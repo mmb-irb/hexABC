@@ -5,7 +5,7 @@ import type { set } from 'nuxt/dist/app/compat/capi';
     <v-container>
       <v-row style="height:64px;"> 
         <v-col lg="2" md="2" sm="6" class="py-0">
-          <NuxtLink to="/"><img src="/img/logo.png" id="main-logo" alt="main logo" /></NuxtLink>
+          <NuxtLink to="/"><NuxtImg src="/img/logo.png" id="main-logo" alt="main logo" /></NuxtLink>
         </v-col>
 
         <v-col lg="10" md="10" sm="6" class="py-0">

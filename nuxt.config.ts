@@ -2,10 +2,7 @@
 export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: true },
-  modules: [
-    'nuxt-plotly',
-    '@invictus.codes/nuxt-vuetify'
-  ],
+  modules: ['nuxt-plotly', '@invictus.codes/nuxt-vuetify', "@nuxt/image"],
   vuetify: {
     /* vuetify options */
     vuetifyOptions: {
@@ -38,12 +35,7 @@ export default defineNuxtConfig({
     },
   },
   app: {  
-    // client only
-    // try like in 3dRS: process.env.NODE_ENV === 'staging' ? '/webdev3/hexABC/' : '/hexABC/'
-    baseURL: process.env.NODE_ENV === 'staging' ? '/webdev3/hexABC/' : '/hexABC/',
-    /*baseURL: process.env.NODE_ENV === 'development'
-    ? '/'
-    : '/webdev/vue/nuxt-public/',*/
+    baseURL: process.env.APP_TYPE == 'staging' ? '/webdev3/hexABC/' : '/hexABC/',
     head: {
       titleTemplate: '%s - hexABC',
       meta: [ 
@@ -51,7 +43,7 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Open+Sans' },
-        //{ rel: 'icon', type: 'image/x-icon', href: `${process.env.NODE_ENV === 'development' ? '/' : '/webdev/vue/nuxt-public/'}favicon.ico` },
+        { rel: 'icon', type: 'image/x-icon', href: `${process.env.APP_TYPE === 'development' ? '/hexABC/' : '/webdev3/hexABC/'}favicon.ico` },
       ]
     },
   },

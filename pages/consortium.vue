@@ -36,7 +36,7 @@
                   {{ partner.name }}
                 </div>
                 <div class="text-h6 mb-1 img-container">
-                  <img :src="`/img/consortium/${partner.img}`" class="logo-partner" :alt="partner.name" />
+                  <NuxtImg :src="`/img/consortium/${partner.img}`" class="logo-partner" :alt="partner.name" />
                 </div>
                 <div class="text-caption">{{ partner.people.join(", ") }}</div>
               </div>
