@@ -1,0 +1,65 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
+export default defineNuxtConfig({
+  ssr: false,
+  devtools: { enabled: true },
+  modules: [
+    'nuxt-plotly',
+    '@invictus.codes/nuxt-vuetify'
+  ],
+  vuetify: {
+    /* vuetify options */
+    vuetifyOptions: {
+      // @TODO: list all vuetify options
+      theme: {
+        themes: {
+          light: {
+            dark: false,
+            colors: {
+              primary: '#ff0000'
+            }
+          },
+        },
+      },
+    },
+    moduleOptions: {
+      /* nuxt-vuetify module options */
+      // treeshaking: true | false,
+      // useIconCDN: true | false,
+
+      /* vite-plugin-vuetify options */
+      // styles: true | 'none' | 'expose' | 'sass' | { configFile: string },
+      // autoImport: true | false,
+      // useVuetifyLabs: true | false,
+    }
+  },
+  vite: {
+    optimizeDeps: {
+      include: ["plotly.js-dist-min"],
+    },
+  },
+  app: {  
+    // client only
+    // try like in 3dRS: process.env.NODE_ENV === 'staging' ? '/webdev3/hexABC/' : '/hexABC/'
+    baseURL: process.env.NODE_ENV === 'staging' ? '/webdev3/hexABC/' : '/hexABC/',
+    /*baseURL: process.env.NODE_ENV === 'development'
+    ? '/'
+    : '/webdev/vue/nuxt-public/',*/
+    head: {
+      titleTemplate: '%s - hexABC',
+      meta: [ 
+        { name: 'description', content: 'hexABC project is the latest effort (2021) of the Ascona B-DNA (ABC) consortium. The study is focused on the systematic characterization of the physical properties of all 2080 unique hexanucleotides, from a collection of 950, 10μs-long MD simulations.' }
+      ],
+      link: [
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Open+Sans' },
+        //{ rel: 'icon', type: 'image/x-icon', href: `${process.env.NODE_ENV === 'development' ? '/' : '/webdev/vue/nuxt-public/'}favicon.ico` },
+      ]
+    },
+  },
+  css: [
+    '@fortawesome/fontawesome-svg-core/styles.css',
+    '~/assets/css/main.css'
+  ],
+  components: [
+    { path: '~/components/common', extensions: ['vue'] }
+  ],
+})
