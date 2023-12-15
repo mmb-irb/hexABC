@@ -18,7 +18,7 @@
 
               <p>The current <strong>ABC consortium</strong> is formed by <strong>thirteen groups</strong> (the most visible ones) from <strong>Europe and US</strong>.</p>
 
-              <p><NuxtImg src="/img/home/home.png" id="home-img" alt="home image" /></p>
+              <p><img src="/img/home/home.png" id="home-img" alt="home image" /></p>
             </template>
           </v-card>
         </v-col>
@@ -34,7 +34,7 @@
               v-for="(partner, index) in partnersLine(partners, 0)"
               :href="partner.url" 
               target="_blank">
-                <NuxtImg :src="`/img/consortium/${partner.img}`" class="logo-partner-home" :alt="partner.name" />
+                <img :src="`img/consortium/${partner.img}`" class="logo-partner-home" :alt="partner.name" />
               </a>
 
             </v-row>
@@ -45,7 +45,7 @@
               v-for="(partner, index) in partnersLine(partners, 1)"
               :href="partner.url" 
               target="_blank">
-                <NuxtImg :src="`/img/consortium/${partner.img}`" class="logo-partner-home" :alt="partner.name" />
+                <img :src="`img/consortium/${partner.img}`" class="logo-partner-home" :alt="partner.name" />
               </a>
 
             </v-row>
@@ -55,7 +55,7 @@
       </v-row>
 
     </v-container>
-      
+      <!--require(`~/assets/${props.image}`)-->
   </template>
   
   <script setup>
@@ -69,6 +69,9 @@
     useHead({
         title: 'About' 
     })
+
+    const topology = await useFetch('api/test')
+    console.log(topology.data.value)
 
     const partnersLine = (partners, line) => {
       return partners.filter(item => item.line === line)

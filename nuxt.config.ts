@@ -1,8 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: false,
+  router: { options: { strict: true } },
   devtools: { enabled: true },
-  modules: ['nuxt-plotly', '@invictus.codes/nuxt-vuetify', "@nuxt/image"],
+  modules: ['nuxt-plotly', '@invictus.codes/nuxt-vuetify'],
   vuetify: {
     /* vuetify options */
     vuetifyOptions: {
@@ -53,5 +54,5 @@ export default defineNuxtConfig({
   ],
   components: [
     { path: '~/components/common', extensions: ['vue'] }
-  ],
+  ]
 })

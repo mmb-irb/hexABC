@@ -12,7 +12,7 @@
         </v-row>
         <v-row>
             <v-col cols="6" class="mx-auto d-flex align-center justify-center">
-                <NuxtImg src="/img/404.png" alt="error 404" />
+                <img src="/img/404.png" alt="error 404" />
             </v-col>
         </v-row>
         <v-row>
