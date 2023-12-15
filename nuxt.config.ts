@@ -43,7 +43,7 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Open+Sans' },
-        { rel: 'icon', type: 'image/x-icon', href: `${process.env.APP_TYPE === 'development' ? '/hexABC/' : '/webdev3/hexABC/'}favicon.ico` },
+        { rel: 'icon', type: 'image/x-icon', href: `${process.env.APP_TYPE === 'staging' ? '/webdev3/hexABC/' : '/hexABC/'}favicon.ico` },
       ]
     },
   },
