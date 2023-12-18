@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     return data*/
 
     return {
-        message: `Hello! You are 564 years old.`
+        message: `Hello! You are ${code} years old.`
     }
 
  });

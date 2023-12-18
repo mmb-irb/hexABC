@@ -28,32 +28,35 @@
           v-for="(partner, index) in partners"
           :key="index"
           >
-          <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
 
-            <v-card-item>
-              <div>
-                <div class="text-overline mb-1">
-                  {{ partner.name }}
-                </div>
-                <div class="text-h6 mb-1 img-container">
-                  <img :src="`img/consortium/${partner.img}`" class="logo-partner" :alt="partner.name" />
-                </div>
-                <div class="text-caption">{{ partner.people.join(", ") }}</div>
-              </div>
-            </v-card-item>
+          <v-hover v-slot="{ isHovering, props }">
+            <v-card rounded="sm" class="pa-4 h-100" v-bind="props" :elevation="isHovering ? 10 : 2">
 
-            <v-card-actions>
-              <v-btn
-                prepend-icon="mdi-web"
-                color="red-accent-4"
-                size="small"
-                :href="partner.url"
-                target="_blank"
-                >
-                    Visit website
-                </v-btn>
-            </v-card-actions>
-          </v-card>
+              <v-card-item>
+                <div>
+                  <div class="text-overline mb-1">
+                    {{ partner.name }}
+                  </div>
+                  <div class="text-h6 mb-1 img-container">
+                    <img :src="`img/consortium/${partner.img}`" class="logo-partner" :alt="partner.name" />
+                  </div>
+                  <div class="text-caption">{{ partner.people.join(", ") }}</div>
+                </div>
+              </v-card-item>
+
+              <v-card-actions>
+                <v-btn
+                  prepend-icon="mdi-web"
+                  color="red-accent-4"
+                  size="small"
+                  :href="partner.url"
+                  target="_blank"
+                  >
+                      Visit website
+                  </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-hover>
         </v-col>
         
       </v-row>

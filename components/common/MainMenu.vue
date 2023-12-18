@@ -86,6 +86,8 @@ import type { set } from 'nuxt/dist/app/compat/capi';
 
 <script setup>
 
+  import { ref } from 'vue'
+
   const search_menu = [
         { title: 'Plain Search', to: '' },
         { title: 'Advanced Search', to: '' },

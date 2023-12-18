@@ -18,8 +18,20 @@
 
               <p>The current <strong>ABC consortium</strong> is formed by <strong>thirteen groups</strong> (the most visible ones) from <strong>Europe and US</strong>.</p>
 
-              <p><img src="/img/home/home.png" id="home-img" alt="home image" /></p>
+              <p id="container-img-home"><img src="/img/home/home.png" id="home-img" alt="home image" /></p>
             </template>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="12">
+          <v-card rounded="sm" class="elevation-2">
+            <v-parallax height="400" src="/img/home/dna.png">
+              <div class="d-flex flex-column fill-height justify-center align-center text-white">
+                <img src="/img/home/logo-home.png" alt="logo image" />
+              </div>
+            </v-parallax>
           </v-card>
         </v-col>
       </v-row>
@@ -55,7 +67,7 @@
       </v-row>
 
     </v-container>
-      <!--require(`~/assets/${props.image}`)-->
+
   </template>
   
   <script setup>
@@ -63,6 +75,7 @@
     //console.log(useRoute())
 
     const { $globals } = useNuxtApp()
+    const config = useRuntimeConfig()
 
     const partners = $globals.partners
 
@@ -70,7 +83,7 @@
         title: 'About' 
     })
 
-    const topology = await useFetch('api/test')
+    const topology = await useFetch(`${config.public.apiBase}/test`)
     console.log(topology.data.value)
 
     const partnersLine = (partners, line) => {
@@ -87,6 +100,8 @@
 
     @media only screen and (max-width: 960px) {
       .logo-partner-home { max-width:90px; }
+      img#home-img { width: 960px; }
+      #container-img-home { overflow-x: auto;}
     }
 
     @media only screen and (max-width: 768px) {

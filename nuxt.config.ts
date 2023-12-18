@@ -54,5 +54,10 @@ export default defineNuxtConfig({
   ],
   components: [
     { path: '~/components/common', extensions: ['vue'] }
-  ]
+  ],
+  runtimeConfig: {
+    public: {
+      apiBase: '/api'
+    }
+  },
 })
