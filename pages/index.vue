@@ -29,7 +29,7 @@
           <v-card rounded="sm" class="elevation-2">
             <v-parallax height="400" src="/img/home/dna.png">
               <div class="d-flex flex-column fill-height justify-center align-center text-white">
-                <img src="/img/home/logo-home.png" alt="logo image" />
+                <img src="/img/home/logo_white.png" alt="logo image" />
               </div>
             </v-parallax>
           </v-card>
