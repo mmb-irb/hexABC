@@ -21,12 +21,13 @@ import type { set } from 'nuxt/dist/app/compat/capi';
             <v-btn prepend-icon="mdi-card-search" rounded="0" color="primary" class="common-menu">
               Search
               <v-menu activator="parent">
-                <v-list>
+                <v-list id="submenu-search">
                   <v-list-item
                     v-for="(item, index) in search_menu"
                     :key="index"
                     :value="index"
                     :to="item.to"
+                    :prepend-icon="item.icon"
                     :title="item.title"
                   >
                   </v-list-item>
@@ -48,7 +49,7 @@ import type { set } from 'nuxt/dist/app/compat/capi';
                 <v-btn icon="mdi-menu" v-bind="props" rounded="0" class="float-right" id="responsive-menu"></v-btn>
               </template>
 
-              <v-list >
+              <v-list id="submenu-search-responsive">
                 <v-list-item prepend-icon="mdi-information" title="About" to="/" @click="menu_resp = false"></v-list-item>
                 <v-list-item prepend-icon="mdi-account-supervisor-circle" title="The consortium" to="/consortium" @click="menu_resp = false"></v-list-item>
 
@@ -65,6 +66,7 @@ import type { set } from 'nuxt/dist/app/compat/capi';
                     :key="index"
                     :value="index"
                     :to="item.to"
+                    :prepend-icon="item.icon"
                     :title="item.title"
                     @click="menu_resp = false"
                   >
@@ -89,9 +91,9 @@ import type { set } from 'nuxt/dist/app/compat/capi';
   import { ref } from 'vue'
 
   const search_menu = [
-        { title: 'Plain Search', to: '' },
-        { title: 'Advanced Search', to: '' },
-        { title: 'Browse', to: '' },
+        { title: 'Plain Search', to: '', icon: 'mdi-magnify' },
+        { title: 'Advanced Search', to: '', icon: 'mdi-tune' },
+        { title: 'Browse', to: '/search/browse', icon: 'mdi-compass-outline' },
   ]
 
   const menu_resp = ref(false)
@@ -102,6 +104,10 @@ import type { set } from 'nuxt/dist/app/compat/capi';
   #main-logo { max-height: 60px; vertical-align: bottom; }
   .v-btn { height: 100%; font-weight: 600; color: var(--palette-5)!important; }
   .v-btn--active { border-bottom: 2px solid;}
+
+  #submenu-search .v-list-item { font-size: 12px!important; }
+  #submenu-search .v-menu > .v-list-item-title { font-size: .8rem!important; }
+  #submenu-search .v-list-item--density-default.v-list-item--one-line { min-height: 35px;}
 
   /* RESPONSIVE MENU */
   #responsive-menu { display: none; }

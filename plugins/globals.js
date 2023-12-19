@@ -18,7 +18,28 @@ export default defineNuxtPlugin(() => {
               { name: 'University of the Republic of Uruguay', url: 'https://udelar.edu.uy/portal/', img: 'uruguay.png', line: 1, people: [ 'Pablo Dans', 'Gabriela da Rosa' ] },
               { name: 'University of York', url: 'https://www.york.ac.uk/', img: 'york.png', line: 1, people: [ 'Agnes Noy' ] },
               { name: 'University Paris Saclay', url: 'https://www.universite-paris-saclay.fr/en', img: 'paris.png', line: 1, people: [ 'Marco Pasi' ] },
-            ]
+            ],
+            projects: {
+              analyses: [
+                { id: 'rmsd', name: 'RMSd'},
+                { id: 'dist-perres-mean', name: 'Distance per residue mean'},
+                { id: 'dist-perres-stdv', name: 'Distance per residue standard deviation'},
+                { id: 'rmsd-pairwise-interface', name: 'RMSd pairwise interface'},
+                { id: 'dist-perres', name: 'Distance per residue'},
+                { id: 'energies', name: 'Energies'},
+                { id: 'hbonds', name: 'Hydrogen bonds'},
+                { id: 'rmsd-pairwise', name: 'RMSd pairwise'},
+                { id: 'fluctuation', name: 'Fluctuation'},
+                { id: 'tmscores', name: 'Time scores'},
+                { id: 'rgyr', name: 'Radius of gyration'},
+                { id: 'rmsds', name: 'RMSds'},
+                { id: 'pockets', name: 'Pockets'},
+                { id: 'interactions', name: 'Interactions'},
+                { id: 'pca', name: 'PCA'},
+                { id: 'rmsd-perres', name: 'RMSd per residue'},
+                { id: 'sasa', name: 'Solvent accessible surface area'},
+              ]
+            }
         }
       }
     }

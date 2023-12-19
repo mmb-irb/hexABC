@@ -15,6 +15,7 @@ export default {
         || ['v-list'].includes(tag)
         || ['v-list-item'].includes(tag)
         //|| ['v-list-group'].includes(tag)
+        || ['NuxtLink'].includes(tag)
         
         
         //isCustomElement: (tag) => tag.startsWith('v-')

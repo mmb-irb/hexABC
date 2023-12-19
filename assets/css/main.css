@@ -27,6 +27,12 @@ p { margin-bottom: 1rem; }
 .v-card-title { color: var(--dark-text); font-weight: 600!important; padding-bottom: 0.5rem!important; border-bottom: 1px solid var(--grey-light); font-size: 1.1rem!important; }
 .v-card-title .mdi { vertical-align: text-bottom; }
 
+/* specific styles (not working on components) */
+#submenu-search .v-list-item__prepend > .v-icon ~ .v-list-item__spacer { width: 15px!important; }
+#submenu-search .v-list-item-title { font-size: 14px!important; }
+#submenu-search-responsive .v-list-item__prepend > .v-icon ~ .v-list-item__spacer { width: 15px!important; }
+#submenu-search-responsive .v-list-group__items { --indent-padding: calc(var(--parent-padding)); }
+
 @media (min-width: 1920px) {
     .v-container { max-width: 1400px!important; }
 }
