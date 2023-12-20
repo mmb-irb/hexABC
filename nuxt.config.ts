@@ -53,7 +53,8 @@ export default defineNuxtConfig({
     '~/assets/css/main.css'
   ],
   components: [
-    { path: '~/components/common', extensions: ['vue'] }
+    { path: '~/components/common', extensions: ['vue'] },
+    { path: '~/components/search', extensions: ['vue'] }
   ],
   runtimeConfig: {
     public: {

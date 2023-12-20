@@ -9,7 +9,7 @@ import type { set } from 'nuxt/dist/app/compat/capi';
         </v-col>
 
         <v-col lg="10" md="10" sm="6" class="py-0">
-          <div class="float-right h-100">
+          <div class="float-right h-100" >
             <v-btn prepend-icon="mdi-information" rounded="0" color="primary" to="/" class="common-menu">
               About
             </v-btn>
@@ -35,6 +35,10 @@ import type { set } from 'nuxt/dist/app/compat/capi';
               </v-menu>
             </v-btn>
 
+            <v-btn prepend-icon="mdi-chart-box" rounded="0" color="primary" class="common-menu">
+              Results
+            </v-btn>
+
             <v-btn prepend-icon="mdi-cloud-braces" rounded="0" color="primary" class="common-menu">
               REST API
             </v-btn>
@@ -46,11 +50,18 @@ import type { set } from 'nuxt/dist/app/compat/capi';
 
             <v-menu v-model="menu_resp" :close-on-content-click="false">
               <template v-slot:activator="{ props }">
-                <v-btn icon="mdi-menu" v-bind="props" rounded="0" class="float-right" id="responsive-menu"></v-btn>
+                <!--<v-btn icon="mdi-menu" v-bind="props" rounded="0" class="float-right" id="responsive-menu"></v-btn>-->
+                <div v-bind="props" id="responsive-menu-btn" class="float-right" @click="animateBtn">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
               </template>
 
               <v-list id="submenu-search-responsive">
+
                 <v-list-item prepend-icon="mdi-information" title="About" to="/" @click="menu_resp = false"></v-list-item>
+
                 <v-list-item prepend-icon="mdi-account-supervisor-circle" title="The consortium" to="/consortium" @click="menu_resp = false"></v-list-item>
 
                 <v-list-group value="Search">
@@ -73,7 +84,10 @@ import type { set } from 'nuxt/dist/app/compat/capi';
                   </v-list-item>
                 </v-list-group>
 
+                <v-list-item prepend-icon="mdi-chart-box" title="Results" to="" @click="menu_resp = false"></v-list-item>
+
                 <v-list-item prepend-icon="mdi-cloud-braces" title="REST API" to="" @click="menu_resp = false"></v-list-item>
+
                 <v-list-item prepend-icon="mdi-help-circle" title="Help"  to="" @click="menu_resp = false"></v-list-item>
 
               </v-list>
@@ -98,6 +112,16 @@ import type { set } from 'nuxt/dist/app/compat/capi';
 
   const menu_resp = ref(false)
 
+  const animateBtn = () => {
+    document.querySelector('#responsive-menu-btn').classList.toggle('open');
+  }
+
+  // control menu responsive button status via responsive menu
+  watch(menu_resp, (val) => {
+    if (val) document.querySelector('#responsive-menu-btn').classList.add('open');
+    else document.querySelector('#responsive-menu-btn').classList.remove('open');
+  })
+
 </script>
 
 <style scoped>
@@ -110,11 +134,83 @@ import type { set } from 'nuxt/dist/app/compat/capi';
   #submenu-search .v-list-item--density-default.v-list-item--one-line { min-height: 35px;}
 
   /* RESPONSIVE MENU */
-  #responsive-menu { display: none; }
+  #responsive-menu-btn { display: none; }
   /*.common-menu { display: block; }*/
 
+  #responsive-menu-btn {
+    width: 45px;
+    height: 50px;
+    position: relative;
+    margin: 15px auto;
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transition: .5s ease-in-out;
+    -moz-transition: .5s ease-in-out;
+    -o-transition: .5s ease-in-out;
+    transition: .5s ease-in-out;
+    cursor: pointer;
+  }
+
+  #responsive-menu-btn span {
+    display: block;
+    position: absolute;
+    height: 5px;
+    width: 100%;
+    background: var(--palette-5);
+    border-radius: 9px;
+    opacity: 1;
+    left: 0;
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transition: .25s ease-in-out;
+    -moz-transition: .25s ease-in-out;
+    -o-transition: .25s ease-in-out;
+    transition: .25s ease-in-out;
+  }
+
+  #responsive-menu-btn span:nth-child(1) {
+    top: 0px;
+  }
+
+  #responsive-menu-btn span:nth-child(2) {
+    top: 14px;
+  }
+
+  #responsive-menu-btn span:nth-child(3) {
+    top: 28px;
+  }
+
+  #responsive-menu-btn.open span:nth-child(1) {
+    top: 14px;
+    -webkit-transform: rotate(135deg);
+    -moz-transform: rotate(135deg);
+    -o-transform: rotate(135deg);
+    transform: rotate(135deg);
+  }
+
+  #responsive-menu-btn.open span:nth-child(2) {
+    opacity: 0;
+    left: -60px;
+  }
+
+  #responsive-menu-btn.open span:nth-child(3) {
+    top: 14px;
+    -webkit-transform: rotate(-135deg);
+    -moz-transform: rotate(-135deg);
+    -o-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+  }
+
+  @media only screen and (max-width: 1280px) {
+    .common-menu { padding:0 .8rem; letter-spacing: 1px; }
+  }
+
   @media only screen and (max-width: 960px) {
-    #responsive-menu { display: block; }
+    #responsive-menu-btn { display: block; }
     .common-menu { display: none; }
   }
 </style>

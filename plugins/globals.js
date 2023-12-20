@@ -19,6 +19,7 @@ export default defineNuxtPlugin(() => {
               { name: 'University of York', url: 'https://www.york.ac.uk/', img: 'york.png', line: 1, people: [ 'Agnes Noy' ] },
               { name: 'University Paris Saclay', url: 'https://www.universite-paris-saclay.fr/en', img: 'paris.png', line: 1, people: [ 'Marco Pasi' ] },
             ],
+            rowsPerPage: [ 5, 10, 25, 50 ],
             projects: {
               analyses: [
                 { id: 'rmsd', name: 'RMSd'},
