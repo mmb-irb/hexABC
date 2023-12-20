@@ -6,6 +6,9 @@ export default defineEventHandler(async (event) => {
     const uri = `https://bioexcel-cv19.bsc.es/api/rest/v1/projects/${id}`
 
     const data = await $fetch(uri)
+                        .catch((error) => {
+                            throw createError({ statusCode: error.status, message: error.message, fatal: true })
+                        });
 
     return {
         data
