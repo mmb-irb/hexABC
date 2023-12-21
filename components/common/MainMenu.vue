@@ -1,5 +1,4 @@
 
-import type { set } from 'nuxt/dist/app/compat/capi';
 <template>
   <v-app-bar class="px-3 elevation-4" flat density="default">
     <v-container>
@@ -39,7 +38,7 @@ import type { set } from 'nuxt/dist/app/compat/capi';
               Results
             </v-btn>
 
-            <v-btn prepend-icon="mdi-cloud-braces" rounded="0" color="primary" class="common-menu">
+            <v-btn prepend-icon="mdi-cloud-braces" rounded="0" color="primary" to="/rest" class="common-menu">
               REST API
             </v-btn>
 
@@ -86,7 +85,7 @@ import type { set } from 'nuxt/dist/app/compat/capi';
 
                 <v-list-item prepend-icon="mdi-chart-box" title="Results" to="" @click="menu_resp = false"></v-list-item>
 
-                <v-list-item prepend-icon="mdi-cloud-braces" title="REST API" to="" @click="menu_resp = false"></v-list-item>
+                <v-list-item prepend-icon="mdi-cloud-braces" title="REST API" to="/rest" @click="menu_resp = false"></v-list-item>
 
                 <v-list-item prepend-icon="mdi-help-circle" title="Help"  to="" @click="menu_resp = false"></v-list-item>
 
@@ -101,6 +100,12 @@ import type { set } from 'nuxt/dist/app/compat/capi';
 </template>
 
 <script setup>
+
+  // ***************
+  // ***************
+  /* TODO: CHECK MENU FROM TRANSATLAS!!!!! */
+  // ***************
+  // ***************
 
   import { ref } from 'vue'
 

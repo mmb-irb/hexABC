@@ -81,7 +81,7 @@ import { ref } from 'vue';
   const page = ref(1)
   
   /* FIRST LOAD */
-  const browseList = await useFetch(`${config.public.apiBase}/projects/list?limit=${rows.value}&page=${page.value}`)
+  const browseList = await useFetch(`${config.public.apiBase}/projects/?limit=${rows.value}&page=${page.value}`)
   
   const totalItems = browseList.data.value.total
   const totalPages = ref(Math.ceil(browseList.data.value.total/rows.value))
@@ -101,7 +101,7 @@ import { ref } from 'vue';
   window.addEventListener('resize', () => calculateTotalVisible())
 
   const paginate = async () => {
-    const browseList = await useFetch(`${config.public.apiBase}/projects/list?limit=${rows.value}&page=${page.value}`)
+    const browseList = await useFetch(`${config.public.apiBase}/projects/?limit=${rows.value}&page=${page.value}`)
     projects.value = browseList.data.value.projects
     totalPages.value = Math.ceil(browseList.data.value.total/rows.value)
     if(browseList.data.value.projects.length === 0) {

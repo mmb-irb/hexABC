@@ -60,11 +60,6 @@
         disabled: true
       }
     ]
-    
-    /*const browseList = await useFetch(`${config.public.apiBase}/projects/list?limit=10&page=1`)
-    
-    const projects = ref(browseList.data.value.data)*/
-
   
   </script>
   

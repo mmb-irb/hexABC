@@ -7,7 +7,8 @@ export default defineEventHandler(async (event) => {
 
     const data = await $fetch(uri)
                         .catch((error) => {
-                            throw createError({ statusCode: error.status, message: error.message, fatal: true })
+                            setResponseStatus(event, 404)
+                            return { message: error.message }
                         });
 
     return {

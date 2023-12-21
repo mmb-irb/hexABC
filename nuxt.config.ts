@@ -58,7 +58,8 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      apiBase: '/api'
+      apiBase: '/api',
+      apiHost: process.env.APP_TYPE == 'development' ? process.env.APP_DEVELOPMENT_HOST : process.env.APP_TYPE == 'staging' ? process.env.APP_STAGING_HOST : process.env.APP_PRODUCTION_HOST
     }
   },
 })

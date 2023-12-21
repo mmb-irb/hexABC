@@ -1,0 +1,228 @@
+
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "hexABC REST API",
+        "license": {
+            "name": "MIT License"
+        },
+        "version": "",
+        "description": "<p>In this section there is the documentation for all the available public end points of the hexABC REST API. Click on each end point and its documentation will be expanded.</p>"
+    },
+    "host": "",
+    "basePath": "\/api",
+    "consumes": [
+        "application\/json"
+    ],
+    "produces": [
+        "application\/json",
+        "text\/plain",
+        "application\/octet-stream",
+        "application\/application\/x-gzip",
+        "application\/zip"
+    ],
+    "tags": [
+        {
+            "name": "Projects",
+            "description": "Information about all the analyses performed for each of the DNA 20 mer"
+        }
+    ],
+    "paths": {
+        "\/projects": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Get list of all projects",
+                "description": "Gets a list of summaries of all the projects available in the database",
+                "operationId": "getProjects",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Maximum number of projects in each page",
+                        "required": false,
+                        "type": "integer",
+                        "default": 10
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Number of page to be returned",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "properties": {
+                                "total": {
+                                    "description": "Total number of projects in the database",
+                                    "type": "number"
+                                },
+                                "projects": {
+                                    "description": "List of projects",
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#\/definitions\/ShortProject"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/{id}": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Get single project",
+                "description": "Gets all the available information for a single project corresponding to the given identifier",
+                "operationId": "getProject",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Project identifier, it must be a FAIR identifier (i.e. MCV1900002)",
+                        "required": true,
+                        "type": "string",
+                        "default": "MCV1900002"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "$ref": "#\/definitions\/WholeProject"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        }
+    },
+    "definitions": {
+        "ShortProject": {
+            "required": [
+                "accession",
+                "name",
+                "unit",
+                "analyses"
+            ],
+            "properties": {
+                "accession": {
+                    "description": "hexABC FAIR identifier for this project",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Project description",
+                    "type": "string"
+                },
+                "unit": {
+                    "description": "Project unit",
+                    "type": "string"
+                },
+                "analyses": {
+                    "type": "array",
+                    "items": {
+                        "description": "Analysis",
+                        "type": "string"
+                    }
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "ShortProject"
+            }
+        },
+        "WholeProject": {
+            "required": [
+                "accession",
+                "published",
+                "metadata",
+                "chains",
+                "mdref",
+                "mds",
+                "files",
+                "mdNumber",
+                "analyses",
+                "identifier"
+            ],
+            "properties": {
+                "accession": {
+                    "description": "hexABC FAIR identifier for this project",
+                    "type": "string"
+                },
+                "published": {
+                    "description": "published",
+                    "type": "string"
+                },
+                "metadata": {
+                    "description": "metadata",
+                    "type": "object"
+                },
+                "chains": {
+                    "description": "chains",
+                    "type": "array",
+                    "items": {
+                        "description": "chains",
+                        "type": "string"
+                    }
+                },
+                "mdref": {
+                    "description": "mdref",
+                    "type": "number",
+                    "format": "integer"
+                },
+                "mds": {
+                    "description": "mds",
+                    "type": "array",
+                    "items": {
+                        "description": "mds",
+                        "type": "string"
+                    }
+                },
+                "files": {
+                    "description": "files",
+                    "type": "array",
+                    "items": {
+                        "description": "files",
+                        "type": "string"
+                    }
+                },
+                "mdNumber": {
+                    "description": "mdNumber",
+                    "type": "number",
+                    "format": "integer"
+                },
+                "analyses": {
+                    "type": "array",
+                    "items": {
+                        "description": "Analysis",
+                        "type": "string"
+                    }
+                },
+                "identifier": {
+                    "description": "identifier",
+                    "type": "string"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "ShortProject"
+            }
+        }
+    }
+}
