@@ -6,13 +6,13 @@ export default defineEventHandler(async (event) => {
     const uri = `https://bioexcel-cv19.bsc.es/api/rest/v1/projects/${id}`
 
     const data = await $fetch(uri)
-                        .catch((error) => {
-                            setResponseStatus(event, 404)
-                            return { message: error.message }
-                        });
+                .catch((error) => {
+                    setResponseStatus(event, 404)
+                    return { message: error.message }
+                });
 
     return {
-        data
+        project: data
     }
 
  });

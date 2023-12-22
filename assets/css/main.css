@@ -9,6 +9,9 @@
     --palette-4: #ef233c;
     --palette-5: #d90429;
     --palette-6: #8d1616;
+    /* swagger */
+    --swagger-method: #d9042988;
+    --swagger-bg: rgb(243 106 90 / 5%);
 }
 
 /* global */

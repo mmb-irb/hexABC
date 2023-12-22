@@ -37,7 +37,7 @@
     const config = useRuntimeConfig()
   
     const data = await useFetch(`${config.public.apiBase}/projects/${id}`)
-    const project = ref(data.data.value.data)
+    const project = ref(data.data.value.project)
 
     const title = project.value.metadata.NAME
 

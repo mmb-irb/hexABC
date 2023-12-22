@@ -33,8 +33,8 @@
                 "tags": [
                     "Projects"
                 ],
-                "summary": "Get list of all projects",
-                "description": "Gets a list of summaries of all the projects available in the database",
+                "summary": "Get list of projects",
+                "description": "Gets a paginated list of summaries of all the projects available in the database",
                 "operationId": "getProjects",
                 "produces": [
                     "application\/json"
@@ -105,7 +105,25 @@
                     "200": {
                         "description": "Successful operation",
                         "schema": {
-                            "$ref": "#\/definitions\/WholeProject"
+                            "type": "object",
+                            "properties": {
+                                "project": {
+                                    "type": "object",
+                                    "$ref": "#\/definitions\/Project"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "project": {
+                                    "type": "object",
+                                    "$ref": "#\/definitions\/StatusError"
+                                }
+                            }
                         }
                     }
                 },
@@ -147,7 +165,7 @@
                 "name": "ShortProject"
             }
         },
-        "WholeProject": {
+        "Project": {
             "required": [
                 "accession",
                 "published",
@@ -221,7 +239,22 @@
             },
             "type": "object",
             "xml": {
-                "name": "ShortProject"
+                "name": "Project"
+            }
+        },
+        "StatusError": {
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "description": "Response of the REST API server",
+                    "type": "string"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "StatusError"
             }
         }
     }

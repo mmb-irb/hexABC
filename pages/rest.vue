@@ -10,16 +10,28 @@
       </v-breadcrumbs>
 
       <v-card rounded="sm">
-        <div class="swagger" id="swagger"></div>
 
-        <v-btn
-          prepend-icon="mdi-tray-arrow-down"
-          color="red-accent-4"
-          class="mb-5 ms-5"
-          @click="downloadSwagger" 
-          >
-              Download swagger.json file
-        </v-btn>
+        <template v-slot:title>
+            <v-icon size="small" icon="mdi-code-json"></v-icon> &nbsp;{{ $globals.shortName }} REST API
+          </template>
+
+          <template v-slot:text>
+
+            <p>In this section there is the documentation for all the available public end points of the hexABC REST API. Click on each end point and its documentation will be expanded.</p>
+
+            <v-divider></v-divider>
+
+            <div class="swagger" id="swagger"></div>
+
+            <v-btn
+              prepend-icon="mdi-tray-arrow-down"
+              color="red-lighten-1"
+              class="mb-5 ms-5"
+              @click="downloadSwagger" 
+              >
+                  Download swagger.json file
+            </v-btn>
+          </template>
 
       </v-card>
 
@@ -27,6 +39,8 @@
   </template>
   
   <script setup>
+
+  const { $globals } = useNuxtApp()
   const config = useRuntimeConfig()
 
   useHead({
@@ -60,6 +74,11 @@
         spec: spec,
         dom_id: '#swagger'
     })
+
+    // remove title from DOM
+    const tit = spec.info.title
+    const titDOM = document.querySelector('.swagger-ui .info .title').innerHTML
+    document.querySelector('.swagger-ui .info .title').innerHTML = titDOM.replace(tit, '')
   })
 
   const downloadSwagger = async() => {
@@ -79,22 +98,31 @@
   
   <style>
       hgroup.main { min-height: auto!important;}
-      .swagger-ui .info a { color: #f36a5a; }
+      .swagger-ui .main { margin-bottom: 0!important; }
+      .swagger-ui .info a { color: var(--palette-4); }
       .swagger-ui .info a:hover { color: #f33c28; }
       .swagger-ui .info .title { color:#555; font-size: 30px; }
       .swagger-ui .info { margin: 20px 0 0; }
-      .swagger-ui .info .title small { background: #f36a5a; }
+      .swagger-ui .info .title small.version-stamp { background: var(--swagger-method); }
+      .swagger-ui .info .title small { background: var(--palette-4); }
+      .swagger-ui .info .description .markdown p { display:none; }
+      .swagger-ui .model-example .model-box { width: 80%; }
+      .swagger-ui .model .prop { justify-content: space-between; }
+      .swagger-ui .model .prop .markdown p { margin-top:.5rem; }
       .swagger-ui .model-box-control:focus, .swagger-ui .models-control:focus, .swagger-ui .opblock-summary-control:focus { outline:none; }
-      .swagger-ui .opblock.opblock-get .opblock-summary-method { background: #f8b5ab; }
-      .swagger-ui .opblock.opblock-get { background: rgb(243 106 90 / 5%); border-color: rgb(243 106 90); }
-      .swagger-ui .opblock.opblock-get .opblock-summary { border-color: #f36a5a; }
-      .swagger-ui .btn.execute { background-color: #f36a5a; border-color: #f36a5a; }
+      .swagger-ui .opblock.opblock-get .opblock-summary-method { background: var(--swagger-method); }
+      .swagger-ui .opblock.opblock-get { background: var(--swagger-bg); border-color: var(--palette-4); }
+      .swagger-ui .opblock.opblock-get .opblock-summary { border-color: var(--palette-4); }
+      .swagger-ui .btn.execute { background-color: var(--palette-4); border-color: var(--palette-4); }
       .swagger-ui table.model tr.property-row.required td:first-child { padding-top: .5rem!important; }
-      .swagger-ui .prop-type { color: #f36a5a; margin-top: 0.5rem; }
+      .swagger-ui .prop-type { color: var(--palette-4); margin-top: 0.5rem; }
       .swagger-ui .prop-format { margin-top: 0.5rem; }
       .swagger-ui .model .prop { display: flex; }
-      .swagger-ui .markdown p { margin: .5rem .5rem; }
+      .swagger-ui .base-url { display:none; }
+      .swagger-ui .info__license { display:none; }
       .swagger-ui table.model tr.description td { padding-top: .5rem!important; width: auto!important;}
       .swagger-ui table.model tr.description td .markdown p { margin: 0!important;}
+      .swagger-ui section.models .model-box { width: 80%; }
+      .swagger-ui .model-box { display: inherit;}
   
   </style>
