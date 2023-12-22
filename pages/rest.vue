@@ -82,7 +82,10 @@
   })
 
   const downloadSwagger = async() => {
-    const swagger = await import('@/assets/settings/swagger.json')
+    const swagger = JSON.parse(JSON.stringify(await import('@/assets/settings/swagger.json')))
+    const pjson = await import('../package.json')
+    swagger.default.host = config.public.apiHost
+    swagger.default.info.version = pjson.version
     const blob = new Blob([JSON.stringify(swagger, null, 2)], {type : 'application/json'});
 
     var url = window.URL.createObjectURL(blob);

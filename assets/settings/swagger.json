@@ -7,7 +7,7 @@
             "name": "MIT License"
         },
         "version": "",
-        "description": "<p>In this section there is the documentation for all the available public end points of the hexABC REST API. Click on each end point and its documentation will be expanded.</p>"
+        "description": "In this section there is the documentation for all the available public end points of the hexABC REST API. Click on each end point and its documentation will be expanded."
     },
     "host": "",
     "basePath": "\/api",
