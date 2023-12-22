@@ -38,6 +38,12 @@ p { margin-bottom: 1rem; }
 #submenu-search-responsive .v-list-item__prepend > .v-icon ~ .v-list-item__spacer { width: 15px!important; }
 #submenu-search-responsive .v-list-group__items { --indent-padding: calc(var(--parent-padding)); }
 
+/* drag select global styles */
+.ds-selector {
+    background: rgba(212, 33, 33, 0.1)!important;
+    border: 1px dashed rgb(212 33 33 / 80%)!important;
+  }
+
 @media (min-width: 1920px) {
     .v-container { max-width: 1400px!important; }
 }
