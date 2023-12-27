@@ -20,6 +20,7 @@ export default defineNuxtPlugin(() => {
               { name: 'University Paris Saclay', url: 'https://www.universite-paris-saclay.fr/en', img: 'paris.png', line: 1, people: [ 'Marco Pasi' ] },
             ],
             rowsPerPage: [ 5, 10, 25, 50 ],
+            thumbnail: (id) => `https://mdposit-dev.mddbr.eu/api/rest/current/projects/${id}/files/screenshot.jpg`,
             projects: {
               analyses: [
                 { id: 'rmsd', name: 'RMSd'},

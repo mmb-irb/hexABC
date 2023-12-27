@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
     const data = await $fetch(uri)
 
     const response = data.projects.map((item) => ({
+        id: item.identifier,
         accession: item.accession, 
         name: item.metadata.NAME,
         unit: item.metadata.UNIT,

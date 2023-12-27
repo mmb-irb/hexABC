@@ -1,23 +1,10 @@
-# Nuxt 3 Minimal Starter
-
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+# hexABC
 
 ## Setup
-
-Make sure to install the dependencies:
 
 ```bash
 # npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
 ## Development Server
@@ -27,49 +14,101 @@ Start the development server on `http://localhost:3000`:
 ```bash
 # npm
 npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+## Build
 
-Build the application for production:
+Build the application for production.
+
+### Staging
+
+Build the application for development server (webdev3).
 
 ```bash
 # npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+npm run build:staging
 ```
 
-Locally preview production build:
+Copy the **.output** folder to the server.
+
+### Production
+
+Build the application for production server.
 
 ```bash
 # npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+npm run build:production
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Copy the **.output** folder to the server.
+
+## Configuration for apache server (development)
+
+1. Edit */etc/apache2/sites-available/000-default.conf* file and add:
+
+```apacheconf
+<Location /hexABC/ >
+    ProxyPass http://localhost:3000/webdev3/hexABC/
+    ProxyPassReverse http://localhost:3000/webdev3/hexABC/
+</Location>
+```
+
+Note that port can be 3000 or any other declared in the **ecosystem.config.js** file (see step 4)
+
+2. Enable proxy and proxy_http modules and restart apache:
+
+```shell
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo /etc/init.d/apache2 restart
+```
+
+3. Install PM2 for running nodeJS server as a daemon:
+
+`sudo npm install pm2 -g`
+
+4. Create **ecosystem.config.js** file in the same folder where the **.output** folfer has been copied:
+
+```javascript
+module.exports = {
+  apps: [
+    {
+      name: 'hexABC',
+      port: '3000',
+      exec_mode: 'cluster',
+      instances: 'max',
+      env: {
+	    NODE_ENV: 'staging'
+      },
+      script: './.output/server/index.mjs'
+    }
+  ]
+}
+```
+
+4. Launch server (from the folder where it's installed):
+
+`pm2 start ecosystem.config.js --name hexABC`
+
+5. Check that the server is up and running:
+
+```bash
+pm2 list
+lsof -i tcp:3000
+```
+
+5. Make pm2 persistent in case VM has to be reset:
+    
+`pm2 startup systemd`
+
+## Credits
+
+Genís Bayarri, Adam Hospital.
+
+## Copyright & licensing
+
+This website has been developed by the [MMB group](https://mmb.irbbarcelona.org) at the [IRB Barcelona](https://irbbarcelona.org).
+
+© 2024 **Institute for Research in Biomedicine**
+
+Licensed under the **Apache License 2.0**.

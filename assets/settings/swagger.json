@@ -134,12 +134,17 @@
     "definitions": {
         "ShortProject": {
             "required": [
+                "id",
                 "accession",
                 "name",
                 "unit",
                 "analyses"
             ],
             "properties": {
+                "id": {
+                    "description": "identifier",
+                    "type": "string"
+                },
                 "accession": {
                     "description": "hexABC FAIR identifier for this project",
                     "type": "string"
