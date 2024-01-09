@@ -1,0 +1,346 @@
+<template>
+    <v-container>
+  
+      <h1>Curves Average Results</h1>
+  
+      <v-breadcrumbs :items="breadcrumbs">
+        <template v-slot:divider>
+          <v-icon icon="mdi-circle-small"></v-icon>
+        </template>
+      </v-breadcrumbs>
+  
+      <v-row> 
+        <v-col cols="12">
+          <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
+
+            <template v-slot:title>
+              <div style="display: flex; justify-content: space-between;">
+                <div>
+                  <v-icon size="small" icon="mdi-chart-bell-curve"></v-icon> &nbsp;SEQUENCE AVERAGE RESULTS
+                </div>
+                <v-btn prepend-icon="mdi-timer-outline"
+                  variant="outlined"
+                  color="red-accent-4"
+                  :to="`/projects/${id}/curves-time`"
+                  >Results by Time</v-btn>
+                </div>
+            </template>
+
+            <template v-slot:text>
+
+              <p>Click on the menu right to the sequence to see all the analyses available in this section.</p>
+
+              <v-row> 
+                <v-col lg="9" md="9" sm="12" xs="12">
+
+                  <v-sheet
+                    color="grey-lighten-4"
+                    class="pa-10 project-sheet"
+                    id="container-strands"
+                  >
+                    <v-row class="project-row" justify="center">
+                      <div 
+                        class="number" 
+                        v-for="(item, index) in strand1"
+                        :key="index"
+                        :value="index"
+                        > {{ index + 1 }} </div>
+                    </v-row>
+                    <v-row class="pb-0 pt-2 px-4 project-row" justify="space-around">
+                      <div class="end"> {{ ends1[0] }} </div>
+                      <div class="d-flex">
+                        <div 
+                        class="gr-nucl" 
+                        v-for="(item, index) in strand1"
+                        :key="index"
+                        :value="index"
+                        > 
+                          <div class="nucleotide" :id="`${item}-${index + 1}-strand1`">{{ item }} </div>
+
+                          <v-icon class="hbond" v-if="index < strand1.length - 1">
+                            mdi-circle-medium
+                          </v-icon>
+
+                          <v-icon class="vbond" v-if="index >= 1 && index < strand1.length - 1">
+                            mdi-circle-medium
+                          </v-icon>
+
+                          <v-icon class="dbond" v-if="index >= 1 && index < strand1.length - 2">
+                            mdi-hospital mdi-rotate-45
+                          </v-icon>
+                        </div>
+                      </div>
+                      <div class="end"> {{ ends1[1] }} </div>
+                    </v-row>
+                    <v-row class="pt-0 pb-2 px-4 project-row" justify="space-around">
+                      <div class="end"> {{ ends2[0] }} </div>
+                      <div class="d-flex">
+                        <div 
+                        class="gr-nucl" 
+                        v-for="(item, index) in strand2"
+                        :key="index"
+                        :value="index"
+                        > 
+                          <div class="nucleotide" :id="`${item}-${index + 1}-strand2`">{{ item }} </div> 
+
+                          <v-icon class="hbond" v-if="index < strand1.length - 1">
+                            mdi-circle-medium
+                          </v-icon>
+
+                        </div>
+                      </div>
+                      <div class="end"> {{ ends2[1] }} </div>
+                    </v-row>
+                    <v-row class="project-row" justify="center">
+                      <div 
+                        class="number" 
+                        v-for="(item, index) in strand2"
+                        :key="index"
+                        :value="index"
+                        > {{ strand2.length*2 - index }} </div>
+                    </v-row>
+                  </v-sheet>
+
+                </v-col>
+
+                <v-col lg="3" md="3" sm="12" xs="12">
+
+                  <v-btn-toggle
+                    v-model="section"
+                    color="red-darken-4"
+                    rounded="0"
+                  >
+                    <v-btn value="0" @click="firstLevelChange"> <v-icon> mdi-arrow-u-down-right </v-icon> &nbsp;Backbone Torsions </v-btn>
+                    <v-btn value="1" @click="firstLevelChange"> <v-icon> mdi-axis-y-rotate-clockwise </v-icon> &nbsp;Axis Base pair </v-btn>
+                    <v-btn value="2" @click="firstLevelChange"> <v-icon> mdi-axis-x-rotate-clockwise </v-icon> &nbsp;Intra-Base Pair HP's </v-btn>
+                    <v-btn value="3" @click="firstLevelChange"> <v-icon> mdi-axis-z-rotate-counterclockwise </v-icon> &nbsp;Inter-Base Pair HP's </v-btn>
+                    <v-btn value="4" @click="firstLevelChange"> <v-icon> mdi-dna </v-icon> &nbsp;Grooves </v-btn>
+                  </v-btn-toggle>
+                </v-col>
+              </v-row>
+
+              <v-row justify="end" v-if="section">
+                <v-col cols="12">
+                  <AverageBackboneTorsions v-if="section === '0'" />
+                  <AverageAxisBasePair v-if="section === '1'" />
+                </v-col>
+              </v-row>
+
+            </template>
+          </v-card>
+        </v-col>
+      </v-row>
+
+  
+    </v-container>
+  </template>
+  
+  <script setup>
+
+    import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
+
+    const { id } = useRoute().params
+    const config = useRuntimeConfig()
+
+    const { 
+      getSequenceSettings
+    } = useInteractiveSequence()
+
+    const data = await useFetch(`${config.public.apiBase}/projects/${id}`)
+    const project = ref(data.data.value.project)
+
+    const title = project.value.metadata.NAME
+
+    useHead({
+      title: `Average results for ${title}`,
+      link: [
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;500&display=swap' }
+      ]
+    })
+
+    /* HARDCODED WHILE NOT HAVING REST API */
+    const sequence = 'GATACATACATAATACAAAC'
+    const { strand1, strand2, ends1, ends2 } = getSequenceSettings(sequence)
+
+    // FIRST LEVEL MENU
+    const section = ref(null)
+
+    const firstLevelChange = () => {
+      
+      switch(section.value) {
+        case '0':
+          document.querySelectorAll(`.hbond`).forEach(item => item.classList.add('bond-highlighted'))
+          document.querySelectorAll(`.vbond`).forEach(item => item.classList.remove('bond-highlighted'))
+          document.querySelectorAll(`.dbond`).forEach(item => item.classList.remove('bond-highlighted'))
+          document.querySelectorAll(`.nucleotide`).forEach(item => item.classList.add('nucl-highlighted'))
+          break;
+        case '1':
+          document.querySelectorAll(`.vbond`).forEach(item => item.classList.add('bond-highlighted'))
+          document.querySelectorAll(`.hbond`).forEach(item => item.classList.remove('bond-highlighted'))
+          document.querySelectorAll(`.dbond`).forEach(item => item.classList.remove('bond-highlighted'))
+          document.querySelectorAll(`.nucleotide`).forEach(item => item.classList.remove('nucl-highlighted'))
+          document.querySelectorAll(`.nucleotide`).forEach(item => {
+            var idx = parseInt(item.attributes.id.value.split('-')[1])
+            if(idx > 1 && idx < strand1.length) item.classList.add('nucl-highlighted')
+          })
+          break;
+        case '2':
+          document.querySelectorAll(`.vbond`).forEach(item => item.classList.add('bond-highlighted'))
+          document.querySelectorAll(`.hbond`).forEach(item => item.classList.remove('bond-highlighted'))
+          document.querySelectorAll(`.dbond`).forEach(item => item.classList.remove('bond-highlighted'))
+          document.querySelectorAll(`.nucleotide`).forEach(item => item.classList.remove('nucl-highlighted'))
+          document.querySelectorAll(`.nucleotide`).forEach(item => {
+            var idx = parseInt(item.attributes.id.value.split('-')[1])
+            if(idx > 1 && idx < strand1.length) item.classList.add('nucl-highlighted')
+          })
+          break;
+        case '3':
+          document.querySelectorAll(`.dbond`).forEach(item => item.classList.add('bond-highlighted'))
+          document.querySelectorAll(`.hbond`).forEach(item => item.classList.remove('bond-highlighted'))
+          document.querySelectorAll(`.vbond`).forEach(item => item.classList.remove('bond-highlighted'))
+          document.querySelectorAll(`.nucleotide`).forEach(item => item.classList.remove('nucl-highlighted'))
+          document.querySelectorAll(`.nucleotide`).forEach(item => {
+            var idx = parseInt(item.attributes.id.value.split('-')[1])
+            if(idx > 1 && idx < strand1.length) item.classList.add('nucl-highlighted')
+          })
+          break;
+        case '4':
+          document.querySelectorAll(`.dbond`).forEach(item => item.classList.add('bond-highlighted'))
+          document.querySelectorAll(`.hbond`).forEach(item => item.classList.remove('bond-highlighted'))
+          document.querySelectorAll(`.vbond`).forEach(item => item.classList.remove('bond-highlighted'))
+          document.querySelectorAll(`.nucleotide`).forEach(item => item.classList.remove('nucl-highlighted'))
+          document.querySelectorAll(`.nucleotide`).forEach(item => {
+            var idx = parseInt(item.attributes.id.value.split('-')[1])
+            if(idx > 1 && idx < strand1.length) item.classList.add('nucl-highlighted')
+          })
+          break;
+      }
+
+    }
+
+    
+
+  
+    const breadcrumbs =  [
+      {
+        title: 'About',
+        disabled: false,
+        to: '/',
+      },
+      {
+        title: 'Projects',
+        disabled: true
+      },
+      {
+        title: 'Overview',
+        disabled: false,
+        to: `/projects/${id}/overview`,
+      },
+      {
+        title: `Average results for ${title}`,
+        disabled: true
+      }
+    ]
+
+    
+  
+  </script>
+  
+  <style scoped>
+    #container-strands {
+      position:sticky; 
+      z-index:10;
+    }
+    /* for making sticky working */
+    .v-card {
+      overflow: inherit !important;  
+    }
+    .gr-nucl {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      /*background-color: red;*/
+    }
+    .nucleotide {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 500;
+      padding: .5rem 0.35rem;
+      margin: 0 0.15rem;
+      color: var(--nucl-dis);
+      user-select: none; 
+    }
+    .hbond {
+      position: absolute;
+      top: .75rem;
+      left: 1.25rem;
+      color: var(--bond-dis);
+      z-index: 2;
+    }
+    .vbond {
+      position: absolute;
+      top: 2.15rem;
+      left: .3rem;
+      color: var(--bond-dis);
+      z-index: 2;
+    }
+    .dbond {
+      position: absolute;
+      top: 2.15rem;
+      left: 1.3rem;
+      color: var(--bond-dis);
+      z-index: 2;
+    }
+    .bond-highlighted { color: var(--palette-5); }
+    .nucl-highlighted{ background-color: var(--light-text); color: var(--palette-4); }
+
+    .v-btn-group {
+      flex-direction: column;
+      overflow: inherit !important;
+      width: 100%;
+    }
+    .v-btn-group .v-btn{
+      padding: .44rem .5rem;
+      justify-content: start;
+      text-transform: none;
+    }
+
+    .number {
+      font-family: monospace;
+      font-size: .75rem;
+      width: 1.91rem;
+      text-align: center;
+      color: var(--palette-2);
+      user-select: none; 
+      line-height: .2rem;
+    }
+    .end {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 200;
+      color: var(--strand-end);
+      user-select: none; 
+      padding: .75rem 0;
+    }
+    .project-sheet{ overflow: hidden;}
+
+    @media only screen and (max-width: 1280px) {
+      .nucleotide { /*padding: 0 0.35rem;*/ padding: .3rem 0.25rem; }
+      .hbond { top: .5rem; left: 1.1rem; }
+      .vbond { top: 1.7rem; left: .2rem; }
+      .dbond { top: 1.85rem; left: 1.2rem; font-size: 1rem; }
+      .number { width: 1.72rem; }
+      .end { padding: .5rem 0; font-size: 1.2rem; }
+      .project-sheet{ overflow-x: auto;}
+      .project-row { min-width: 630px; }
+    }
+
+    @media only screen and (max-width: 960px) {
+      .v-btn-group {
+        flex-direction: inherit;
+        overflow: scroll !important;
+      }
+    }
+  </style>

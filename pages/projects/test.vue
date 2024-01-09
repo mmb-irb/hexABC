@@ -19,7 +19,7 @@
 
             <template v-slot:text>
 
-              <p>Using the below <strong>interactive sequence</strong>, users can select the desired <strong>nucleotides</strong> (single or grouped) in order to view the different <strong>analyses</strong>. <strong>Nucleotides</strong> can be selected <strong>individually</strong> <img src="/img/projects/nucleotide.png" alt="nucleotide" style="vertical-align: middle;" /> , by <strong>base step</strong>  <img src="/img/projects/base-step.png" alt="base step" style="vertical-align: middle;" /> , by <strong>base pair</strong> <img src="/img/projects/base-pair.png" alt="base pair" style="vertical-align: middle;" /> , by <strong>base pair step</strong> <img src="/img/projects/base-pair-step.png" alt="base pair step" style="vertical-align: middle;" /> , by <strong>tetramers</strong> <img src="/img/projects/tetramer.png" alt="tetramer" style="vertical-align: middle;" />  and by <strong>hexamers</strong>  <img src="/img/projects/hexamer.png" alt="hexamer" style="vertical-align: middle;" /></p>
+              <p>Using the below <strong>interactive sequence</strong>, users can select the desired <strong>nucleotides</strong> (single or grouped) in order to view the different <strong>analyses</strong>. <strong>Nucleotides</strong> can be selected <strong>individually</strong> <img src="/img/projects/analyses/curves/nucleotide.png" alt="nucleotide" style="vertical-align: middle;" /> , by <strong>base step</strong>  <img src="/img/projects/analyses/curves/base-step.png" alt="base step" style="vertical-align: middle;" /> , by <strong>base pair</strong> <img src="/img/projects/analyses/curves/base-pair.png" alt="base pair" style="vertical-align: middle;" /> , by <strong>base pair step</strong> <img src="/img/projects/analyses/curves/base-pair-step.png" alt="base pair step" style="vertical-align: middle;" /> , by <strong>tetramers</strong> <img src="/img/projects/analyses/curves/tetramer.png" alt="tetramer" style="vertical-align: middle;" />  and by <strong>hexamers</strong>  <img src="/img/projects/analyses/curves/hexamer.png" alt="hexamer" style="vertical-align: middle;" /></p>
 
               <v-sheet
                 color="grey-lighten-4"
@@ -93,8 +93,8 @@
                 
                 <v-col v-if="!showAlert">
                   <v-row>
-                  <div v-html="message"></div>
-                </v-row>
+                    <div v-html="message"></div>
+                  </v-row>
 
                   <v-row justify="center" class="pt-5">
 
@@ -140,31 +140,31 @@
                               color="primary"
                             >
                               <v-tab value="0">
-                                <img src="/img/projects/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
+                                <img src="/img/projects/analyses/curves/base-pair/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
                                 Alpha torsions
                               </v-tab>
                               <v-tab value="1">
-                                <img src="/img/projects/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
+                                <img src="/img/projects/analyses/curves/base-pair/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
                                 Beta Torsions
                               </v-tab>
                               <v-tab value="2">
-                                <img src="/img/projects/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
+                                <img src="/img/projects/analyses/curves/base-pair/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
                                 Gamma torsions
                               </v-tab>
                               <v-tab value="2">
-                                <img src="/img/projects/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
+                                <img src="/img/projects/analyses/curves/base-pair/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
                                 Epsilon torsions
                               </v-tab>
                               <v-tab value="2">
-                                <img src="/img/projects/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
+                                <img src="/img/projects/analyses/curves/base-pair/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
                                 Zeta torsions
                               </v-tab>
                               <v-tab value="2">
-                                <img src="/img/projects/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
+                                <img src="/img/projects/analyses/curves/base-pair/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
                                 Chi torsions
                               </v-tab>
                               <v-tab value="2">
-                                <img src="/img/projects/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
+                                <img src="/img/projects/analyses/curves/base-pair/inclination.png" alt="base step" style="width:50px; margin-right: 10px;" />
                                 Phase torsions
                               </v-tab>
                             </v-tabs>

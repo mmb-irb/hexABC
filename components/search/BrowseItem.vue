@@ -6,7 +6,7 @@
     </div>
 
     <div class="browse-list-content fill-height">
-      <h3 class="bl-desc"><NuxtLink :to="`/projects/${item.accession}`">{{ item.name }}</NuxtLink></h3>
+      <h3 class="bl-desc"><NuxtLink :to="`/projects/${item.accession}/overview`">{{ item.name }}</NuxtLink></h3>
       
       <div class="bl-anal">
         <h4>Analyses</h4>
@@ -22,7 +22,7 @@
           <v-btn
             density="comfortable"
             icon
-            :to="`/projects/${item.accession}`"
+            :to="`/projects/${item.accession}/overview`"
             v-bind="props"
           >
             <v-icon color="blue-grey-darken-1">
