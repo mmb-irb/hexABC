@@ -13,14 +13,14 @@
     <v-tab :value="5">Twist</v-tab>
   </v-tabs>
 
-  <v-window v-model="model_menu" class="elevation-2 pa-5" style="height: 440px">
+  <v-window v-model="model_menu" class="elevation-2 pa-5" id="container-window">
 
     <v-window-item :value="0"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/rise.png" alt="Rise" style="max-width: 100%;" >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/inter-base-pair/rise.png" alt="Rise" >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <TimeSeriesHistogramPlot id="rise"/>
         </v-col>
       </v-row>
@@ -28,10 +28,10 @@
 
     <v-window-item :value="1"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/roll.png" alt="Roll" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/inter-base-pair/roll.png" alt="Roll"  >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <TimeSeriesHistogramPlot id="roll"/>
         </v-col>
       </v-row>
@@ -39,10 +39,10 @@
 
     <v-window-item :value="2"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/shift.png" alt="Shift" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/inter-base-pair/shift.png" alt="Shift"  >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <TimeSeriesHistogramPlot id="shift"/>
         </v-col>
       </v-row>
@@ -50,10 +50,10 @@
 
     <v-window-item :value="3"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/slide.png" alt="Slide" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/inter-base-pair/slide.png" alt="Slide"  >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <TimeSeriesHistogramPlot id="slide"/>
         </v-col>
       </v-row>
@@ -61,10 +61,10 @@
 
     <v-window-item :value="3"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/tilt.png" alt="Tilt" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/inter-base-pair/tilt.png" alt="Tilt"  >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <TimeSeriesHistogramPlot id="tilt"/>
         </v-col>
       </v-row>
@@ -72,10 +72,10 @@
 
     <v-window-item :value="3"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/twist.png" alt="Twist" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/inter-base-pair/twist.png" alt="Twist"  >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <TimeSeriesHistogramPlot id="twist"/>
         </v-col>
       </v-row>
@@ -95,4 +95,14 @@
     align-items: center;
     justify-content: center;
   }
-</style>
+  .col-left img { max-width: 100%; }
+  #container-window { height: 440px; }
+
+  @media only screen and (max-width: 960px) {
+    .col-left img { max-width: 80%; }
+  }
+
+  @media only screen and (max-width: 600px) {
+    #container-window { height: auto; }
+    .col-left { display: none; }
+  }</style>

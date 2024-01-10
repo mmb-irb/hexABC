@@ -13,14 +13,14 @@
     <v-tab :value="5">Opening</v-tab>
   </v-tabs>
 
-  <v-window v-model="model_menu" class="elevation-2 pa-5" style="height: 440px">
+  <v-window v-model="model_menu" class="elevation-2 pa-5" id="container-window">
 
     <v-window-item :value="0"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/intra-base-pair/shear.png" alt="Shear" style="max-width: 100%;" >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/intra-base-pair/shear.png" alt="Shear" >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <ErrorBarsPlot id="shear"/>
         </v-col>
       </v-row>
@@ -28,10 +28,10 @@
 
     <v-window-item :value="1"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/intra-base-pair/stretch.png" alt="Stretch" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/intra-base-pair/stretch.png" alt="Stretch"  >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <ErrorBarsPlot id="stretch"/>
         </v-col>
       </v-row>
@@ -39,10 +39,10 @@
 
     <v-window-item :value="2"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/intra-base-pair/stagger.png" alt="Stagger" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/intra-base-pair/stagger.png" alt="Stagger"  >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <ErrorBarsPlot id="stagger"/>
         </v-col>
       </v-row>
@@ -50,10 +50,10 @@
 
     <v-window-item :value="3"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/intra-base-pair/buckle.png" alt="Buckle" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/intra-base-pair/buckle.png" alt="Buckle"  >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <ErrorBarsPlot id="buckle"/>
         </v-col>
       </v-row>
@@ -61,10 +61,10 @@
 
     <v-window-item :value="3"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/intra-base-pair/propeller.png" alt="Propeller" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/intra-base-pair/propeller.png" alt="Propeller"  >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <ErrorBarsPlot id="propeller"/>
         </v-col>
       </v-row>
@@ -72,10 +72,10 @@
 
     <v-window-item :value="3"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/intra-base-pair/opening.png" alt="Opening" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/intra-base-pair/opening.png" alt="Opening"  >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <ErrorBarsPlot id="opening"/>
         </v-col>
       </v-row>
@@ -94,5 +94,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .col-left img { max-width: 100%; }
+  #container-window { height: 440px; }
+
+  @media only screen and (max-width: 960px) {
+    .col-left img { max-width: 80%; }
+  }
+
+  @media only screen and (max-width: 600px) {
+    #container-window { height: auto; }
+    .col-left { display: none; }
   }
 </style>

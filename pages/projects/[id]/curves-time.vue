@@ -14,7 +14,7 @@
           <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
 
             <template v-slot:title>
-              <div style="display: flex; justify-content: space-between;">
+              <div id="header-container">
                 <div>
                   <v-icon size="small" icon="mdi-timer-outline"></v-icon> &nbsp;SEQUENCE RESULTS BY TIME
                 </div>
@@ -383,6 +383,10 @@
   </script>
   
   <style scoped>
+    #header-container {
+      display: flex; 
+      justify-content: space-between;
+    }
     #container-strands {
       position:sticky; 
       z-index:10;
@@ -469,5 +473,12 @@
         flex-direction: inherit;
         overflow: scroll !important;
       }
+    }
+
+    @media only screen and (max-width: 600px) {
+      #header-container {
+        flex-direction: column;
+      }
+      #header-container .v-btn {  margin-top: 1rem; }
     }
   </style>

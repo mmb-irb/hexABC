@@ -28,8 +28,8 @@ h1 { color: var(--palette-6); line-height: 2rem; font-size: 30px; font-weight: 3
 p { margin-bottom: 1rem; }
 
 /* breadcrumbs */
-.v-breadcrumbs { padding: 10px 0!important; }
-.v-breadcrumbs-item { font-size: 14px!important; padding:0!important; }
+.v-breadcrumbs { padding: 10px 0!important; overflow-x: auto; }
+.v-breadcrumbs-item { font-size: 14px!important; padding:0!important; text-wrap: nowrap; }
 .v-breadcrumbs-divider { padding: 0!important; }
 
 /* cards */

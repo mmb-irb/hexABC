@@ -128,10 +128,10 @@
 
   @media only screen and (max-width: 600px) {
     .browse-list-item { display: block; }
-    .browse-list-img-thumb { justify-content: center; margin-right: 0;}
+    .browse-list-img-thumb { justify-content: center; margin-right: 0; border-bottom: none; }
     .browse-list-img-thumb img { max-height: 180px; }
     .browse-list-content { padding-left: 0; padding-right: 0; }
-    .bl-anal { margin-right: 0; } 
+    .bl-anal { margin-right: 0; border-bottom: none; } 
     .browse-list-append { width: 100%; justify-content: space-around; padding: .7rem 0;}
   }
 

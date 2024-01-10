@@ -11,14 +11,14 @@
     <v-tab :value="3">Y-Displacement</v-tab>
   </v-tabs>
 
-  <v-window v-model="model_menu" class="elevation-2 pa-5" style="height: 440px">
+  <v-window v-model="model_menu" class="elevation-2 pa-5" id="container-window">
 
     <v-window-item :value="0"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/inclination.png" alt="Inclination" style="max-width: 100%;" >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/base-pair/inclination.png" alt="Inclination" >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <ErrorBarsPlot id="inclination"/>
         </v-col>
       </v-row>
@@ -26,10 +26,10 @@
 
     <v-window-item :value="1"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/tip.png" alt="Tip" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/base-pair/tip.png" alt="Tip" >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <ErrorBarsPlot id="tip"/>
         </v-col>
       </v-row>
@@ -37,10 +37,10 @@
 
     <v-window-item :value="2"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/xdisp.png" alt="X-Displacement" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/base-pair/xdisp.png" alt="X-Displacement" >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <ErrorBarsPlot id="xdisplacement"/>
         </v-col>
       </v-row>
@@ -48,10 +48,10 @@
 
     <v-window-item :value="3"> 
       <v-row>
-        <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/ydisp.png" alt="Y-Displacement" style="max-width: 100%;"  >
+        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
+          <img src="/img/projects/analyses/curves/base-pair/ydisp.png" alt="Y-Displacement" >
         </v-col>
-        <v-col cols="9">
+        <v-col lg="9" md="8" sm="8" xs="12">
           <ErrorBarsPlot id="ydisplacement"/>
         </v-col>
       </v-row>
@@ -70,5 +70,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .col-left img { max-width: 100%; }
+  #container-window { height: 440px; }
+
+  @media only screen and (max-width: 960px) {
+    .col-left img { max-width: 80%; }
+  }
+
+  @media only screen and (max-width: 600px) {
+    #container-window { height: auto; }
+    .col-left { display: none; }
   }
 </style>
