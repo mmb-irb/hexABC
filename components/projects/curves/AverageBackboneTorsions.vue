@@ -26,7 +26,7 @@
     <v-window-item :value="1"> 
       <v-row>
         <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/backbone/alpha-gamma.png" alt="Canonical Alpha-Gamma" width="200px" >
+          <img src="/img/projects/analyses/curves/backbone/alpha-gamma.png" alt="Canonical Alpha-Gamma" style="max-width: 100%;"  >
         </v-col>
         <v-col cols="9">
           <StackedHistogramPlot id="alpha-gamma"/>
@@ -37,7 +37,7 @@
     <v-window-item :value="2"> 
       <v-row>
         <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/backbone/puckering.png" alt="Puckering" width="200px" >
+          <img src="/img/projects/analyses/curves/backbone/puckering.png" alt="Puckering" style="max-width: 100%;"  >
         </v-col>
         <v-col cols="9">
           <StackedHistogramPlot id="puckering"/>
@@ -57,5 +57,6 @@
   .col-left {
     display: flex;
     align-items: center;
+    justify-content: center;
   }
 </style>

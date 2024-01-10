@@ -5,10 +5,10 @@
     color="red-darken-4"
     grow
   >
-    <v-tab :value="0">Inclination</v-tab>
-    <v-tab :value="1">Tip</v-tab>
-    <v-tab :value="2">X-Displacement</v-tab>
-    <v-tab :value="3">Y-Displacement</v-tab>
+    <v-tab :value="0">Major Groove Depth</v-tab>
+    <v-tab :value="1">Major Groove Width</v-tab>
+    <v-tab :value="2">Minor Groove Depth</v-tab>
+    <v-tab :value="3">Minor Groove Width</v-tab>
   </v-tabs>
 
   <v-window v-model="model_menu" class="elevation-2 pa-5" style="height: 440px">
@@ -16,10 +16,10 @@
     <v-window-item :value="0"> 
       <v-row>
         <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/inclination.png" alt="Inclination" style="max-width: 100%;" >
+          <img src="/img/projects/analyses/curves/grooves/major.png" alt="Major Groove Depth" style="max-width: 100%;" >
         </v-col>
         <v-col cols="9">
-          <ErrorBarsPlot id="inclination"/>
+          <ErrorBarsPlot id="major-depth"/>
         </v-col>
       </v-row>
     </v-window-item>
@@ -27,10 +27,10 @@
     <v-window-item :value="1"> 
       <v-row>
         <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/tip.png" alt="Tip" style="max-width: 100%;"  >
+          <img src="/img/projects/analyses/curves/grooves/major.png" alt="Major Groove Width" style="max-width: 100%;"  >
         </v-col>
         <v-col cols="9">
-          <ErrorBarsPlot id="tip"/>
+          <ErrorBarsPlot id="major-width"/>
         </v-col>
       </v-row>
     </v-window-item>
@@ -38,10 +38,10 @@
     <v-window-item :value="2"> 
       <v-row>
         <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/xdisp.png" alt="X-Displacement" style="max-width: 100%;"  >
+          <img src="/img/projects/analyses/curves/grooves/minor.png" alt="Minor Groove Depth" style="max-width: 100%;"  >
         </v-col>
         <v-col cols="9">
-          <ErrorBarsPlot id="xdisplacement"/>
+          <ErrorBarsPlot id="minor-depth"/>
         </v-col>
       </v-row>
     </v-window-item>
@@ -49,10 +49,10 @@
     <v-window-item :value="3"> 
       <v-row>
         <v-col cols="3" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/ydisp.png" alt="Y-Displacement" style="max-width: 100%;"  >
+          <img src="/img/projects/analyses/curves/grooves/minor.png" alt="Minor Groove Width" style="max-width: 100%;"  >
         </v-col>
         <v-col cols="9">
-          <ErrorBarsPlot id="ydisplacement"/>
+          <ErrorBarsPlot id="minor-width"/>
         </v-col>
       </v-row>
     </v-window-item>

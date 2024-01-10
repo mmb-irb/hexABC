@@ -58,15 +58,15 @@
                           <div class="nucleotide" :id="`${item}-${index + 1}-strand1`">{{ item }} </div>
 
                           <v-icon class="hbond" v-if="index < strand1.length - 1">
-                            mdi-circle-medium
+                            mdi-dots-horizontal
                           </v-icon>
 
                           <v-icon class="vbond" v-if="index >= 1 && index < strand1.length - 1">
-                            mdi-circle-medium
+                            mdi-dots-vertical
                           </v-icon>
 
                           <v-icon class="dbond" v-if="index >= 1 && index < strand1.length - 2">
-                            mdi-hospital mdi-rotate-45
+                            mdi-arrow-all mdi-rotate-45
                           </v-icon>
                         </div>
                       </div>
@@ -84,7 +84,7 @@
                           <div class="nucleotide" :id="`${item}-${index + 1}-strand2`">{{ item }} </div> 
 
                           <v-icon class="hbond" v-if="index < strand1.length - 1">
-                            mdi-circle-medium
+                            mdi-dots-horizontal
                           </v-icon>
 
                         </div>
@@ -110,11 +110,11 @@
                     color="red-darken-4"
                     rounded="0"
                   >
-                    <v-btn value="0" @click="firstLevelChange"> <v-icon> mdi-arrow-u-down-right </v-icon> &nbsp;Backbone Torsions </v-btn>
-                    <v-btn value="1" @click="firstLevelChange"> <v-icon> mdi-axis-y-rotate-clockwise </v-icon> &nbsp;Axis Base pair </v-btn>
-                    <v-btn value="2" @click="firstLevelChange"> <v-icon> mdi-axis-x-rotate-clockwise </v-icon> &nbsp;Intra-Base Pair HP's </v-btn>
-                    <v-btn value="3" @click="firstLevelChange"> <v-icon> mdi-axis-z-rotate-counterclockwise </v-icon> &nbsp;Inter-Base Pair HP's </v-btn>
-                    <v-btn value="4" @click="firstLevelChange"> <v-icon> mdi-dna </v-icon> &nbsp;Grooves </v-btn>
+                    <v-btn value="0" @click="firstLevelChange"> <v-icon> mdi-heating-coil </v-icon> &nbsp;Backbone Torsions </v-btn>
+                    <v-btn value="1" @click="firstLevelChange"> <v-icon> mdi-arrow-top-right-bottom-left mdi-rotate-135 </v-icon> &nbsp;Axis Base pair </v-btn>
+                    <v-btn value="2" @click="firstLevelChange"> <v-icon> mdi-arrow-expand </v-icon> &nbsp;Intra-Base Pair HP's </v-btn>
+                    <v-btn value="3" @click="firstLevelChange"> <v-icon> mdi-arrow-expand-all </v-icon> &nbsp;Inter-Base Pair HP's </v-btn>
+                    <v-btn value="4" @click="firstLevelChange"> <v-icon style="transform: scaleX(-1);"> mdi-set-square mdi-rotate-45 </v-icon> &nbsp;Grooves </v-btn>
                   </v-btn-toggle>
                 </v-col>
               </v-row>
@@ -123,6 +123,9 @@
                 <v-col cols="12">
                   <AverageBackboneTorsions v-if="section === '0'" />
                   <AverageAxisBasePair v-if="section === '1'" />
+                  <AverageIntraBasePair v-if="section === '2'" />
+                  <AverageInterBasePair v-if="section === '3'" />
+                  <AverageGrooves v-if="section === '4'" />
                 </v-col>
               </v-row>
 
@@ -205,13 +208,14 @@
           })
           break;
         case '4':
-          document.querySelectorAll(`.dbond`).forEach(item => item.classList.add('bond-highlighted'))
+          document.querySelectorAll(`.dbond`).forEach(item => item.classList.remove('bond-highlighted'))
           document.querySelectorAll(`.hbond`).forEach(item => item.classList.remove('bond-highlighted'))
           document.querySelectorAll(`.vbond`).forEach(item => item.classList.remove('bond-highlighted'))
-          document.querySelectorAll(`.nucleotide`).forEach(item => item.classList.remove('nucl-highlighted'))
+          //document.querySelectorAll(`.nucleotide`).forEach(item => item.classList.remove('nucl-highlighted'))
           document.querySelectorAll(`.nucleotide`).forEach(item => {
-            var idx = parseInt(item.attributes.id.value.split('-')[1])
-            if(idx > 1 && idx < strand1.length) item.classList.add('nucl-highlighted')
+            /*var idx = parseInt(item.attributes.id.value.split('-')[1])
+            if(idx > 1 && idx < strand1.length) item.classList.add('nucl-highlighted')*/
+            item.classList.add('nucl-highlighted')
           })
           break;
       }
@@ -274,15 +278,17 @@
     }
     .hbond {
       position: absolute;
-      top: .75rem;
-      left: 1.25rem;
+      top: 1rem;
+      left: 1.4rem;
+      font-size: 1rem;
       color: var(--bond-dis);
       z-index: 2;
     }
     .vbond {
       position: absolute;
       top: 2.15rem;
-      left: .3rem;
+      left: .35rem;
+      font-size: 1.2rem;
       color: var(--bond-dis);
       z-index: 2;
     }
@@ -328,9 +334,9 @@
 
     @media only screen and (max-width: 1280px) {
       .nucleotide { /*padding: 0 0.35rem;*/ padding: .3rem 0.25rem; }
-      .hbond { top: .5rem; left: 1.1rem; }
-      .vbond { top: 1.7rem; left: .2rem; }
-      .dbond { top: 1.85rem; left: 1.2rem; font-size: 1rem; }
+      .hbond { top: .8rem; left: 1.3rem; font-size:.8rem; }
+      .vbond { top: 1.7rem; left: .4rem; font-size:1rem;  }
+      .dbond { top: 1.8rem; left: 1.2rem; font-size: 1rem; }
       .number { width: 1.72rem; }
       .end { padding: .5rem 0; font-size: 1.2rem; }
       .project-sheet{ overflow-x: auto;}
