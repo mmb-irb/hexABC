@@ -8,9 +8,9 @@ export default defineEventHandler(async (event) => {
     if(!page) page = 1;
 
     // analyses not working
-    //const uri = `https://bioexcel-cv19.bsc.es/api/rest/v1/projects?projection={"accession":1,"metadata.NAME":1,"metadata.UNIT":1,"analyses":1}&limit=${limit}&page=${page}`
+    //const uri = `${process.env.MAIN_API_URL}projects?projection={"accession":1,"metadata.NAME":1,"metadata.UNIT":1,"analyses":1}&limit=${limit}&page=${page}`
 
-    const uri = `https://bioexcel-cv19.bsc.es/api/rest/v1/projects?limit=${limit}&page=${page}`
+    const uri = `${process.env.MAIN_API_URL}projects?limit=${limit}&page=${page}`
 
     const data = await $fetch(uri)
 
