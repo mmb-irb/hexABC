@@ -28,15 +28,14 @@
 
             <template v-slot:text>
 
-              <p>Click on the menu right to the sequence to see all the analyses available in this section.</p>
+              <p>Click on the <strong>menu</strong> right to the <strong>sequence</strong> to see all the <strong>analyses</strong> available in this section.</p>
 
-              <v-row> 
+              <v-row id="container-strands"> 
                 <v-col lg="9" md="9" sm="12" xs="12">
 
                   <v-sheet
                     color="grey-lighten-4"
                     class="pa-10 project-sheet"
-                    id="container-strands"
                   >
                     <v-row class="project-row" justify="center">
                       <div 
@@ -66,7 +65,7 @@
                           </v-icon>
 
                           <v-icon class="dbond" v-if="index >= 1 && index < strand1.length - 2">
-                            mdi-arrow-all mdi-rotate-45
+                            mdi-window-close
                           </v-icon>
                         </div>
                       </div>
@@ -109,6 +108,7 @@
                     v-model="section"
                     color="red-darken-4"
                     rounded="0"
+                    mandatory
                   >
                     <v-btn value="0" @click="firstLevelChange"> <v-icon> mdi-heating-coil </v-icon> &nbsp;Backbone Torsions </v-btn>
                     <v-btn value="1" @click="firstLevelChange"> <v-icon> mdi-arrow-top-right-bottom-left mdi-rotate-135 </v-icon> &nbsp;Axis Base pair </v-btn>
@@ -117,6 +117,21 @@
                     <v-btn value="4" @click="firstLevelChange"> <v-icon style="transform: scaleX(-1);"> mdi-set-square mdi-rotate-45 </v-icon> &nbsp;Grooves </v-btn>
                   </v-btn-toggle>
                 </v-col>
+                <div id="sticky-disable">
+                  <v-tooltip text="Disable sticky" location="bottom">
+                    <template v-slot:activator="{ props }">
+                      <v-btn 
+                        v-bind="props" 
+                        density="compact" 
+                        id="btn-sticky-disable" 
+                        color="blue-grey-lighten-4" 
+                        variant="flat" 
+                        icon="mdi-window-close"
+                        @click="controlSticky"
+                      ></v-btn>
+                    </template>
+                  </v-tooltip>
+                </div>
               </v-row>
 
               <v-row justify="end" v-if="section">
@@ -132,8 +147,23 @@
             </template>
           </v-card>
         </v-col>
-      </v-row>
 
+        <div id="sticky-enable">
+          <v-tooltip text="Enable sticky" location="bottom">
+            <template v-slot:activator="{ props }">
+              <v-btn 
+                v-bind="props" 
+                density="compact" 
+                id="btn-sticky-enable" 
+                color="blue-grey-lighten-4" 
+                icon="mdi-chevron-double-down"
+                @click="controlSticky"
+              ></v-btn>
+            </template>
+          </v-tooltip>
+        </div>
+
+      </v-row>
   
     </v-container>
   </template>
@@ -222,9 +252,45 @@
 
     }
 
-    
+    // STICKY CONTAINER STRANDS 
+    let sticky = ref(true)
+    const onScroll = () => {
+      console.log(sticky.value)
+      if(sticky.value === false) return
 
-  
+      if(document.querySelector("#container-strands").getBoundingClientRect().y <= 50) {
+        document.querySelector("#container-strands").style.position = 'sticky'
+        document.querySelector("#container-strands").style.top = '50px'
+        document.querySelector("#container-strands").classList.add('elevation-3')
+        document.querySelector("#sticky-disable").style.display = 'block'
+      } else {
+        document.querySelector("#container-strands").style.position = 'relative'
+        document.querySelector("#container-strands").style.top = 'inherit'
+        document.querySelector("#container-strands").classList.remove('elevation-3')
+        document.querySelector("#sticky-disable").style.display = 'none'
+      }
+    }
+    window.addEventListener('scroll', onScroll)    
+
+    const controlSticky = () => {
+      sticky.value = !sticky.value
+      if(sticky.value === false) {
+        document.querySelector("#container-strands").style.position = 'relative'
+        document.querySelector("#container-strands").style.top = 'inherit'
+        document.querySelector("#container-strands").classList.remove('elevation-3')
+        document.querySelector("#sticky-disable").style.display = 'none'
+        document.querySelector("#sticky-enable").style.display = 'block'
+      } else {        
+        document.querySelector("#sticky-enable").style.display = 'none'
+        if(document.querySelector("#container-strands").getBoundingClientRect().y <= 50) {
+          document.querySelector("#container-strands").style.position = 'sticky'
+          document.querySelector("#container-strands").style.top = '50px'
+          document.querySelector("#container-strands").classList.add('elevation-3')
+          document.querySelector("#sticky-disable").style.display = 'block'
+        }
+      }
+    }
+
     const breadcrumbs =  [
       {
         title: 'About',
@@ -245,8 +311,6 @@
         disabled: true
       }
     ]
-
-    
   
   </script>
   
@@ -254,6 +318,7 @@
     #container-strands {
       position:sticky; 
       z-index:10;
+      background: #fff;
     }
     /* for making sticky working */
     .v-card {
@@ -324,7 +389,7 @@
     }
     .end {
       font-family: 'Roboto Mono', monospace;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 200;
       color: var(--strand-end);
       user-select: none; 
@@ -332,8 +397,12 @@
     }
     .project-sheet{ overflow: hidden;}
 
+    #sticky-disable { position: absolute; right: -.8rem; bottom: -.8rem; display: none; }
+    #sticky-enable { position: fixed; top: 55px; right:0px; display: none; }
+    #btn-sticky-disable, #btn-sticky-enable { color: #fff!important; }
+
     @media only screen and (max-width: 1280px) {
-      .nucleotide { /*padding: 0 0.35rem;*/ padding: .3rem 0.25rem; }
+      .nucleotide { padding: .3rem 0.25rem; }
       .hbond { top: .8rem; left: 1.3rem; font-size:.8rem; }
       .vbond { top: 1.7rem; left: .4rem; font-size:1rem;  }
       .dbond { top: 1.8rem; left: 1.2rem; font-size: 1rem; }

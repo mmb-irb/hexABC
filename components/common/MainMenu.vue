@@ -130,6 +130,7 @@
 </script>
 
 <style scoped>
+  header { z-index:10000!important; }
   #main-logo { max-height: 60px; vertical-align: bottom; }
   .v-btn { height: 100%; font-weight: 600; color: var(--palette-5)!important; }
   .v-btn--active { border-bottom: 2px solid;}
