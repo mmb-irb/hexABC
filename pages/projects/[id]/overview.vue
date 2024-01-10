@@ -38,7 +38,6 @@
 
             <v-row> 
               <v-col lg="3" md="6" sm="6" xs="12">
-
                 <v-hover v-slot:default="{ isHovering, props }">
                   <v-card
                     class="mx-auto"
@@ -62,7 +61,32 @@
 
                   </v-card>
                 </v-hover>
+              </v-col>
 
+              <v-col lg="3" md="6" sm="6" xs="12">
+                <v-hover v-slot:default="{ isHovering, props }">
+                  <v-card
+                    class="mx-auto"
+                  >
+                  <NuxtLink :to="`/projects/${id}/hbonds`"
+                    v-bind="props"
+                    :class="isHovering ? 'bg-link-hover' : 'bg-link'">
+                    <v-img
+                      src="/img/projects/analyses/hbonds/hbonds.png"
+                      height="200px"
+                      cover
+                      v-bind="props"
+                      :class="isHovering ? 'bg-img-hover' : 'bg-img'"
+                    >
+                    </v-img>
+                  </NuxtLink>
+
+                  <v-card-title>
+                    <NuxtLink :to="`/projects/${id}/hbonds`">HBonds Analyses</NuxtLink>
+                  </v-card-title>
+
+                  </v-card>
+                </v-hover>
               </v-col>
             </v-row>
 
