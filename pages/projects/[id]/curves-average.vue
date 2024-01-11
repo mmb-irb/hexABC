@@ -2,12 +2,8 @@
     <v-container>
   
       <h1>Curves Average Results</h1>
-  
-      <v-breadcrumbs :items="breadcrumbs">
-        <template v-slot:divider>
-          <v-icon icon="mdi-circle-small"></v-icon>
-        </template>
-      </v-breadcrumbs>
+
+      <Breadcrumbs :props="{id: id, text: 'Average results ', title: title}" />
   
       <v-row> 
         <v-col cols="12">
@@ -290,27 +286,6 @@
         }
       }
     }
-
-    const breadcrumbs =  [
-      {
-        title: 'About',
-        disabled: false,
-        to: '/',
-      },
-      {
-        title: 'Projects',
-        disabled: true
-      },
-      {
-        title: 'Overview',
-        disabled: false,
-        to: `/projects/${id}/overview`,
-      },
-      {
-        title: `Average results for ${title}`,
-        disabled: true
-      }
-    ]
   
   </script>
   

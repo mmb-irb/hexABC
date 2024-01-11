@@ -3,11 +3,7 @@
 
       <h1>REST API documentation</h1>
 
-      <v-breadcrumbs :items="breadcrumbs">
-        <template v-slot:divider>
-          <v-icon icon="mdi-circle-small"></v-icon>
-        </template>
-      </v-breadcrumbs>
+      <Breadcrumbs :props="{section:'REST API'}" />
 
       <v-card rounded="sm">
 
@@ -46,18 +42,6 @@
   useHead({
     title: `REST API` 
   })
-
-  const breadcrumbs =  [
-    {
-      title: 'About',
-      disabled: false,
-      to: '/',
-    },
-    {
-      title: 'REST API',
-      disabled: true
-    }
-  ]
 
   import SwaggerUI from 'swagger-ui'
   import 'swagger-ui/dist/swagger-ui.css'

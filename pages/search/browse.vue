@@ -3,11 +3,7 @@
 
     <h1>Browse</h1>
 
-    <v-breadcrumbs :items="breadcrumbs">
-      <template v-slot:divider>
-        <v-icon icon="mdi-circle-small"></v-icon>
-      </template>
-    </v-breadcrumbs>
+    <Breadcrumbs :props="{section:'Browse'}" />
 
     <v-row> 
       <v-col cols="12">
@@ -60,22 +56,6 @@ import { ref } from 'vue';
   useHead({
     title: 'Browse collection' 
   })
-
-  const breadcrumbs =  [
-    {
-      title: 'About',
-      disabled: false,
-      to: '/',
-    },
-    {
-      title: 'Search',
-      disabled: true
-    },
-    {
-      title: 'Browse',
-      disabled: true
-    }
-  ]
 
   const rows = ref(10)
   const page = ref(1)

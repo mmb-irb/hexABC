@@ -2,12 +2,8 @@
     <v-container>
   
       <h1>Curves Results by Time</h1>
-  
-      <v-breadcrumbs :items="breadcrumbs">
-        <template v-slot:divider>
-          <v-icon icon="mdi-circle-small"></v-icon>
-        </template>
-      </v-breadcrumbs>
+
+      <Breadcrumbs :props="{id: id, text: 'Results by time', title: title}" />
   
       <v-row> 
         <v-col cols="12">
@@ -358,27 +354,6 @@
         }
       }
     }
-
-    const breadcrumbs =  [
-      {
-        title: 'About',
-        disabled: false,
-        to: '/',
-      },
-      {
-        title: 'Projects',
-        disabled: true
-      },
-      {
-        title: 'Overview',
-        disabled: false,
-        to: `/projects/${id}/overview`,
-      },
-      {
-        title: `Results by time for ${title}`,
-        disabled: true
-      }
-    ]
 
   </script>
   

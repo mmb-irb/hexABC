@@ -3,11 +3,7 @@
 
     <h1>The Consortium</h1>
 
-    <v-breadcrumbs :items="breadcrumbs">
-      <template v-slot:divider>
-        <v-icon icon="mdi-circle-small"></v-icon>
-      </template>
-    </v-breadcrumbs>
+    <Breadcrumbs :props="{section:'The consortium'}" />
 
     <v-row> 
       <v-col lg="6" md="6" sm="6" xs="12">
@@ -74,18 +70,6 @@
   useHead({
     title: 'The consortium' 
   })
-
-  const breadcrumbs =  [
-    {
-      title: 'About',
-      disabled: false,
-      to: '/',
-    },
-    {
-      title: 'The consortium',
-      disabled: true
-    }
-  ]
 
 </script>
 

@@ -3,11 +3,7 @@
 
     <h1>Hydrogen Bonds</h1>
 
-    <v-breadcrumbs :items="breadcrumbs">
-      <template v-slot:divider>
-        <v-icon icon="mdi-circle-small"></v-icon>
-      </template>
-    </v-breadcrumbs>
+    <Breadcrumbs :props="{id: id, text: 'HBonds analyses', title: title}" />
 
     <v-row> 
       <v-col cols="12">
@@ -43,27 +39,6 @@ import { ref } from 'vue';
   useHead({
     title: `HBonds for ${title}`,
   })
-
-  const breadcrumbs =  [
-      {
-        title: 'About',
-        disabled: false,
-        to: '/',
-      },
-      {
-        title: 'Projects',
-        disabled: true
-      },
-      {
-        title: 'Overview',
-        disabled: false,
-        to: `/projects/${id}/overview`,
-      },
-      {
-        title: `HBonds analyses for ${title}`,
-        disabled: true
-      }
-    ]
 
 </script>
 
