@@ -42,7 +42,7 @@
                     v-bind="props"
                     :class="isHovering ? 'bg-link-hover' : 'bg-link'">
                     <v-img
-                      src="/img/projects/analyses/curves/curves-analyses.png"
+                      :src="curvesImg"
                       height="200px"
                       cover
                       v-bind="props"
@@ -68,7 +68,7 @@
                     v-bind="props"
                     :class="isHovering ? 'bg-link-hover' : 'bg-link'">
                     <v-img
-                      src="/img/projects/analyses/hbonds/hbonds.png"
+                      :src="hbondsImg"
                       height="200px"
                       cover
                       v-bind="props"
@@ -97,6 +97,10 @@
 <script setup>
 import { ref } from 'vue';
 
+  // vuetify images must be imported like this
+  import curvesImg from '/img/projects/analyses/curves/curves-analyses.png'
+  import hbondsImg from '/img/projects/analyses/hbonds/hbonds.png'
+
   const { id } = useRoute().params
   const config = useRuntimeConfig()
 
@@ -108,6 +112,8 @@ import { ref } from 'vue';
   useHead({
     title: title
   })
+
+  //const baseURL = config.public.baseURL
 
 </script>
 

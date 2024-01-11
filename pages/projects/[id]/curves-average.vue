@@ -389,6 +389,7 @@
       .end { padding: .5rem 0; font-size: 1.2rem; }
       .project-sheet{ overflow-x: auto;}
       .project-row { min-width: 630px; }
+      .v-btn-group .v-btn { padding: .44rem .2rem; }
     }
 
     @media only screen and (max-width: 960px) {
@@ -396,6 +397,7 @@
         flex-direction: inherit;
         overflow: scroll !important;
       }
+      .v-btn-group .v-btn { padding: .44rem .35rem; }
     }
 
     @media only screen and (max-width: 600px) {

@@ -1,6 +1,9 @@
 // this end point gives the list of projects paginated
 export default defineEventHandler(async (event) => { 
 
+    // get runtime config
+    const config = useRuntimeConfig()
+
     // handle query params (GET)
     let { limit, page } = getQuery(event);
 
@@ -8,9 +11,9 @@ export default defineEventHandler(async (event) => {
     if(!page) page = 1;
 
     // analyses not working
-    //const uri = `${process.env.MAIN_API_URL}projects?projection={"accession":1,"metadata.NAME":1,"metadata.UNIT":1,"analyses":1}&limit=${limit}&page=${page}`
+    //const uri = `${config.public.externalApi}projects?projection={"accession":1,"metadata.NAME":1,"metadata.UNIT":1,"analyses":1}&limit=${limit}&page=${page}`
 
-    const uri = `${process.env.MAIN_API_URL}projects?limit=${limit}&page=${page}`
+    const uri = `${config.public.externalApi}projects?limit=${limit}&page=${page}`
 
     const data = await $fetch(uri)
 

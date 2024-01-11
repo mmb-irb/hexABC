@@ -198,18 +198,6 @@
     let showAlert = ref(true)
     let alertType = ref('info')
 
-    let toggle = ref(0)
-    let tab1 = ref(0)
-    let tab1_1 = ref(0)
-
-    const tab1Items = [
-      { id: 0, text: 'One Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-      { id: 1, text: 'Two Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-      { id: 2, text: 'Three Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-      { id: 3, text: 'Four Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-      { id: 4, text: 'Five Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-    ]
-
     /* HARDCODED WHILE NOT HAVING REST API */
     const sequence = 'GATACATACATAATACAAAC'
     const { strand1, strand2, ends1, ends2 } = getSequenceSettings(sequence)
@@ -374,7 +362,7 @@
     .nucleotide {
       font-family: 'Roboto Mono', monospace;
       font-size: 1.5rem;
-      line-height: 1.5rem;
+      line-height: 1.6rem;
       font-weight: 500;
       padding: .5rem 0.5rem;
       margin: 0;
@@ -441,6 +429,7 @@
       .end { padding: .5rem 0; font-size: 1.2rem; }
       .project-sheet{ overflow-x: auto;}
       .project-row { min-width: 630px; }
+      .v-btn-group .v-btn { padding: .44rem .2rem; }
     }
 
     @media only screen and (max-width: 960px) {
@@ -448,6 +437,7 @@
         flex-direction: inherit;
         overflow: scroll !important;
       }
+      .v-btn-group .v-btn { padding: .44rem .35rem; }
     }
 
     @media only screen and (max-width: 600px) {

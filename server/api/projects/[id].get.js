@@ -1,9 +1,13 @@
 // this end point gives the list of projects paginated
 export default defineEventHandler(async (event) => { 
 
+    // get runtime config
+    const config = useRuntimeConfig()
+
+    // get project id
     const { id } = event.context.params
 
-    const uri = `${process.env.MAIN_API_URL}projects/${id}`
+    const uri = `${config.public.externalApi}projects/${id}`
 
     const data = await $fetch(uri)
                 .catch((error) => {
