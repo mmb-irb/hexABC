@@ -113,8 +113,6 @@ import { ref } from 'vue';
     title: title
   })
 
-  //const baseURL = config.public.baseURL
-
 </script>
 
 <style scoped>
