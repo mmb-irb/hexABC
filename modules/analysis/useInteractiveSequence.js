@@ -168,7 +168,7 @@ export default function useInteractiveSequence() {
                     return {
                         status: false,
                         alert: 'warning',
-                        msg: '<strong>Invalid base pair</strong>, please be sure to select two <strong>complementary nucleotides</strong> <img src="/img/projects/analyses/curves/base-pair.png" alt="base step" style="vertical-align: middle;" />'
+                        msg: '<strong>Invalid base pair</strong>, please be sure to select <strong>two complementary nucleotides</strong> <img src="/img/projects/analyses/curves/base-pair.png" alt="base step" style="vertical-align: middle;" />'
                     };
                 }
 
@@ -187,7 +187,7 @@ export default function useInteractiveSequence() {
                     return {
                         status: false,
                         alert: 'warning',
-                        msg: '<strong>Invalid base step</strong>, please be sure to select two <strong>consecutive nucleotides</strong> <img src="/img/projects/analyses/curves/base-step.png" alt="base step" style="vertical-align: middle;" />'
+                        msg: '<strong>Invalid base step</strong>, please be sure to select <strong>two consecutive nucleotides</strong> <img src="/img/projects/analyses/curves/base-step.png" alt="base step" style="vertical-align: middle;" />'
                     };
                 }
             }
@@ -215,7 +215,7 @@ export default function useInteractiveSequence() {
                     return {
                         status: false,
                         alert: 'warning',
-                        msg: '<strong>Invalid base pair step</strong>, please be sure to select two <strong>consecutive pairs of complementary nucleotides</strong> <img src="/img/projects/analyses/curves/base-pair-step.png" alt="base pair step" style="vertical-align: middle;" />'
+                        msg: '<strong>Invalid base pair step</strong>, please be sure to select <strong>two consecutive pairs of complementary nucleotides</strong> <img src="/img/projects/analyses/curves/base-pair-step.png" alt="base pair step" style="vertical-align: middle;" />'
                     };
                 }
 
@@ -223,7 +223,7 @@ export default function useInteractiveSequence() {
                 return {
                     status: false,
                     alert: 'warning',
-                    msg: '<strong>Invalid base pair step</strong>, please be sure to select two <strong>consecutive pairs of complementary nucleotides</strong> <img src="/img/projects/analyses/curves/base-pair-step.png" alt="base pair step" style="vertical-align: middle;" />'
+                    msg: '<strong>Invalid base pair step</strong>, please be sure to select <strong>two consecutive pairs of complementary nucleotides</strong> <img src="/img/projects/analyses/curves/base-pair-step.png" alt="base pair step" style="vertical-align: middle;" />'
                 };
             }
         }
@@ -250,7 +250,7 @@ export default function useInteractiveSequence() {
                     return {
                         status: false,
                         alert: 'warning',
-                        msg: '<strong>Invalid tetramer</strong>, please be sure to select four <strong>consecutive pairs of complementary nucleotides</strong> <img src="/img/projects/analyses/curves/tetramer.png" alt="tetramer" style="vertical-align: middle;" />'
+                        msg: '<strong>Invalid tetramer</strong>, please be sure to select <strong>four consecutive pairs of complementary nucleotides</strong> <img src="/img/projects/analyses/curves/tetramer.png" alt="tetramer" style="vertical-align: middle;" />'
                     };
                 }
 
@@ -258,7 +258,7 @@ export default function useInteractiveSequence() {
                 return {
                     status: false,
                     alert: 'warning',
-                    msg: '<strong>Invalid tetramer</strong>, please be sure to select four <strong>consecutive pairs of complementary nucleotides</strong> <img src="/img/projects/analyses/curves/tetramer.png" alt="tetramer" style="vertical-align: middle;" />'
+                    msg: '<strong>Invalid tetramer</strong>, please be sure to select <strong>four consecutive pairs of complementary nucleotides</strong> <img src="/img/projects/analyses/curves/tetramer.png" alt="tetramer" style="vertical-align: middle;" />'
                 };
             }
 
@@ -286,7 +286,7 @@ export default function useInteractiveSequence() {
                     return {
                         status: false,
                         alert: 'warning',
-                        msg: '<strong>Invalid hexamer</strong>, please be sure to select four <strong>consecutive pairs of complementary nucleotides</strong> <img src="/img/projects/analyses/curves/hexamer.png" alt="hexamer" style="vertical-align: middle;" />'
+                        msg: '<strong>Invalid hexamer</strong>, please be sure to select <strong>six consecutive pairs of complementary nucleotides</strong> <img src="/img/projects/analyses/curves/hexamer.png" alt="hexamer" style="vertical-align: middle;" />'
                     };
                 }
 
@@ -294,7 +294,7 @@ export default function useInteractiveSequence() {
                 return {
                     status: false,
                     alert: 'warning',
-                    msg: '<strong>Invalid hexamer</strong>, please be sure to select four <strong>consecutive pairs of complementary nucleotides</strong> <img src="/img/projects/analyses/curves/hexamer.png" alt="hexamer" style="vertical-align: middle;" />'
+                    msg: '<strong>Invalid hexamer</strong>, please be sure to select <strong>six consecutive pairs of complementary nucleotides</strong> <img src="/img/projects/analyses/curves/hexamer.png" alt="hexamer" style="vertical-align: middle;" />'
                 };
             }
 

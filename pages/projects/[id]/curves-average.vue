@@ -255,7 +255,7 @@
     // STICKY CONTAINER STRANDS 
     let sticky = ref(true)
     const onScroll = () => {
-      console.log(sticky.value)
+      //console.log(sticky.value)
       if(sticky.value === false) return
 
       if(document.querySelector("#container-strands").getBoundingClientRect().y <= 50) {

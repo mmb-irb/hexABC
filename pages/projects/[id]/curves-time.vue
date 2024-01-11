@@ -229,7 +229,7 @@
         enableSectionButtons(activeMenu)
       }, 1);
       
-      switch(section.value) {
+      /*switch(section.value) {
         case '0':
           console.log(' section 0')
           break;
@@ -245,7 +245,7 @@
         case '4':
           console.log(' section 4')
           break;
-      }
+      }*/
 
     }
 
