@@ -1,42 +1,36 @@
-export default defineEventHandler(async (event) => { 
+import { readFile } from 'fs/promises';
 
-    // result of REST
-    // TODO WITH FILE!!! FIRST 20 nucl, then 500k :)
-    const resp = {
-        "1G40C": [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,3,3,3],
-        "2C39G": [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-        "3A38T": [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-        "4T37A": [2,2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,2,2],
-        "5T36A": [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-        "6T35A": [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-        "7A34T": [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2],
-        "8G33C": [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-        "9G32C": [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-        "10C31G": [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-        "11G30C": [3,3,3,3,3,3,3,3,3,2,3,3,3,3,3,3,3,3,3],
-        "12G29C": [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-        "13T28A": [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-        "14G27C": [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-        "15T26A": [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-        "16A25T": [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-        "17A24T": [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-        "18C23G": [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-        "19G22C": [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-        "20C21G": [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
-    }
+export default defineEventHandler(async (event) => { 
+    // Get the path to the JSON file
+    const filePath = process.env.MOCK_HBONDS_PATH;
+
+    let resp = {}
+
+    // Read the JSON file
+    await (async () => {
+      try {
+        // Use the readFile function from fs/promises
+        const data = await readFile(filePath, 'utf8');
+    
+        // Parse the JSON data
+        resp = JSON.parse(data);
+    
+      } catch (error) {
+        console.error(`Error: ${error.message}`);
+      }
+    })();
 
     let hbonds = []
-    let bps = []
     Object.keys(resp).forEach(key => {
-        hbonds.push(resp[key])
-        bps.push(key)
+        hbonds.push({
+          bp: key,
+          hbonds: resp[key]
+        })
     });
 
     hbonds = hbonds.reverse()
-    bps = bps.reverse()
 
     return {
-        hbonds: hbonds,
-        bps: bps
+        hbonds: hbonds
     }
 });
