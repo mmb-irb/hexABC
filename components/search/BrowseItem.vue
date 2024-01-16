@@ -6,11 +6,25 @@
     </div>
 
     <div class="browse-list-content fill-height">
-      <h3 class="bl-desc"><NuxtLink :to="`/projects/${item.accession}/overview`">{{ item.name }}</NuxtLink></h3>
+      <h3 class="bl-desc"><NuxtLink :to="`/projects/${item.id}/overview`">{{ item.name }}</NuxtLink></h3>
       
       <div class="bl-anal">
-        <h4>Analyses</h4>
-        <p>{{ printAnalyses(item.analyses) }}</p>
+        <v-row>
+          <v-col cols="6">
+            <h4>{{ item.sequences[0] }}</h4>
+            <h4>{{ [...item.sequences[1]].reverse().join("") }}</h4>
+          </v-col>
+          <v-col cols="6">
+            <v-select
+              label="Analyses"
+              v-model="modelAnalyses"
+              :items="itemsAnal"
+              variant="outlined"
+              density="compact"
+              @update:modelValue="selectAnalyses"
+            ></v-select>
+          </v-col>        
+      </v-row>
       </div>
     </div>
 
@@ -22,7 +36,7 @@
           <v-btn
             density="comfortable"
             icon
-            :to="`/projects/${item.accession}/overview`"
+            :to="`/projects/${item.id}/overview`"
             v-bind="props"
           >
             <v-icon color="blue-grey-darken-1">
@@ -58,25 +72,27 @@
 
 <script setup>
 
-  /* TODO useSettings.js WITH HISTORY */
-
   const { $globals } = useNuxtApp()
+  const config = useRuntimeConfig()
 
   const { item } = defineProps(['item'])
 
   // thumbnail
-  const thumb = $globals.thumbnail(item.id)
+  const thumb = $globals.thumbnail(config.public.externalApi, item.id)
 
   /* ANALYSES */
   const analyses = $globals.projects.analyses
+  const itemsAnal = analyses.map(item => ({ title: item.name, value: item.id }))
+  const modelAnalyses = ref(null)
 
-  const printAnalyses = (anls) => {
-    let anlsList = []
-    for (const anl of anls) {
-      anlsList.push(analyses.filter(item => item.id === anl)[0].name)
-    }
-    anlsList.sort()
-    return anlsList.join(', ')
+  const selectAnalyses = async () => {
+    console.log(`go to ${item.id} > ${modelAnalyses.value}`)
+    // *******************
+    // *******************
+    // TODO WHEN ALL ANALYSES ARE READY
+    // await navigateTo(`/projects/${item.id}/${modelAnalyses.value}`)
+    // *******************
+    // *******************
   }
 
   /* PREVIEW TRAJECTORY (TODO) */
@@ -112,8 +128,8 @@
   }
   h3 a { text-decoration: none; color: var(--palette-4); }
   h3 a:hover { color: var(--palette-6); }
-  .bl-anal { margin-top: 1rem; margin-right: .5rem; border-bottom: solid 2px var(--palette-2); }
-  h4 { text-transform: uppercase; font-size: 14px; color: var(--dark-text); font-weight:700;}
+  .bl-anal { margin-top: 1rem; margin-right: .5rem; border-bottom: solid 2px var(--palette-2); min-height: 54px; }
+  h4 { text-transform: uppercase; font-size: 20px; color: var(--dark-text); font-weight:500; font-family: 'Roboto Mono', monospace; }
   .bl-anal p { color: var(--dark-text); font-weight:400; margin-top: .25rem; }
   .browse-list-append {
     align-self: center;

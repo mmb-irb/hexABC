@@ -122,10 +122,10 @@ import { ref } from 'vue';
 
     // TODO: put all this logic in plugins / plot.js
     plotData.val = [{
+      type: 'heatmap',
       z: hbonds,
       y: bps,
-      x: [1],
-      type: 'heatmap',
+      //x: [1],
       colorscale: scale,
       colorbar:{
         autotick: false,

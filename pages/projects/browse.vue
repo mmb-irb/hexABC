@@ -1,7 +1,7 @@
 <template>
   <v-container>
 
-    <h1>Browse</h1>
+    <h1>Browse {{ $globals.shortName }} Projects</h1>
 
     <Breadcrumbs :props="{section:'Browse'}" />
 
@@ -11,7 +11,7 @@
 
           <template v-slot:title>
             <div id="container-header">
-              <div><v-icon size="small" icon="mdi-compass"></v-icon> &nbsp;BROWSE COLLECTION</div>
+              <div><v-icon size="small" icon="mdi-compass"></v-icon> &nbsp;BROWSE PROJECTS</div>
               <div id="total-items">{{ (page - 1) * rows + 1 }}-{{ (page * rows) <= totalItems ? page * rows : totalItems }} of {{ totalItems }}</div>
             </div>
           </template>
@@ -54,7 +54,10 @@ import { ref } from 'vue';
   const config = useRuntimeConfig()
 
   useHead({
-    title: 'Browse collection' 
+    title: 'Browse collection',
+    link: [
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;500&display=swap' }
+    ]
   })
 
   const rows = ref(10)

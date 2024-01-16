@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     // get project id
     const { id } = event.context.params
 
-    const uri = `${config.public.externalApi}projects/${id}`
+    const uri = `${config.public.externalApi}v1/projects/${id}`
 
     const data = await $fetch(uri)
                 .catch((error) => {

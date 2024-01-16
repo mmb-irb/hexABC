@@ -4,30 +4,31 @@
     <v-container>
       <v-row style="height:64px;"> 
         <v-col lg="2" md="2" sm="6" class="py-0">
-          <NuxtLink to="/"><img src="/img/logo.png" id="main-logo" alt="main logo" /></NuxtLink>
+          <NuxtLink to="/" @click="toggleMenu('/')"><img src="/img/logo.png" id="main-logo" alt="main logo" /></NuxtLink>
         </v-col>
 
         <v-col lg="10" md="10" sm="6" class="py-0">
           <div class="float-right h-100" >
-            <v-btn prepend-icon="mdi-information" rounded="0" color="primary" to="/" class="common-menu">
+            <v-btn prepend-icon="mdi-information" rounded="0" color="primary" @click="toggleMenu('/')" to="/" class="common-menu">
               About
             </v-btn>
 
-            <v-btn prepend-icon="mdi-account-supervisor-circle" rounded="0" color="primary" to="/consortium" class="common-menu">
+            <v-btn prepend-icon="mdi-account-supervisor-circle" rounded="0" @click="toggleMenu('/consortium')" color="primary" to="/consortium" class="common-menu">
               The consortium
             </v-btn>
 
-            <v-btn prepend-icon="mdi-card-search" rounded="0" color="primary" class="common-menu">
-              Search
+            <v-btn prepend-icon="mdi-clipboard-text-search" rounded="0" color="primary" class="common-menu">
+              Projects
               <v-menu activator="parent">
                 <v-list id="submenu-search">
                   <v-list-item
-                    v-for="(item, index) in search_menu"
+                    v-for="(item, index) in projects_menu"
                     :key="index"
                     :value="index"
                     :to="item.to"
                     :prepend-icon="item.icon"
                     :title="item.title"
+                    @click="toggleMenu(item.to)"
                   >
                   </v-list-item>
                 </v-list>
@@ -38,7 +39,7 @@
               Results
             </v-btn>
 
-            <v-btn prepend-icon="mdi-cloud-braces" rounded="0" color="primary" to="/rest" class="common-menu">
+            <v-btn prepend-icon="mdi-cloud-braces" rounded="0" color="primary" @click="toggleMenu('/rest')" to="/rest" class="common-menu">
               REST API
             </v-btn>
 
@@ -59,33 +60,33 @@
 
               <v-list id="submenu-search-responsive">
 
-                <v-list-item prepend-icon="mdi-information" title="About" to="/" @click="menu_resp = false"></v-list-item>
+                <v-list-item prepend-icon="mdi-information" title="About" to="/" @click="menu_resp = false; toggleMenu('/')"></v-list-item>
 
-                <v-list-item prepend-icon="mdi-account-supervisor-circle" title="The consortium" to="/consortium" @click="menu_resp = false"></v-list-item>
+                <v-list-item prepend-icon="mdi-account-supervisor-circle" title="The consortium" to="/consortium" @click="menu_resp = false; toggleMenu('/consortium')"></v-list-item>
 
-                <v-list-group value="Search">
+                <v-list-group value="Projects">
                   <template v-slot:activator="{ props }">
                     <v-list-item
                       v-bind="props"
-                      prepend-icon="mdi-card-search"
-                      title="Search"
+                      prepend-icon="mdi-clipboard-text-search"
+                      title="Projects"
                     ></v-list-item>
                   </template>
                   <v-list-item
-                    v-for="(item, index) in search_menu"
+                    v-for="(item, index) in projects_menu"
                     :key="index"
                     :value="index"
                     :to="item.to"
                     :prepend-icon="item.icon"
                     :title="item.title"
-                    @click="menu_resp = false"
+                    @click="menu_resp = false; toggleMenu(item.to)"
                   >
                   </v-list-item>
                 </v-list-group>
 
                 <v-list-item prepend-icon="mdi-chart-box" title="Results" to="" @click="menu_resp = false"></v-list-item>
 
-                <v-list-item prepend-icon="mdi-cloud-braces" title="REST API" to="/rest" @click="menu_resp = false"></v-list-item>
+                <v-list-item prepend-icon="mdi-cloud-braces" title="REST API" to="/rest" @click="menu_resp = false; toggleMenu('/rest')"></v-list-item>
 
                 <v-list-item prepend-icon="mdi-help-circle" title="Help"  to="" @click="menu_resp = false"></v-list-item>
 
@@ -101,24 +102,29 @@
 
 <script setup>
 
-  // ***************
-  // ***************
-  /* TODO: CHECK MENU FROM TRANSATLAS!!!!! */
-  // ***************
-  // ***************
-
   import { ref } from 'vue'
+  import structureSettings from '@/modules/structure/structureSettings'
 
-  const search_menu = [
-        { title: 'Plain Search', to: '', icon: 'mdi-magnify' },
-        { title: 'Advanced Search', to: '', icon: 'mdi-tune' },
-        { title: 'Browse', to: '/search/browse', icon: 'mdi-compass-outline' },
+  const { 
+    setProperty
+  } = structureSettings()
+
+  const projects_menu = [
+    { title: 'Browse', to: '/projects/browse', icon: 'mdi-compass-outline' },
+    { title: 'Plain Search', to: '', icon: 'mdi-magnify' },
+    { title: 'Advanced Search', to: '', icon: 'mdi-tune' }
+        
   ]
 
   const menu_resp = ref(false)
 
   const animateBtn = () => {
     document.querySelector('#responsive-menu-btn').classList.toggle('open');
+  }
+
+  const toggleMenu = (pth) => {
+    let [, ...currMenuSection] = pth.split('/')
+    setProperty('currMenuSection', currMenuSection)
   }
 
   // control menu responsive button status via responsive menu

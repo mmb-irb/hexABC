@@ -13,7 +13,7 @@ export default defineNuxtPlugin(() => {
             disabled: true
           }
         ],
-        analysis: (id, text, title) => [
+        analysis: (subsection, pth, id, text, title) => [
           {
             title: 'About',
             disabled: false,
@@ -22,6 +22,11 @@ export default defineNuxtPlugin(() => {
           {
             title: 'Projects',
             disabled: true
+          },
+          {
+            title: subsection,
+            disabled: false,
+            to: pth,
           },
           {
             title: 'Overview',
@@ -33,7 +38,7 @@ export default defineNuxtPlugin(() => {
             disabled: true
           }
         ],
-        overview: (title) => [
+        overview: (subsection, pth, title) => [
           {
             title: 'About',
             disabled: false,
@@ -42,6 +47,11 @@ export default defineNuxtPlugin(() => {
           {
             title: 'Projects',
             disabled: true
+          },
+          {
+            title: subsection,
+            disabled: false,
+            to: pth,
           },
           {
             title: `${title} overview`,

@@ -187,8 +187,7 @@
       ]
     })
 
-    /* HARDCODED WHILE NOT HAVING REST API */
-    const sequence = 'GATACATACATAATACAAAC'
+    const sequence = project.value.metadata.SEQUENCES[0]
     const { strand1, strand2, ends1, ends2 } = getSequenceSettings(sequence)
 
     // FIRST LEVEL MENU
@@ -267,6 +266,10 @@
       }
     }
     window.addEventListener('scroll', onScroll)    
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', onScroll)
+    })
 
     const controlSticky = () => {
       sticky.value = !sticky.value

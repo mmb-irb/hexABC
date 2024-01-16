@@ -15,7 +15,11 @@
 
           <template v-slot:text>
 
-            {{ project.metadata.DESCRIPTION }}
+            <p>{{ project.metadata.DESCRIPTION }}</p>
+            <p id="sequences">
+              {{ project.metadata.SEQUENCES[0] }}<br>
+              {{ [...project.metadata.SEQUENCES[1]].reverse().join("") }}
+            </p>
 
           </template>
         </v-card>
@@ -110,12 +114,16 @@ import { ref } from 'vue';
   const title = project.value.metadata.NAME
 
   useHead({
-    title: title
+    title: title,
+    link: [
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;500&display=swap' }
+    ]
   })
 
 </script>
 
 <style scoped>
+  #sequences { font-size: 25px; color: var(--dark-text); font-weight:500; line-height: 25px; font-family: 'Roboto Mono', monospace; }
   .v-card .v-card-title { border-top: 1px solid var(--grey-light); text-align: center; }
   .v-card .v-card-title a { text-decoration: none; }
   .bg-link {

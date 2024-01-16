@@ -1,7 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: false,
-  router: { options: { strict: true } },
+  router: { 
+    options: { strict: true } 
+  },
   devtools: { enabled: true },
   modules: ['nuxt-plotly', '@invictus.codes/nuxt-vuetify'],
   vuetify: {

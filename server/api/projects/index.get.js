@@ -11,9 +11,9 @@ export default defineEventHandler(async (event) => {
     if(!page) page = 1;
 
     // analyses not working
-    //const uri = `${config.public.externalApi}projects?projection={"accession":1,"metadata.NAME":1,"metadata.UNIT":1,"analyses":1}&limit=${limit}&page=${page}`
+    //const uri = `${config.public.externalApi}v1/projects?projection={"accession":1,"metadata.NAME":1,"metadata.UNIT":1,"analyses":1}&limit=${limit}&page=${page}`
 
-    const uri = `${config.public.externalApi}projects?limit=${limit}&page=${page}`
+    const uri = `${config.public.externalApi}v1/projects?limit=${limit}&page=${page}`
 
     const data = await $fetch(uri)
 
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
         id: item.identifier,
         accession: item.accession, 
         name: item.metadata.NAME,
-        unit: item.metadata.UNIT,
+        sequences: item.metadata.SEQUENCES,
         analyses: item.analyses
     }))
 

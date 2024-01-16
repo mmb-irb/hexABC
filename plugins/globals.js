@@ -20,26 +20,20 @@ export default defineNuxtPlugin(() => {
               { name: 'University Paris Saclay', url: 'https://www.universite-paris-saclay.fr/en', img: 'paris.png', line: 1, people: [ 'Marco Pasi' ] },
             ],
             rowsPerPage: [ 5, 10, 25, 50 ],
-            thumbnail: (id) => `https://mdposit-dev.mddbr.eu/api/rest/current/projects/${id}/files/screenshot.jpg`,
+            thumbnail: (api, id) => `${api}/current/projects/${id}/files/screenshot.jpg`,
             projects: {
               analyses: [
-                { id: 'rmsd', name: 'RMSd'},
-                { id: 'dist-perres-mean', name: 'Distance per residue mean'},
-                { id: 'dist-perres-stdv', name: 'Distance per residue standard deviation'},
-                { id: 'rmsd-pairwise-interface', name: 'RMSd pairwise interface'},
                 { id: 'dist-perres', name: 'Distance per residue'},
                 { id: 'energies', name: 'Energies'},
-                { id: 'hbonds', name: 'Hydrogen bonds'},
-                { id: 'rmsd-pairwise', name: 'RMSd pairwise'},
                 { id: 'fluctuation', name: 'Fluctuation'},
-                { id: 'tmscores', name: 'Time scores'},
-                { id: 'rgyr', name: 'Radius of gyration'},
-                { id: 'rmsds', name: 'RMSds'},
-                { id: 'pockets', name: 'Pockets'},
-                { id: 'interactions', name: 'Interactions'},
+                { id: 'hbonds', name: 'Hydrogen bonds'},
                 { id: 'pca', name: 'PCA'},
+                { id: 'rgyr', name: 'Radius of gyration'},
+                { id: 'rmsd-pairwise', name: 'RMSd pairwise'},
                 { id: 'rmsd-perres', name: 'RMSd per residue'},
-                { id: 'sasa', name: 'Solvent accessible surface area'},
+                { id: 'rmsds', name: 'RMSds'},
+                { id: 'interactions', name: 'Interactions'},
+                { id: 'sasa', name: 'Solvent accessible surface area'},              
               ]
             }
         }
