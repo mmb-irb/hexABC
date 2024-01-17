@@ -23,21 +23,66 @@
 
             <p>Lorem ipsum dolor <strong>Hydrogen Bonds</strong> sit amet consectetur adipisicing <strong>20mer sequence</strong> elit. Modi illo odio molestias consectetur <strong>500.000 frames</strong> odit ex aut id quidem fuga dolores.</p>
 
-            <v-btn
+            <!--<v-btn
               color="red-accent-4"
               @click="loadBP(['1G40C'])" 
               >
               1G40C
             </v-btn>
 
-            <!-- TODO: change that by the magic sequence -->
             <v-btn
               class="ml-2"
               color="red-accent-4"
               @click="loadBP(['2C39G', '3A38T', '9G32C'])" 
               >
               2C39G 3A38T 9G32C
-            </v-btn>
+            </v-btn>-->
+
+            <v-row id="container-strands"> 
+              <v-col lg="9" md="9" sm="12" xs="12">
+
+                <v-sheet
+                  color="grey-lighten-4"
+                  class="pa-10 project-sheet"
+                  id="container-strands-sheet"
+                >
+                  <v-row class="project-row" justify="center">
+                    <div 
+                      class="number" 
+                      v-for="(item, index) in strand1"
+                      :key="index"
+                      :value="index"
+                      > {{ index + 1 }} </div>
+                  </v-row>
+                  <v-row class="pb-0 pt-2 px-4 project-row" justify="space-around">
+                    <!--<div class="end"> {{ ends1[0] }} </div>-->
+                    <div class="d-flex">
+                      <div 
+                      class="base-pair" 
+                      v-for="(item, index) in strands"
+                      :key="index"
+                      :value="index"
+                      :id="`${item[0]}-${item[1]}-${index + 1}-strand1`"
+                      > <div class="flex">
+                          <div>{{ item[0] }}</div> 
+                          <div>{{ item[1] }}</div>
+                        </div> 
+                      </div>
+                    </div>
+                    <!--<div class="end"> {{ ends2[1] }} </div>-->
+                  </v-row>
+                  <v-row class="project-row" justify="center">
+                    <div 
+                      class="number" 
+                      v-for="(item, index) in strand2"
+                      :key="index"
+                      :value="index"
+                      > {{ strand2.length*2 - index }} </div>
+                  </v-row>
+                </v-sheet>
+
+              </v-col>
+            </v-row> 
 
             <div v-if="!dataLoaded" style="width:100%; height:100px; display:flex; justify-content: center; align-items: center;">
               <v-progress-linear
@@ -67,13 +112,17 @@
 <script setup>
 import { ref } from 'vue';
 
-  import usePlotsUtils from '@/modules/analysis/usePlotsUtils'  
+  import usePlotsUtils from '@/modules/analysis/usePlotsUtils' 
+  import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence' 
 
   const { id } = useRoute().params
   const config = useRuntimeConfig()
   const { $plots } = useNuxtApp()
 
   const { getColorScale, getColorBarText, getHMUniqueValues } = usePlotsUtils()
+  const { 
+      getSequenceSettings
+  } = useInteractiveSequence()
 
   const datap = await useFetch(`${config.public.apiBase}/projects/${id}`)
   const project = ref(datap.data.value.project)
@@ -95,6 +144,18 @@ import { ref } from 'vue';
     })
     return {b, h}
   }
+
+  /* MAGIC SEQUENCE */
+
+  const sequence = project.value.metadata.SEQUENCES[0]
+  const { strand1, strand2, ends1, ends2 } = getSequenceSettings(sequence)
+  const strands = [];
+
+  for (let i = 0; i < Math.min(strand1.length, strand2.length); i++) {
+    strands.push([strand1[i], strand2[i]]);
+  }
+
+  /* HEATMAP */
 
   let plotData = reactive({
     val: []
@@ -190,7 +251,7 @@ import { ref } from 'vue';
     })
   }
 
-  const loadBP = async(bs) => {
+  /*const loadBP = async(bs) => {
     const filteredData = datahb.data.value.hbonds.filter(item => bs.includes(item.bp))
 
     const parsedHBonds = getParsedHBonds(filteredData)
@@ -228,7 +289,7 @@ import { ref } from 'vue';
                         '<br>hbonds: <b>%{z}</b>' + 
                         '<extra></extra>',
       }]
-  }
+  }*/
 
 </script>
 

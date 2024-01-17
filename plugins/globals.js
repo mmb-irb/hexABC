@@ -23,17 +23,17 @@ export default defineNuxtPlugin(() => {
             thumbnail: (api, id) => `${api}/current/projects/${id}/files/screenshot.jpg`,
             projects: {
               analyses: [
-                { id: 'dist-perres', name: 'Distance per residue'},
-                { id: 'energies', name: 'Energies'},
-                { id: 'fluctuation', name: 'Fluctuation'},
-                { id: 'hbonds', name: 'Hydrogen bonds'},
-                { id: 'pca', name: 'PCA'},
-                { id: 'rgyr', name: 'Radius of gyration'},
-                { id: 'rmsd-pairwise', name: 'RMSd pairwise'},
-                { id: 'rmsd-perres', name: 'RMSd per residue'},
-                { id: 'rmsds', name: 'RMSds'},
-                { id: 'interactions', name: 'Interactions'},
-                { id: 'sasa', name: 'Solvent accessible surface area'},              
+                { id: 'dist-perres', name: 'Distance per residue', icon: 'mdi-arrow-expand'},
+                { id: 'energies', name: 'Energies', icon: 'mdi-lightning-bolt-outline mdi-rotate-45'},
+                { id: 'fluctuation', name: 'Fluctuation', icon: 'mdi-sine-wave'},
+                { id: 'hbonds', name: 'Hydrogen bonds', icon: 'mdi-format-line-weight mdi-rotate-90'},
+                { id: 'pca', name: 'PCA', icon: 'mdi-chart-scatter-plot'},
+                { id: 'rgyr', name: 'Radius of gyration', icon: 'mdi-rotate-360'},
+                { id: 'rmsd-pairwise', name: 'RMSd pairwise', icon: 'mdi-chart-line'},
+                { id: 'rmsd-perres', name: 'RMSd per residue', icon: 'mdi-chart-areaspline-variant'},
+                { id: 'rmsds', name: 'RMSds', icon: 'mdi-chart-multiple'},
+                { id: 'interactions', name: 'Interactions', icon: 'mdi-cursor-default-click-outline'},
+                { id: 'sasa', name: 'Solvent accessible surface area', icon: 'mdi-peanut-outline mdi-rotate-90'},              
               ]
             }
         }

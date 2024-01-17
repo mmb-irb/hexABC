@@ -22,7 +22,14 @@
               variant="outlined"
               density="compact"
               @update:modelValue="selectAnalyses"
-            ></v-select>
+            >
+              <template v-slot:selection="{ item, index }">
+                {{ item.raw.title }}                  
+                </template>
+              <template v-slot:item="{ props, item }">
+                <v-list-item class="item-v-select" v-bind="props" :title="item.raw.title" :value="item.raw.value" :prepend-icon="item.raw.icon"></v-list-item>
+              </template>
+            </v-select>
           </v-col>        
       </v-row>
       </div>
@@ -82,7 +89,7 @@
 
   /* ANALYSES */
   const analyses = $globals.projects.analyses
-  const itemsAnal = analyses.map(item => ({ title: item.name, value: item.id }))
+  const itemsAnal = analyses.map(item => ({ title: item.name, value: item.id, icon: item.icon }))
   const modelAnalyses = ref(null)
 
   const selectAnalyses = async () => {
@@ -103,7 +110,7 @@
 </script>
 
 <style scoped>
-
+.v-list-item { font-size: 14px!important; }
 .browse-list-item { 
     display: grid;
     grid-template-areas: "prepend content append";

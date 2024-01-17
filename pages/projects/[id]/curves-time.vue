@@ -185,7 +185,8 @@
       getSequenceSettings, 
       checkNucleotides,
       addBordersToNucleotides,
-      removeBordersFromNucleotides } = useInteractiveSequence()
+      removeBordersFromNucleotides 
+    } = useInteractiveSequence()
 
     useHead({
       title: `Results by time for ${title}`,

@@ -41,6 +41,7 @@ p { margin-bottom: 1rem; }
 #submenu-search .v-list-item-title { font-size: 14px!important; }
 #submenu-search-responsive .v-list-item__prepend > .v-icon ~ .v-list-item__spacer { width: 15px!important; }
 #submenu-search-responsive .v-list-group__items { --indent-padding: calc(var(--parent-padding)); }
+.item-v-select .v-list-item__prepend > .v-icon ~ .v-list-item__spacer { width: 10px!important; }
 
 /* drag select global styles */
 .ds-selector {
