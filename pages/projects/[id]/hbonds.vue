@@ -74,6 +74,26 @@
                 </v-sheet>
 
               </v-col>
+
+              <v-col lg="3" md="3" sm="12" xs="12">
+                select with hbons predominance for each selected bp??
+              </v-col>
+
+              <div id="sticky-disable">
+                <v-tooltip text="Disable sticky" location="bottom">
+                  <template v-slot:activator="{ props }">
+                    <v-btn 
+                      v-bind="props" 
+                      density="compact" 
+                      id="btn-sticky-disable" 
+                      color="blue-grey-lighten-4" 
+                      variant="flat" 
+                      icon="mdi-window-close"
+                      @click="controlSticky"
+                    ></v-btn>
+                  </template>
+                </v-tooltip>
+              </div>
             </v-row> 
 
             <div v-if="!dataLoaded" style="width:100%; height:100px; display:flex; justify-content: center; align-items: center;">
@@ -96,6 +116,22 @@
           </template>
         </v-card>
       </v-col>
+
+      <div id="sticky-enable">
+          <v-tooltip text="Enable sticky" location="bottom">
+            <template v-slot:activator="{ props }">
+              <v-btn 
+                v-bind="props" 
+                density="compact" 
+                id="btn-sticky-enable" 
+                color="blue-grey-lighten-4" 
+                icon="mdi-chevron-double-down"
+                @click="controlSticky"
+              ></v-btn>
+            </template>
+          </v-tooltip>
+        </div>
+
     </v-row>
 
   </v-container>
@@ -312,6 +348,48 @@
                         '<extra></extra>',
       }]
   }
+
+  // STICKY CONTAINER STRANDS 
+  let sticky = ref(true)
+    const onScroll = () => {
+      if(sticky.value === false) return
+
+      if(document.querySelector("#container-strands").getBoundingClientRect().y <= 50) {
+        document.querySelector("#container-strands").style.position = 'sticky'
+        document.querySelector("#container-strands").style.top = '50px'
+        document.querySelector("#container-strands").classList.add('elevation-3')
+        document.querySelector("#sticky-disable").style.display = 'block'
+      } else {
+        document.querySelector("#container-strands").style.position = 'relative'
+        document.querySelector("#container-strands").style.top = 'inherit'
+        document.querySelector("#container-strands").classList.remove('elevation-3')
+        document.querySelector("#sticky-disable").style.display = 'none'
+      }
+    }
+    window.addEventListener('scroll', onScroll)    
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', onScroll)
+    })
+
+    const controlSticky = () => {
+      sticky.value = !sticky.value
+      if(sticky.value === false) {
+        document.querySelector("#container-strands").style.position = 'relative'
+        document.querySelector("#container-strands").style.top = 'inherit'
+        document.querySelector("#container-strands").classList.remove('elevation-3')
+        document.querySelector("#sticky-disable").style.display = 'none'
+        document.querySelector("#sticky-enable").style.display = 'block'
+      } else {        
+        document.querySelector("#sticky-enable").style.display = 'none'
+        if(document.querySelector("#container-strands").getBoundingClientRect().y <= 50) {
+          document.querySelector("#container-strands").style.position = 'sticky'
+          document.querySelector("#container-strands").style.top = '50px'
+          document.querySelector("#container-strands").classList.add('elevation-3')
+          document.querySelector("#sticky-disable").style.display = 'block'
+        }
+      }
+    }
 
 </script>
 
