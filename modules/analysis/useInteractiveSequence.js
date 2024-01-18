@@ -377,10 +377,20 @@ export default function useInteractiveSequence() {
 
     }
 
+    const addBordersToBasePairs = (basePairs) => {
+        basePairs.forEach((bp) => document.querySelector(`#${bp}`).classList.add('selected'))
+    }
+
+    const removeBordersFromBasePairs = () => {
+        document.querySelectorAll(`.base-pair`).forEach(item => item.classList.remove('selected'))
+    }
+
     return {
         getSequenceSettings,
         checkNucleotides,
         addBordersToNucleotides,
-        removeBordersFromNucleotides
+        removeBordersFromNucleotides,
+        addBordersToBasePairs,
+        removeBordersFromBasePairs
     }
 }

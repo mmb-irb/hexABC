@@ -274,8 +274,6 @@
 
       ds.subscribe("DS:end", ({items}) => {
 
-        // TODO: SEE IF LOADING OF DIFFERENT COMPONENTS WORKS WITH V-IF OR NOT
-
         const nucleotides = items.map((item) => item.id )
 
         const checkNuc = checkNucleotides(nucleotides, sequence.length)

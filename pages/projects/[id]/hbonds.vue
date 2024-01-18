@@ -21,22 +21,7 @@
 
           <template v-slot:text>
 
-            <p>Lorem ipsum dolor <strong>Hydrogen Bonds</strong> sit amet consectetur adipisicing <strong>20mer sequence</strong> elit. Modi illo odio molestias consectetur <strong>500.000 frames</strong> odit ex aut id quidem fuga dolores.</p>
-
-            <!--<v-btn
-              color="red-accent-4"
-              @click="loadBP(['1G40C'])" 
-              >
-              1G40C
-            </v-btn>
-
-            <v-btn
-              class="ml-2"
-              color="red-accent-4"
-              @click="loadBP(['2C39G', '3A38T', '9G32C'])" 
-              >
-              2C39G 3A38T 9G32C
-            </v-btn>-->
+            <p>Click or drag the base pairs in the sequence below to show them in the heatmap plot. </p>
 
             <v-row id="container-strands"> 
               <v-col lg="9" md="9" sm="12" xs="12">
@@ -55,25 +40,32 @@
                       > {{ index + 1 }} </div>
                   </v-row>
                   <v-row class="pb-0 pt-2 px-4 project-row" justify="space-around">
-                    <!--<div class="end"> {{ ends1[0] }} </div>-->
                     <div class="d-flex">
+                      <div class="end" style="left: -20px;"> 
+                        <div>{{ ends1[0] }}</div> 
+                        <div class="mt-4">{{ ends1[1] }}</div> 
+                      </div>
                       <div 
-                      class="base-pair" 
-                      v-for="(item, index) in strands"
-                      :key="index"
-                      :value="index"
-                      :id="`${item[0]}-${item[1]}-${index + 1}-strand1`"
-                      > <div class="flex">
-                          <div>{{ item[0] }}</div> 
-                          <div>{{ item[1] }}</div>
+                        class="base-pair" 
+                        v-for="(item, index) in strands"
+                        :key="index"
+                        :value="index"
+                        :id="`bp${index + 1}${item[0]}${strands.length*2 - index}${item[1]}`"
+                        > 
+                        <div class="flex">
+                          <div class="nucleotide">{{ item[0] }}</div> 
+                          <div class="nucleotide">{{ item[1] }}</div>
                         </div> 
                       </div>
+                      <div class="end" style="left: 20px;"> 
+                        <div>{{ ends2[0] }}</div> 
+                        <div class="mt-4">{{ ends2[1] }}</div> 
+                      </div>
                     </div>
-                    <!--<div class="end"> {{ ends2[1] }} </div>-->
                   </v-row>
                   <v-row class="project-row" justify="center">
                     <div 
-                      class="number" 
+                      class="number mt-3" 
                       v-for="(item, index) in strand2"
                       :key="index"
                       :value="index"
@@ -110,8 +102,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
 
+  import DragSelect from 'dragselect'
   import usePlotsUtils from '@/modules/analysis/usePlotsUtils' 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence' 
 
@@ -121,7 +113,9 @@ import { ref } from 'vue';
 
   const { getColorScale, getColorBarText, getHMUniqueValues } = usePlotsUtils()
   const { 
-      getSequenceSettings
+      getSequenceSettings,
+      addBordersToBasePairs,
+      removeBordersFromBasePairs
   } = useInteractiveSequence()
 
   const datap = await useFetch(`${config.public.apiBase}/projects/${id}`)
@@ -131,6 +125,9 @@ import { ref } from 'vue';
 
   useHead({
     title: `HBonds for ${title}`,
+      link: [
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;500&display=swap' }
+      ]
   })
 
   // parse data resulting from the REST API in a format that can be used by plotly
@@ -243,6 +240,30 @@ import { ref } from 'vue';
       responsive: true 
     }
 
+    const ds = new DragSelect({
+      selectables: document.getElementsByClassName("base-pair"),
+      area: document.getElementById("container-strands-sheet"),
+      draggability: false,
+      multiSelectKeys: ['Shift']
+    });
+
+    ds.subscribe("DS:start", (e) => {
+      console.log('selection started');
+      removeBordersFromBasePairs()
+    });
+
+    ds.subscribe("DS:end", ({items}) => {
+     
+      let bps_sel = items.map((item) => item.id )
+
+      if(bps_sel.length == 0) bps_sel = bps.map((item) => `bp${item}`)
+      else addBordersToBasePairs(bps_sel)
+
+      const pureBps = bps_sel.map(item => item.replace(/^bp/, ''));
+      loadBP(pureBps)
+
+    });
+
   })
 
   const myChartOnReady = (plotlyHTMLElement) => {
@@ -251,7 +272,7 @@ import { ref } from 'vue';
     })
   }
 
-  /*const loadBP = async(bs) => {
+  const loadBP = async(bs) => {
     const filteredData = datahb.data.value.hbonds.filter(item => bs.includes(item.bp))
 
     const parsedHBonds = getParsedHBonds(filteredData)
@@ -289,7 +310,7 @@ import { ref } from 'vue';
                         '<br>hbonds: <b>%{z}</b>' + 
                         '<extra></extra>',
       }]
-  }*/
+  }
 
 </script>
 
@@ -314,5 +335,76 @@ import { ref } from 'vue';
     left: 0;
     top: 0;
     font-size:1.5rem;
+  }
+
+  #container-strands {
+    position:sticky; 
+    z-index:10;
+    background: #fff;
+  }
+  /* for making sticky working */
+  .v-card {
+    overflow: inherit !important;  
+  }
+  .base-pair {
+    color: var(--palette-6);
+    margin-right: 1px;
+  }
+  .nucleotide {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.5rem;
+    line-height: 1.6rem;
+    font-weight: 500;
+    padding: .5rem .5rem;
+    margin: 0;
+    /*color: var(--palette-6);*/
+    user-select: none; 
+  }
+  .number {
+    font-family: monospace;
+    font-size: .75rem;
+    width: 1.98rem;
+    text-align: center;
+    color: var(--palette-2);
+    user-select: none; 
+    line-height: .2rem;
+  }
+  .end {
+    display:flex; 
+    flex-direction: column;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.25rem;
+    font-weight: 200;
+    color: var(--strand-end);
+    user-select: none; 
+    padding: .75rem 0;
+    position: relative;
+  }
+  .base-pair.selected { box-shadow: inset 0 0 0 1px var(--palette-2); }
+  .ds-selected {
+      background-color: var(--light-text);
+      color: var(--palette-4);
+    }
+  .project-sheet{ overflow: hidden;}
+
+  #sticky-disable { position: absolute; right: -.8rem; bottom: -.8rem; display: none; }
+  #sticky-enable { position: fixed; top: 55px; right:0px; display: none; }
+  #btn-sticky-disable, #btn-sticky-enable { color: #fff!important; }
+
+  @media only screen and (max-width: 1280px) {
+    .nucleotide { padding: .3rem 0.35rem; }
+    .number { width: 1.68rem; }
+    .end { padding: .5rem 0; font-size: 1.2rem; }
+    .project-sheet{ overflow-x: auto;}
+    .project-row { min-width: 630px; }
+    /*.v-btn-group .v-btn { padding: .44rem .2rem; }*/
+  }
+
+  @media only screen and (max-width: 960px) {
+    /*.v-btn-group {
+      flex-direction: inherit;
+      overflow: scroll !important;
+    }
+    .v-btn-group .v-btn { padding: .44rem .35rem; }*/
   }
 </style>
