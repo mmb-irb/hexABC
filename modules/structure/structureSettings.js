@@ -1,5 +1,6 @@
 let settings = reactive({
-    currMenuSection: null
+    currMenuSection: null,
+    bannerApiError: false,
 })
 
 // navigation for settings module

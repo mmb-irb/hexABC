@@ -106,24 +106,14 @@
                         "description": "Successful operation",
                         "schema": {
                             "type": "object",
-                            "properties": {
-                                "project": {
-                                    "type": "object",
-                                    "$ref": "#\/definitions\/Project"
-                                }
-                            }
+                            "$ref": "#\/definitions\/Project"
                         }
                     },
                     "404": {
                         "description": "Resource Not Found",
                         "schema": {
                             "type": "object",
-                            "properties": {
-                                "project": {
-                                    "type": "object",
-                                    "$ref": "#\/definitions\/StatusError"
-                                }
-                            }
+                            "$ref": "#\/definitions\/StatusError"
                         }
                     }
                 },

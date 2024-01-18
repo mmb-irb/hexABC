@@ -3,6 +3,8 @@
 
     <h1>About {{ $globals.shortName }}</h1>
 
+    <BannerRESTError v-if="bannerApiError" /> 
+
     <v-row> 
       <v-col cols="12" >
         <v-card rounded="sm" class="elevation-2 pa-4" >
@@ -72,10 +74,15 @@
   
 <script setup>
 
+  import structureSettings from '@/modules/structure/structureSettings'
+
   // vuetify images must be imported like this
   import dnaImg from '/img/home/dna.png'
 
   const { $globals } = useNuxtApp()
+  const { getProperty } = structureSettings()
+
+  const bannerApiError = ref(getProperty('bannerApiError'))
 
   const partners = $globals.partners
 

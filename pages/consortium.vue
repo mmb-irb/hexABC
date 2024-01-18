@@ -5,6 +5,8 @@
 
     <Breadcrumbs :props="{section:'The consortium'}" />
 
+    <BannerRESTError v-if="bannerApiError" /> 
+
     <v-row> 
       <v-col lg="6" md="6" sm="6" xs="12">
         <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
@@ -63,7 +65,12 @@
   
 <script setup>
 
+  import structureSettings from '@/modules/structure/structureSettings'
+
   const { $globals } = useNuxtApp()
+  const { getProperty } = structureSettings()
+
+  const bannerApiError = ref(getProperty('bannerApiError'))
 
   const partners = $globals.partners
 

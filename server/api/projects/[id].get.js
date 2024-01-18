@@ -9,14 +9,13 @@ export default defineEventHandler(async (event) => {
 
     const uri = `${config.public.externalApi}v1/projects/${id}`
 
-    const data = await $fetch(uri)
+    const response = await $fetch(uri)
                 .catch((error) => {
                     setResponseStatus(event, 404)
                     return { message: error.message }
                 });
 
-    return {
-        project: data
-    }
+    return response
+    
 
  });

@@ -108,8 +108,9 @@ import { ref } from 'vue';
   const { id } = useRoute().params
   const config = useRuntimeConfig()
 
-  const data = await useFetch(`${config.public.apiBase}/projects/${id}`)
-  const project = ref(data.data.value.project)
+  const datap = await useFetch(`${config.public.apiBase}/projects/${id}`)
+  if(datap.status.value === 'error')  throw createError({ statusCode: 404, message: 'Project not found', fatal: true })
+  const project = ref(datap.data.value)  
 
   const title = project.value.metadata.NAME
 
