@@ -88,7 +88,20 @@
               </v-col>
 
               <v-col lg="3" md="3" sm="12" xs="12">
-                select with hbonds predominance for each selected bp??
+                <v-btn-toggle
+                  v-model="hbondsSel"
+                  rounded="0"
+                  color="red-darken-4"
+                  group
+                  divided
+                  multiple
+                  variant="outlined"
+                >
+                  <v-btn icon="mdi-numeric-0-circle"></v-btn>
+                  <v-btn icon="mdi-numeric-1-circle"></v-btn>
+                  <v-btn icon="mdi-numeric-2-circle"></v-btn>
+                  <v-btn icon="mdi-numeric-3-circle"></v-btn>
+                </v-btn-toggle>
               </v-col>
 
               <div id="sticky-disable">
@@ -193,7 +206,8 @@
   }
 
   /* RANGE SLIDER */
-  
+  /* TODO: START WORKING WITH RANGE SLIDER AND RANGE SELECTOR */
+
   const range = ref([0, 20]);
   const maxTotalRange = 20;
 
@@ -207,12 +221,12 @@
   watch(range, (oldr, newr) => {
 
     // if the range is too big, adjust it to the maxTotalRange
-    if ((oldr[0] !== newr[0]) && (newr[1] - newr[0] >= maxTotalRange)) {
+    if ((oldr[0] !== newr[0]) && (newr[1] - newr[0] > maxTotalRange)) {
       // If min has changed, adjust the max to fit within the limit
       if (range.value[1] - range.value[0] > maxTotalRange) {
         newRange.value = [range.value[0], range.value[0] + maxTotalRange]
       }
-    } else if ((oldr[1] !== newr[1]) && (newr[1] - newr[0] >= maxTotalRange)) {
+    } else if ((oldr[1] !== newr[1]) && (newr[1] - newr[0] > maxTotalRange)) {
       // If max has changed, adjust the min to fit within the limit
       if (range.value[1] - range.value[0] > maxTotalRange) {
         newRange.value = [range.value[1] - maxTotalRange, range.value[1]]
@@ -226,7 +240,6 @@
 
   });
 
-
   /* MAGIC SEQUENCE */
 
   const sequence = project.value.metadata.SEQUENCES[0]
@@ -236,6 +249,10 @@
   for (let i = 0; i < Math.min(strand1.length, strand2.length); i++) {
     strands.push([strand1[i], strand2[i]]);
   }
+
+  /* SELECT BY HBONDS */
+
+  const hbondsSel = ref([0, 1, 2, 3])
 
   /* HEATMAP */
 
@@ -295,6 +312,7 @@
       hovermode: "closest",
       hoverlabel: { bgcolor: "#f9f9f9" },
       xaxis: {
+        //range: [5, 10],
         tickformat: "d",
         title: {
           text: 'frame number',
