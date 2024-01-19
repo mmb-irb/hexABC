@@ -23,7 +23,19 @@
 
             <p>Click or drag the base pairs in the sequence below to show them in the heatmap plot. </p>
 
-            <v-row id="container-strands"> 
+            <div id="container-strands" class="px-3">
+            <v-range-slider
+              v-model="range"
+              :min="0"
+              :max="200"
+              step="1"
+              thumb-label="always"
+              @end="handleRangeChange"
+              strict
+              class="mt-8"
+            ></v-range-slider>
+
+            <v-row> 
               <v-col lg="9" md="9" sm="12" xs="12">
 
                 <v-sheet
@@ -76,7 +88,7 @@
               </v-col>
 
               <v-col lg="3" md="3" sm="12" xs="12">
-                select with hbons predominance for each selected bp??
+                select with hbonds predominance for each selected bp??
               </v-col>
 
               <div id="sticky-disable">
@@ -95,6 +107,7 @@
                 </v-tooltip>
               </div>
             </v-row> 
+          </div>
 
             <div v-if="!dataLoaded" style="width:100%; height:100px; display:flex; justify-content: center; align-items: center;">
               <v-progress-linear
@@ -178,6 +191,41 @@
     })
     return {b, h}
   }
+
+  /* RANGE SLIDER */
+  
+  const range = ref([0, 20]);
+  const maxTotalRange = 20;
+
+  const newRange = ref([0, 20])
+
+  // Handle range change event and update range model
+  const handleRangeChange = (e) => {
+    range.value = newRange.value
+  };
+
+  watch(range, (oldr, newr) => {
+
+    // if the range is too big, adjust it to the maxTotalRange
+    if ((oldr[0] !== newr[0]) && (newr[1] - newr[0] >= maxTotalRange)) {
+      // If min has changed, adjust the max to fit within the limit
+      if (range.value[1] - range.value[0] > maxTotalRange) {
+        newRange.value = [range.value[0], range.value[0] + maxTotalRange]
+      }
+    } else if ((oldr[1] !== newr[1]) && (newr[1] - newr[0] >= maxTotalRange)) {
+      // If max has changed, adjust the min to fit within the limit
+      if (range.value[1] - range.value[0] > maxTotalRange) {
+        newRange.value = [range.value[1] - maxTotalRange, range.value[1]]
+      }
+    } 
+
+    // if the range is too small, adjust it to the newr
+    if((newr[1] - newr[0] <= maxTotalRange)) {
+      newRange.value = [newr[0], newr[1]]
+    }
+
+  });
+
 
   /* MAGIC SEQUENCE */
 
@@ -354,9 +402,9 @@
     const onScroll = () => {
       if(sticky.value === false) return
 
-      if(document.querySelector("#container-strands").getBoundingClientRect().y <= 50) {
+      if(document.querySelector("#container-strands").getBoundingClientRect().y <= 65) {
         document.querySelector("#container-strands").style.position = 'sticky'
-        document.querySelector("#container-strands").style.top = '50px'
+        document.querySelector("#container-strands").style.top = '65px'
         document.querySelector("#container-strands").classList.add('elevation-3')
         document.querySelector("#sticky-disable").style.display = 'block'
       } else {
@@ -382,9 +430,9 @@
         document.querySelector("#sticky-enable").style.display = 'block'
       } else {        
         document.querySelector("#sticky-enable").style.display = 'none'
-        if(document.querySelector("#container-strands").getBoundingClientRect().y <= 50) {
+        if(document.querySelector("#container-strands").getBoundingClientRect().y <= 65) {
           document.querySelector("#container-strands").style.position = 'sticky'
-          document.querySelector("#container-strands").style.top = '50px'
+          document.querySelector("#container-strands").style.top = '65px'
           document.querySelector("#container-strands").classList.add('elevation-3')
           document.querySelector("#sticky-disable").style.display = 'block'
         }

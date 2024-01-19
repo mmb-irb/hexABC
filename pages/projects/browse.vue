@@ -18,9 +18,31 @@
 
           <template v-slot:text>
             
+            <v-row class="flex py-2 mx-0" > 
+              <v-text-field
+                density="compact"
+                variant="outlined"
+                label="Search by sequence"
+                single-line
+                :rules="[validateSequence]"
+                v-model="seqSearch"
+              ></v-text-field>
+              <v-btn
+                prepend-icon="mdi-magnify"
+                variant="outlined"
+                color="red-accent-4"
+                class="ms-2"
+                style="height: 40px;"
+                :disabled="!seqValid"
+                @click="searchBySequence" 
+                >
+                    Search
+                </v-btn>
+            </v-row>
+
             <BrowseItem v-for="(item, index) in projects" :key="index" :item="item" />
 
-            <v-row justify="space-between" class="pt-5 " > 
+            <v-row justify="space-between" class="pt-5" > 
               <v-col lg="2" md="2" sm="4" xs="12">
                 <v-select
                   v-model="rows"
@@ -70,6 +92,33 @@ import { ref } from 'vue';
   const totalPages = ref(Math.ceil(browseList.data.value.total/rows.value))
   const projects = ref(browseList.data.value.projects)
 
+  /* SEARCH */
+  const seqSearch = ref('')
+  const searchBySequence = () => {
+    if(seqSearch.value) console.log(seqSearch.value)
+  }
+
+  const seqValid = ref(false)
+  const validateSequence = (value) => {
+      // Define your regular expression pattern
+      const regex = /^[GATC]{3,}$/;
+
+      // Check if the value matches the pattern
+      if (!regex.test(value)) {
+        seqValid.value = false
+        return 'Text must be a valid DNA sequence: GATC in uppercase, at least 3 nucleotides';
+      }
+
+      // Return true if the value is valid
+      seqValid.value = true
+      return true;
+    }
+
+  //  @input="checkText" in v-text-field
+  const checkText = (e) => {
+    console.log(seqSearch.value)
+  }
+
   /* PAGINATION */
   const rowsPerPage = $globals.rowsPerPage
 
@@ -97,5 +146,5 @@ import { ref } from 'vue';
 
 <style scoped>
   #container-header { display: flex; justify-content: space-between; }
-  #total-items { font-size: 0.8rem; }
+  #total-items { font-size: 0.8rem; color: var(--palette-2); }
 </style>
