@@ -26,8 +26,9 @@
                 single-line
                 :rules="[validateSequence]"
                 v-model="seqSearch"
+                @input="checkText"
               ></v-text-field>
-              <v-btn
+              <!--<v-btn
                 prepend-icon="mdi-magnify"
                 variant="outlined"
                 color="red-accent-4"
@@ -37,10 +38,10 @@
                 @click="searchBySequence" 
                 >
                     Search
-                </v-btn>
+                </v-btn>-->
             </v-row>
 
-            <BrowseItem v-for="(item, index) in projects" :key="index" :item="item" />
+            <BrowseItem v-for="(item, index) in projects" :key="`${Math.random()}`" :item="item" :seq="seqProp" />
 
             <v-row justify="space-between" class="pt-5" > 
               <v-col lg="2" md="2" sm="4" xs="12">
@@ -88,17 +89,31 @@ import { ref } from 'vue';
   /* FIRST LOAD */
   const browseList = await useFetch(`${config.public.apiBase}/projects/?limit=${rows.value}&page=${page.value}`)
   
-  const totalItems = browseList.data.value.total
-  const totalPages = ref(Math.ceil(browseList.data.value.total/rows.value))
-  const projects = ref(browseList.data.value.projects)
+  let totalItems = ref(browseList.data.value.total)
+  let totalPages = ref(Math.ceil(browseList.data.value.total/rows.value))
+  let projects = ref(browseList.data.value.projects)
 
   /* SEARCH */
-  const seqSearch = ref('')
-  const searchBySequence = () => {
-    if(seqSearch.value) console.log(seqSearch.value)
-  }
+  
+  /*const searchBySequence = async () => {
+    if(seqSearch.value && seqValid.value) {
+      //const seqList = await useFetch(`${config.public.apiBase}/projects/sequence?seq=${seqSearch.value}&limit=${rows.value}&page=${page.value}`)
+      const seqList = await useFetch(`${config.public.apiBase}/projects/sequence?seq=${seqSearch.value}&limit=${rows.value}`)
+      totalItems.value = seqList.data.value.total
+      totalPages.value = Math.ceil(seqList.data.value.total/rows.value)
+      projects.value = seqList.data.value.projects
+      //console.log(projects.value)
+    }
+  }*/
 
+  const seqSearch = ref('')
   const seqValid = ref(false)
+  const seqProp = computed(() => {
+   return {
+      str: seqSearch.value,
+      valid: seqValid.value
+    }
+  })
   const validateSequence = (value) => {
       // Define your regular expression pattern
       const regex = /^[GATC]{3,}$/;
@@ -114,9 +129,20 @@ import { ref } from 'vue';
       return true;
     }
 
-  //  @input="checkText" in v-text-field
-  const checkText = (e) => {
-    console.log(seqSearch.value)
+  const checkText = async (e) => {
+    page.value = 1
+    if(seqSearch.value && seqValid.value) {
+      const seqList = await useFetch(`${config.public.apiBase}/projects/sequence?seq=${seqSearch.value}&limit=${rows.value}`)
+      totalItems.value = seqList.data.value.total
+      totalPages.value = Math.ceil(seqList.data.value.total/rows.value)
+      projects.value = seqList.data.value.projects
+    } else {
+      const browseList = await useFetch(`${config.public.apiBase}/projects/?limit=${rows.value}&page=${page.value}`)
+      totalItems.value = browseList.data.value.total
+      totalPages.value = Math.ceil(browseList.data.value.total/rows.value)
+      projects.value = browseList.data.value.projects
+    }
+    
   }
 
   /* PAGINATION */
@@ -133,10 +159,15 @@ import { ref } from 'vue';
   window.addEventListener('resize', () => calculateTotalVisible())
 
   const paginate = async () => {
-    const browseList = await useFetch(`${config.public.apiBase}/projects/?limit=${rows.value}&page=${page.value}`)
-    projects.value = browseList.data.value.projects
-    totalPages.value = Math.ceil(browseList.data.value.total/rows.value)
-    if(browseList.data.value.projects.length === 0) {
+    let prjList
+    if(seqSearch.value && seqValid.value) {
+      prjList = await useFetch(`${config.public.apiBase}/projects/sequence?seq=${seqSearch.value}&limit=${rows.value}&page=${page.value}`)
+    } else {
+      prjList = await useFetch(`${config.public.apiBase}/projects/?limit=${rows.value}&page=${page.value}`)
+    }
+    projects.value = prjList.data.value.projects
+    totalPages.value = Math.ceil(prjList.data.value.total/rows.value)
+    if(prjList.data.value.projects.length === 0) {
       page.value = 1
       paginate()
     }

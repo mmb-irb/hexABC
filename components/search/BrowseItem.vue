@@ -11,7 +11,7 @@
       <div class="bl-anal">
         <v-row>
           <v-col cols="6">
-            <h4>{{ item.sequences[0] }}</h4>
+            <h4 v-html="highlightSequence(item.sequences[0])"></h4>
             <h4>{{ [...item.sequences[1]].reverse().join("") }}</h4>
           </v-col>
           <v-col cols="6">
@@ -82,10 +82,23 @@
   const { $globals } = useNuxtApp()
   const config = useRuntimeConfig()
 
-  const { item } = defineProps(['item'])
+  const { item, seq } = defineProps(['item', 'seq']);
+
+  const seqValid = computed(() => seq.valid)
+  const seqSearch = computed(() => seq.valid ? seq.str : null)
 
   // thumbnail
   const thumb = $globals.thumbnail(config.public.externalApi, item.id)
+
+  /* HIGHLIGHT SEQUENCE */
+
+  const highlightSequence = (text) => {
+    if(seqValid.value === false) return text
+
+    const regex = new RegExp(seqSearch.value, 'gi')
+    const highlightedText = text.replace(regex, (match) => `<span class="seq-highlight">${match}</span>`)
+    return highlightedText
+  }
 
   /* ANALYSES */
   const analyses = $globals.projects.analyses
@@ -110,8 +123,8 @@
 </script>
 
 <style scoped>
-.v-list-item { font-size: 14px!important; }
-.browse-list-item { 
+  .v-list-item { font-size: 14px!important; }
+  .browse-list-item { 
     display: grid;
     grid-template-areas: "prepend content append";
     grid-template-columns: max-content 1fr auto;
