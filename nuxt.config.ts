@@ -66,7 +66,7 @@ export default defineNuxtConfig({
       apiBase: '/api',
       apiHost: process.env.APP_TYPE == 'development' ? process.env.APP_DEVELOPMENT_HOST : process.env.APP_TYPE == 'staging' ? process.env.APP_STAGING_HOST : process.env.APP_PRODUCTION_HOST,
       apiEndPoints: [
-        '/api', '/api/projects', '/^\/api\/projects\/[a-zA-Z0-9]+$/', '/api/projects/analyses/hbonds'
+        '/api', '/api/projects', '/^\/api\/projects\/?([a-zA-Z0-9]+)?(\\?[\\w=&]+)?$/', '/api/projects/analyses/hbonds'
       ]
     }
   },

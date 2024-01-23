@@ -88,6 +88,7 @@ import { ref } from 'vue';
   
   /* FIRST LOAD */
   const browseList = await useFetch(`${config.public.apiBase}/projects/?limit=${rows.value}&page=${page.value}`)
+  if(browseList.status.value === 'error')  throw createError({ statusCode: browseList.error.value.statusCode, message: browseList.error.value.statusMessage, fatal: true })
   
   let totalItems = ref(browseList.data.value.total)
   let totalPages = ref(Math.ceil(browseList.data.value.total/rows.value))

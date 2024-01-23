@@ -16,7 +16,6 @@ export default defineEventHandler(async (event) => {
                 if (path.startsWith('/') && path.endsWith('/')) {
                     // This is a regular expression stored as a string
                     const regex = new RegExp(path.slice(1, -1));
-                    console.log(regex.test(requestedUrl))
                     return regex.test(requestedUrl);
                 } else {
                     // This is a normal string
