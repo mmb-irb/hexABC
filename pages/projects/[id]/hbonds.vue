@@ -285,7 +285,7 @@
       type: 'heatmap',
       z: hbonds,
       y: bps,
-      //x: [1],
+      x: Array.from({length: 65000}, (_, i) => i * 100),
       colorscale: scale,
       colorbar:{
         autotick: false,

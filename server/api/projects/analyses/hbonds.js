@@ -21,10 +21,13 @@ export default defineEventHandler(async (event) => {
     })();
 
     let hbonds = []
+    const factor = 100
     Object.keys(resp).forEach(key => {
         hbonds.push({
           bp: key,
-          hbonds: resp[key]
+          //hbonds: resp[key]
+          // downsampling
+          hbonds: resp[key].filter((_, i) => i % factor === 0)
         })
     });
 

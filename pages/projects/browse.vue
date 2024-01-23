@@ -24,9 +24,12 @@
                 variant="outlined"
                 label="Search by sequence"
                 single-line
+                clearable
                 :rules="[validateSequence]"
                 v-model="seqSearch"
                 @input="checkText"
+                @click:clear="clearValidation"
+                ref="searchFieldRef"
               ></v-text-field>
               <!--<v-btn
                 prepend-icon="mdi-magnify"
@@ -119,6 +122,9 @@ import { ref } from 'vue';
       // Define your regular expression pattern
       const regex = /^[GATC]{3,}$/;
 
+      // if empty, remove error validation
+      if(value === '' || value === null) return true;
+
       // Check if the value matches the pattern
       if (!regex.test(value)) {
         seqValid.value = false
@@ -144,6 +150,18 @@ import { ref } from 'vue';
       projects.value = browseList.data.value.projects
     }
     
+  }
+
+  // trick to clear search input text when clicking on clear button
+  const searchFieldRef = ref(null)
+  const clearValidation = async () => {
+    if (searchFieldRef.value) {
+      searchFieldRef.value.resetValidation();
+      const browseList = await useFetch(`${config.public.apiBase}/projects/?limit=${rows.value}&page=${page.value}`)
+      totalItems.value = browseList.data.value.total
+      totalPages.value = Math.ceil(browseList.data.value.total/rows.value)
+      projects.value = browseList.data.value.projects
+    }
   }
 
   /* PAGINATION */
