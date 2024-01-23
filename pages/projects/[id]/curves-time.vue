@@ -176,7 +176,7 @@
     const config = useRuntimeConfig()
 
     const datap = await useFetch(`${config.public.apiBase}/projects/${id}`)
-    if(datap.status.value === 'error') throw createError({ statusCode: 404, message: 'Project not found', fatal: true })
+    if(datap.status.value === 'error')  throw createError({ statusCode: datap.error.value.statusCode, message: datap.error.value.statusMessage, fatal: true })
     const project = ref(datap.data.value)
 
     const title = project.value.metadata.NAME

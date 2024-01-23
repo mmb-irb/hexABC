@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
     const response = await $fetch(uri)
                 .catch((error) => {
-                    setResponseStatus(event, 404)
+                    setResponseStatus(event, error.status)
                     return { message: error.message }
                 });
 

@@ -12,10 +12,15 @@ export default defineEventHandler(async (event) => {
 
     // analyses not working
     //const uri = `${config.public.externalApi}v1/projects?projection={"accession":1,"metadata.NAME":1,"metadata.UNIT":1,"analyses":1}&limit=${limit}&page=${page}`
-
     const uri = `${config.public.externalApi}v1/projects?limit=${limit}&page=${page}`
 
-    const data = await $fetch(uri)
+    let data
+    try {
+        data = await $fetch(uri)
+    } catch (error) {
+        setResponseStatus(event, error.status)
+        return { message: error.message }
+    }
 
     const response = data.projects.map((item) => ({
         id: item.identifier,

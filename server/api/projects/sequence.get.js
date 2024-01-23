@@ -12,7 +12,13 @@ export default defineEventHandler(async (event) => {
 
     const uri = `${config.public.externalApi}v1/projects?query={"metadata.SEQUENCES.0":{"$regex":"${seq}"}}&limit=${limit}&page=${page}`
 
-    const data = await $fetch(uri)
+    let data
+    try {
+        data = await $fetch(uri)
+    } catch (error) {
+        setResponseStatus(event, error.status)
+        return { message: error.message }
+    }
 
     const response = data.projects.map((item) => ({
         id: item.identifier,
