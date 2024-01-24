@@ -131,12 +131,17 @@
 
             <div v-else>
               <nuxt-plotly 
-              :data="plotData.val"
-              :layout="plotLayout"
-              :config="plotConfig"
-              style="width: 100%; height: 500px;"
-              @on-ready="myChartOnReady"
-            ></nuxt-plotly>
+                :data="plotData.val"
+                :layout="plotLayout"
+                :config="plotConfig"
+                style="width: 100%; height: 500px;"
+                @on-ready="myChartOnReady"
+              ></nuxt-plotly>
+
+              <div v-if="pngImage" class="mt-4 px-5 d-flex justify-center">
+                <img :src="pngImage" alt="Plot image" style="opacity: .5;">
+              </div>
+
             </div>
 
           </template>
@@ -167,7 +172,8 @@
 
   import DragSelect from 'dragselect'
   import usePlotsUtils from '@/modules/analysis/usePlotsUtils' 
-  import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence' 
+  import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
+  import Plotly from 'plotly.js-dist-min';
 
   const { id } = useRoute().params
   const config = useRuntimeConfig()
@@ -256,6 +262,7 @@
 
   /* HEATMAP */
 
+  const pngImage = ref(null);
   let plotData = reactive({
     val: []
   })
@@ -265,10 +272,14 @@
   let colorscale = $plots.heatmap.colorscale
 
   let datahb = {}
+  let numframes = 0
+  let downSamplingFactor = 0
   onMounted(async () => {
 
     // provisional connection to REST API
     datahb = await useFetch(`${config.public.apiBase}/projects/analyses/hbonds`)
+    numframes = datahb.data.value.frames
+    downSamplingFactor = datahb.data.value.factor
     const parsedHBonds = getParsedHBonds(datahb.data.value.hbonds)
     const hbonds = parsedHBonds.h
     const bps = parsedHBonds.b
@@ -285,7 +296,7 @@
       type: 'heatmap',
       z: hbonds,
       y: bps,
-      x: Array.from({length: 65000}, (_, i) => i * 100),
+      x: Array.from({length: numframes}, (_, i) => i * downSamplingFactor),
       colorscale: scale,
       colorbar:{
         autotick: false,
@@ -369,7 +380,46 @@
 
   })
 
-  const myChartOnReady = (plotlyHTMLElement) => {
+  let imageCreated = false
+  const myChartOnReady = async (plotlyHTMLElement) => {
+
+    if(!imageCreated) {
+      
+      // Create a copy of your data and layout
+      const dataCopy = JSON.parse(JSON.stringify(plotData.val));
+      const layoutCopy = JSON.parse(JSON.stringify(plotLayout));
+
+      layoutCopy.height = 40;
+      //layoutCopy.width = document.querySelectorAll(`.js-plotly-plot`)[0].clientWidth;
+      // Remove the axes labels and color scale
+      layoutCopy.xaxis.title = '';
+      layoutCopy.yaxis.title = '';
+      layoutCopy.xaxis.showticklabels = false;
+      layoutCopy.yaxis.showticklabels = false;
+      layoutCopy.margin = { l: 0, r: 0, b: 0, t: 0, pad: 0 }
+      dataCopy.forEach(trace => {
+        if (trace.colorbar) {
+          trace.showscale = false;
+        }
+      });
+
+      // Generate the image with the modified data and layout
+      pngImage.value = await Plotly.toImage({
+        data: dataCopy,
+        layout: layoutCopy,
+        format: 'png'
+      });
+
+      const image = new Image();
+      image.onload = function() {
+        //console.log(this.width, this.height);
+        // here create slider with this width!!!!!!
+      };
+      image.src = pngImage.value;
+
+      imageCreated = true
+    }
+
     plotlyHTMLElement.on?.('plotly_click', (e) => {
       console.log(e.points[0].x, e.points[0].y, e.points[0].z);
     })
@@ -391,7 +441,7 @@
     plotData.val = [{
         z: hbonds,
         y: bps,
-        x: [1],
+        x: Array.from({length: numframes}, (_, i) => i * downSamplingFactor),
         type: 'heatmap',
         colorscale: scale,
         colorbar:{

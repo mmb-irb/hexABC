@@ -44,6 +44,16 @@ p { margin-bottom: 1rem; }
 .item-v-select .v-list-item__prepend > .v-icon ~ .v-list-item__spacer { width: 10px!important; }
 span.seq-highlight {  color: var(--palette-5); }
 
+/* TO PUT IN A DIV OR SMTH */
+.v-locale--is-ltr.v-slider.v-input--horizontal .v-slider-thumb__label, .v-locale--is-ltr .v-slider.v-input--horizontal .v-slider-thumb__label {
+  transform: translateX(-50%) translateY(65px)!important;
+}
+
+.v-slider.v-input--horizontal .v-slider-thumb__label::before {
+  top: -6px;
+  transform: scaleY(-1);
+}
+
 /* drag select global styles */
 .ds-selector {
   background: rgba(212, 33, 33, 0.1)!important;

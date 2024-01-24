@@ -120,7 +120,7 @@ import { ref } from 'vue';
   })
   const validateSequence = (value) => {
       // Define your regular expression pattern
-      const regex = /^[GATC]{3,}$/;
+      const regex = /^[GATC]{2,}$/;
 
       // if empty, remove error validation
       if(value === '' || value === null) return true;
@@ -128,7 +128,7 @@ import { ref } from 'vue';
       // Check if the value matches the pattern
       if (!regex.test(value)) {
         seqValid.value = false
-        return 'Text must be a valid DNA sequence: GATC in uppercase, at least 3 nucleotides';
+        return 'Text must be a valid DNA sequence: GATC in uppercase, at least 2 nucleotides';
       }
 
       // Return true if the value is valid

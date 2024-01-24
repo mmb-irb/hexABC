@@ -21,11 +21,14 @@ export default defineEventHandler(async (event) => {
     })();
 
     let hbonds = []
-    const factor = 100
+    let frames = 0
+    const factor = 1000
     Object.keys(resp).forEach(key => {
+        frames = resp[key].length
         hbonds.push({
           bp: key,
           //hbonds: resp[key]
+          // In a futre, try with lttb algorithm???
           // downsampling
           hbonds: resp[key].filter((_, i) => i % factor === 0)
         })
@@ -34,6 +37,8 @@ export default defineEventHandler(async (event) => {
     hbonds = hbonds.reverse()
 
     return {
-        hbonds: hbonds
+        hbonds: hbonds,
+        frames: frames,
+        factor: factor
     }
 });
