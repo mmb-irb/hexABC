@@ -358,6 +358,7 @@
   #sticky-disable { position: absolute; right: -.8rem; bottom: -.8rem; display: none; }
   #sticky-enable { position: fixed; top: 55px; right:0px; display: none; }
   #btn-sticky-disable, #btn-sticky-enable { color: #fff!important; }
+  #btn-sticky-disable { font-size: 12px!important; }
 
   @media only screen and (max-width: 1280px) {
     .nucleotide { padding: .3rem 0.25rem; }

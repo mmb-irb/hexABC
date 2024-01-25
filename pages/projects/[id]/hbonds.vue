@@ -21,7 +21,7 @@
 
           <template v-slot:text>
 
-            <p>Click or drag the base pairs in the sequence below to show them in the heatmap plot. </p>
+            <p><strong>Click or drag the base pairs</strong> in the sequence below to show them in the <strong>heatmap plot</strong>. Additionally, base pairs can be <strong>filtered by bonds</strong>. The plot is a <strong>downsampled version</strong> of the original one showing one frame each <strong>{{ downSamplingFactor }}ps</strong> for the sake of showing a <strong>big picture</strong> of the whole analysis. To browse through the plot <strong>in depth</strong> (seeing <strong>all the frames</strong> one by one), go below and <strong>enable the big resolution</strong> button.</p>
 
             <div id="container-strands" class="px-3">
 
@@ -119,33 +119,7 @@
               ></v-progress-linear>
             </div>
 
-            <div v-else>
-              <nuxt-plotly 
-                :data="plotData.val"
-                :layout="plotLayout"
-                :config="plotConfig"
-                style="width: 100%; height: 500px;"
-                @on-ready="myChartOnReady"
-              ></nuxt-plotly>
-
-              <div v-if="pngImage" class="mt-4 px-5 flex justify-center align-center">
-                <div><img :src="pngImage" alt="Plot image" style="opacity: .5; max-width: 100%;"></div>
-
-                <v-range-slider
-                  v-model="range"
-                  :min="0"
-                  :max="200"
-                  step="1"
-                  thumb-label="always"
-                  @end="handleRangeChange"
-                  strict
-                  style="width: 700px;"
-                  class="mt-8"
-                ></v-range-slider>
-
-              </div>
-
-            </div>
+            <HeatmapHBonds v-else :pd="plotData" @customEvent="parentFunction" />
 
           </template>
         </v-card>
@@ -177,7 +151,6 @@
   import useHeatmapUtils from '@/modules/analysis/useHeatmapUtils' 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
   import useScroll from '@/modules/analysis/useScroll' 
-  import Plotly from 'plotly.js-dist-min';
 
   const { id } = useRoute().params
   const config = useRuntimeConfig()
@@ -189,7 +162,6 @@
     getColorBarText, 
     getHMUniqueValues, 
     downSamplingAxis,
-    getPlotlyForImage
   } = useHeatmapUtils()
   const { 
       getSequenceSettings,
@@ -211,40 +183,6 @@
       ]
   })
 
-  /* RANGE SLIDER */
-  /* TODO: START WORKING WITH RANGE SLIDER AND RANGE SELECTOR */
-
-  const range = ref([0, 20]);
-  const maxTotalRange = 20;
-
-  const newRange = ref([0, 20])
-
-  // Handle range change event and update range model
-  const handleRangeChange = (e) => {
-    range.value = newRange.value
-  };
-
-  watch(range, (oldr, newr) => {
-
-    // if the range is too big, adjust it to the maxTotalRange
-    if ((oldr[0] !== newr[0]) && (newr[1] - newr[0] > maxTotalRange)) {
-      // If min has changed, adjust the max to fit within the limit
-      if (range.value[1] - range.value[0] > maxTotalRange) {
-        newRange.value = [range.value[0], range.value[0] + maxTotalRange]
-      }
-    } else if ((oldr[1] !== newr[1]) && (newr[1] - newr[0] > maxTotalRange)) {
-      // If max has changed, adjust the min to fit within the limit
-      if (range.value[1] - range.value[0] > maxTotalRange) {
-        newRange.value = [range.value[1] - maxTotalRange, range.value[1]]
-      }
-    } 
-
-    // if the range is too small, adjust it to the newr
-    if((newr[1] - newr[0] <= maxTotalRange)) {
-      newRange.value = [newr[0], newr[1]]
-    }
-
-  });
 
   /* MAGIC SEQUENCE */
 
@@ -262,12 +200,9 @@
 
   /* HEATMAP */
 
-  const pngImage = ref(null);
   let plotData = reactive({
     val: []
   })
-  let plotLayout = {}
-  let plotConfig = {}
   const dataLoaded = ref(false)
   let colorscale = $hbonds.colorscale
 
@@ -297,10 +232,6 @@
 
     // load plot data
     plotData.val = $hbonds.data(hbonds, bps, xvals, cscale, cbVals, cbTxt)
-    // load plot layout
-    plotLayout = $hbonds.layout
-    // load plot config
-    plotConfig = $hbonds.config
 
     /* DRAG SELECT */
 
@@ -330,35 +261,6 @@
 
   })
 
-  let imageCreated = false
-  const myChartOnReady = async (plotlyHTMLElement) => {
-
-    if(!imageCreated) {
-      
-      const { dataCopy, layoutCopy} = getPlotlyForImage(plotData.val, plotLayout)
-
-      // Generate the image with the modified data and layout
-      pngImage.value = await Plotly.toImage({
-        data: dataCopy,
-        layout: layoutCopy,
-        format: 'png'
-      });
-
-      const image = new Image();
-      image.onload = function() {
-        //console.log(this.width, this.height);
-        // here create slider with this width!!!!!!
-      };
-      image.src = pngImage.value;
-
-      imageCreated = true
-    }
-
-    plotlyHTMLElement.on?.('plotly_click', (e) => {
-      console.log(e.points[0].x, e.points[0].y, e.points[0].z);
-    })
-  }
-
   const loadBP = async(bs) => {
     const filteredData = datahb.data.value.hbonds.filter(item => bs.includes(item.bp))
 
@@ -375,6 +277,12 @@
 
     plotData.val = $hbonds.data(hbonds, bps, xvals, cscale, cbVals, cbTxt)
   }
+
+  /************** */
+  const parentFunction = (d1, d2) => {
+    console.log(d1, d2)
+  }
+  /************** */
 
   // STICKY CONTAINER STRANDS 
   let sticky = ref(true)
@@ -470,6 +378,7 @@
   #sticky-disable { position: absolute; right: -.8rem; bottom: -.8rem; display: none; }
   #sticky-enable { position: fixed; top: 55px; right:0px; display: none; }
   #btn-sticky-disable, #btn-sticky-enable { color: #fff!important; }
+  #btn-sticky-disable { font-size: 12px!important; }
 
   @media only screen and (max-width: 1280px) {
     .nucleotide { padding: .3rem 0.35rem; }
