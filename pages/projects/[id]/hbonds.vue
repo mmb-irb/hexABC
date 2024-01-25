@@ -24,103 +24,93 @@
             <p>Click or drag the base pairs in the sequence below to show them in the heatmap plot. </p>
 
             <div id="container-strands" class="px-3">
-            <v-range-slider
-              v-model="range"
-              :min="0"
-              :max="200"
-              step="1"
-              thumb-label="always"
-              @end="handleRangeChange"
-              strict
-              class="mt-8"
-            ></v-range-slider>
 
-            <v-row> 
-              <v-col lg="9" md="9" sm="12" xs="12">
+              <v-row> 
+                <v-col lg="9" md="9" sm="12" xs="12">
 
-                <v-sheet
-                  color="grey-lighten-4"
-                  class="pa-10 project-sheet"
-                  id="container-strands-sheet"
-                >
-                  <v-row class="project-row" justify="center">
-                    <div 
-                      class="number" 
-                      v-for="(item, index) in strand1"
-                      :key="index"
-                      :value="index"
-                      > {{ index + 1 }} </div>
-                  </v-row>
-                  <v-row class="pb-0 pt-2 px-4 project-row" justify="space-around">
-                    <div class="d-flex">
-                      <div class="end" style="left: -20px;"> 
-                        <div>{{ ends1[0] }}</div> 
-                        <div class="mt-4">{{ ends1[1] }}</div> 
-                      </div>
+                  <v-sheet
+                    color="grey-lighten-4"
+                    class="pa-10 project-sheet"
+                    id="container-strands-sheet"
+                  >
+                    <v-row class="project-row" justify="center">
                       <div 
-                        class="base-pair" 
-                        v-for="(item, index) in strands"
+                        class="number" 
+                        v-for="(item, index) in strand1"
                         :key="index"
                         :value="index"
-                        :id="`bp${index + 1}${item[0]}${strands.length*2 - index}${item[1]}`"
-                        > 
-                        <div class="flex">
-                          <div class="nucleotide">{{ item[0] }}</div> 
-                          <div class="nucleotide">{{ item[1] }}</div>
-                        </div> 
+                        > {{ index + 1 }} </div>
+                    </v-row>
+                    <v-row class="pb-0 pt-2 px-4 project-row" justify="space-around">
+                      <div class="d-flex">
+                        <div class="end" style="left: -20px;"> 
+                          <div>{{ ends1[0] }}</div> 
+                          <div class="mt-4">{{ ends1[1] }}</div> 
+                        </div>
+                        <div 
+                          class="base-pair" 
+                          v-for="(item, index) in strands"
+                          :key="index"
+                          :value="index"
+                          :id="`bp${index + 1}${item[0]}${strands.length*2 - index}${item[1]}`"
+                          > 
+                          <div class="flex">
+                            <div class="nucleotide">{{ item[0] }}</div> 
+                            <div class="nucleotide">{{ item[1] }}</div>
+                          </div> 
+                        </div>
+                        <div class="end" style="left: 20px;"> 
+                          <div>{{ ends2[0] }}</div> 
+                          <div class="mt-4">{{ ends2[1] }}</div> 
+                        </div>
                       </div>
-                      <div class="end" style="left: 20px;"> 
-                        <div>{{ ends2[0] }}</div> 
-                        <div class="mt-4">{{ ends2[1] }}</div> 
-                      </div>
-                    </div>
-                  </v-row>
-                  <v-row class="project-row" justify="center">
-                    <div 
-                      class="number mt-3" 
-                      v-for="(item, index) in strand2"
-                      :key="index"
-                      :value="index"
-                      > {{ strand2.length*2 - index }} </div>
-                  </v-row>
-                </v-sheet>
+                    </v-row>
+                    <v-row class="project-row" justify="center">
+                      <div 
+                        class="number mt-3" 
+                        v-for="(item, index) in strand2"
+                        :key="index"
+                        :value="index"
+                        > {{ strand2.length*2 - index }} </div>
+                    </v-row>
+                  </v-sheet>
 
-              </v-col>
+                </v-col>
 
-              <v-col lg="3" md="3" sm="12" xs="12">
-                <v-btn-toggle
-                  v-model="hbondsSel"
-                  rounded="0"
-                  color="red-darken-4"
-                  group
-                  divided
-                  multiple
-                  variant="outlined"
-                >
-                  <v-btn icon="mdi-numeric-0-circle"></v-btn>
-                  <v-btn icon="mdi-numeric-1-circle"></v-btn>
-                  <v-btn icon="mdi-numeric-2-circle"></v-btn>
-                  <v-btn icon="mdi-numeric-3-circle"></v-btn>
-                </v-btn-toggle>
-              </v-col>
+                <v-col lg="3" md="3" sm="12" xs="12">
+                  <v-btn-toggle
+                    v-model="hbondsSel"
+                    rounded="0"
+                    color="red-darken-4"
+                    group
+                    divided
+                    multiple
+                    variant="outlined"
+                  >
+                    <v-btn icon="mdi-numeric-0-circle"></v-btn>
+                    <v-btn icon="mdi-numeric-1-circle"></v-btn>
+                    <v-btn icon="mdi-numeric-2-circle"></v-btn>
+                    <v-btn icon="mdi-numeric-3-circle"></v-btn>
+                  </v-btn-toggle>
+                </v-col>
 
-              <div id="sticky-disable">
-                <v-tooltip text="Disable sticky" location="bottom">
-                  <template v-slot:activator="{ props }">
-                    <v-btn 
-                      v-bind="props" 
-                      density="compact" 
-                      id="btn-sticky-disable" 
-                      color="blue-grey-lighten-4" 
-                      variant="flat" 
-                      icon="mdi-window-close"
-                      @click="controlSticky"
-                    ></v-btn>
-                  </template>
-                </v-tooltip>
-              </div>
-            </v-row> 
-          </div>
+                <div id="sticky-disable">
+                  <v-tooltip text="Disable sticky" location="bottom">
+                    <template v-slot:activator="{ props }">
+                      <v-btn 
+                        v-bind="props" 
+                        density="compact" 
+                        id="btn-sticky-disable" 
+                        color="blue-grey-lighten-4" 
+                        variant="flat" 
+                        icon="mdi-arrow-expand-up"
+                        @click="controlSticky"
+                      ></v-btn>
+                    </template>
+                  </v-tooltip>
+                </div>
+              </v-row> 
+            </div>
 
             <div v-if="!dataLoaded" style="width:100%; height:100px; display:flex; justify-content: center; align-items: center;">
               <v-progress-linear
@@ -138,8 +128,21 @@
                 @on-ready="myChartOnReady"
               ></nuxt-plotly>
 
-              <div v-if="pngImage" class="mt-4 px-5 d-flex justify-center">
-                <img :src="pngImage" alt="Plot image" style="opacity: .5;">
+              <div v-if="pngImage" class="mt-4 px-5 flex justify-center align-center">
+                <div><img :src="pngImage" alt="Plot image" style="opacity: .5; max-width: 100%;"></div>
+
+                <v-range-slider
+                  v-model="range"
+                  :min="0"
+                  :max="200"
+                  step="1"
+                  thumb-label="always"
+                  @end="handleRangeChange"
+                  strict
+                  style="width: 700px;"
+                  class="mt-8"
+                ></v-range-slider>
+
               </div>
 
             </div>
@@ -171,20 +174,29 @@
 <script setup>
 
   import DragSelect from 'dragselect'
-  import usePlotsUtils from '@/modules/analysis/usePlotsUtils' 
+  import useHeatmapUtils from '@/modules/analysis/useHeatmapUtils' 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
+  import useScroll from '@/modules/analysis/useScroll' 
   import Plotly from 'plotly.js-dist-min';
 
   const { id } = useRoute().params
   const config = useRuntimeConfig()
-  const { $plots } = useNuxtApp()
+  const { $hbonds } = useNuxtApp()
 
-  const { getColorScale, getColorBarText, getHMUniqueValues } = usePlotsUtils()
+  const { 
+    getParsedHBonds,
+    getColorScale, 
+    getColorBarText, 
+    getHMUniqueValues, 
+    downSamplingAxis,
+    getPlotlyForImage
+  } = useHeatmapUtils()
   const { 
       getSequenceSettings,
       addBordersToBasePairs,
       removeBordersFromBasePairs
   } = useInteractiveSequence()
+  const { scrolling, ctrlSticky } = useScroll()
 
   const datap = await useFetch(`${config.public.apiBase}/projects/${id}`)
   if(datap.status.value === 'error')  throw createError({ statusCode: datap.error.value.statusCode, message: datap.error.value.statusMessage, fatal: true })
@@ -198,18 +210,6 @@
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;500&display=swap' }
       ]
   })
-
-  // parse data resulting from the REST API in a format that can be used by plotly
-  const getParsedHBonds = (hbs) => {
-    let b = []
-    let h = []
-    
-    hbs.forEach((hb) => {
-      b.push(hb.bp)
-      h.push(Object.values(hb.hbonds))
-    })
-    return {b, h}
-  }
 
   /* RANGE SLIDER */
   /* TODO: START WORKING WITH RANGE SLIDER AND RANGE SELECTOR */
@@ -269,7 +269,7 @@
   let plotLayout = {}
   let plotConfig = {}
   const dataLoaded = ref(false)
-  let colorscale = $plots.heatmap.colorscale
+  let colorscale = $hbonds.colorscale
 
   let datahb = {}
   let numframes = 0
@@ -283,76 +283,26 @@
     const parsedHBonds = getParsedHBonds(datahb.data.value.hbonds)
     const hbonds = parsedHBonds.h
     const bps = parsedHBonds.b
+    const xvals = downSamplingAxis(numframes, downSamplingFactor)
 
     dataLoaded.value = true
 
-    const uniqueValues = getHMUniqueValues(hbonds)
+    /* PLOTLY */
 
-    let scale = getColorScale(uniqueValues, colorscale)
-    let cbtxt = getColorBarText(uniqueValues)
+    // get unique values for the color bar
+    const cbVals = getHMUniqueValues(hbonds)
+    // get color scale and color bar text
+    let cscale = getColorScale(cbVals, colorscale)
+    let cbTxt = getColorBarText(cbVals)
 
-    // TODO: put all this logic in plugins / plot.js
-    plotData.val = [{
-      type: 'heatmap',
-      z: hbonds,
-      y: bps,
-      x: Array.from({length: numframes}, (_, i) => i * downSamplingFactor),
-      colorscale: scale,
-      colorbar:{
-        autotick: false,
-        tick0: 0,
-        thickness: 20,
-        dtick: 1,
-        ticklabelposition: 'outside',
-        ypad: 1,
-        title: '<br>number of hydrogen bonds',
-        titleside: 'right',
-        tickmode:"array",
-        tickvals: uniqueValues,
-        ticktext: cbtxt,
-        
-      },
-      hovertemplate: 'bp: <b>%{y}</b>' +
-                      '<br>frame <b>%{x}</b>' +
-                      '<br>hbonds: <b>%{z}</b>' + 
-                      '<extra></extra>',
-    }]
+    // load plot data
+    plotData.val = $hbonds.data(hbonds, bps, xvals, cscale, cbVals, cbTxt)
+    // load plot layout
+    plotLayout = $hbonds.layout
+    // load plot config
+    plotConfig = $hbonds.config
 
-    plotLayout = {
-      title: null,
-      hovermode: "closest",
-      hoverlabel: { bgcolor: "#f9f9f9" },
-      xaxis: {
-        //range: [5, 10],
-        tickformat: "d",
-        title: {
-          text: 'frame number',
-          standoff: 20
-        }
-      },
-      yaxis: {
-        title: {
-          text: 'base pair',
-          standoff: 10
-        }
-      },
-      margin: {
-        l: 80,
-        r: 0,
-        b: 50,
-        t: 20,
-        pad: 4
-      },
-      annotations: {
-        arrowcolor: '#f00000',
-      }
-    }
-
-    plotConfig = { 
-      scrollZoom: true, 
-      displayModeBar: false, 
-      responsive: true 
-    }
+    /* DRAG SELECT */
 
     const ds = new DragSelect({
       selectables: document.getElementsByClassName("base-pair"),
@@ -385,23 +335,7 @@
 
     if(!imageCreated) {
       
-      // Create a copy of your data and layout
-      const dataCopy = JSON.parse(JSON.stringify(plotData.val));
-      const layoutCopy = JSON.parse(JSON.stringify(plotLayout));
-
-      layoutCopy.height = 40;
-      //layoutCopy.width = document.querySelectorAll(`.js-plotly-plot`)[0].clientWidth;
-      // Remove the axes labels and color scale
-      layoutCopy.xaxis.title = '';
-      layoutCopy.yaxis.title = '';
-      layoutCopy.xaxis.showticklabels = false;
-      layoutCopy.yaxis.showticklabels = false;
-      layoutCopy.margin = { l: 0, r: 0, b: 0, t: 0, pad: 0 }
-      dataCopy.forEach(trace => {
-        if (trace.colorbar) {
-          trace.showscale = false;
-        }
-      });
+      const { dataCopy, layoutCopy} = getPlotlyForImage(plotData.val, plotLayout)
 
       // Generate the image with the modified data and layout
       pngImage.value = await Plotly.toImage({
@@ -431,81 +365,32 @@
     const parsedHBonds = getParsedHBonds(filteredData)
     const hbonds = parsedHBonds.h
     const bps = parsedHBonds.b
+    const xvals = downSamplingAxis(numframes, downSamplingFactor)
 
-    const uniqueValues = getHMUniqueValues(hbonds)
+    // get unique values for the color bar
+    const cbVals = getHMUniqueValues(hbonds)
+    // get color scale and color bar text
+    let cscale = getColorScale(cbVals, colorscale)
+    let cbTxt = getColorBarText(cbVals)
 
-    let scale = getColorScale(uniqueValues, colorscale)
-    let cbtxt = getColorBarText(uniqueValues)
-
-    // TODO: put all the logic in plugins / plot.js
-    plotData.val = [{
-        z: hbonds,
-        y: bps,
-        x: Array.from({length: numframes}, (_, i) => i * downSamplingFactor),
-        type: 'heatmap',
-        colorscale: scale,
-        colorbar:{
-          autotick: false,
-          tick0: 0,
-          thickness: 20,
-          dtick: 1,
-          ticklabelposition: 'outside',
-          ypad: 1,
-          title: '<br>number of hydrogen bonds',
-          titleside: 'right',
-          tickvals: uniqueValues,
-          //tickmode:"array",
-          ticktext: cbtxt,
-          
-        },
-        hovertemplate: 'bp: <b>%{y}</b>' +
-                        '<br>frame <b>%{x}</b>' +
-                        '<br>hbonds: <b>%{z}</b>' + 
-                        '<extra></extra>',
-      }]
+    plotData.val = $hbonds.data(hbonds, bps, xvals, cscale, cbVals, cbTxt)
   }
 
   // STICKY CONTAINER STRANDS 
   let sticky = ref(true)
-    const onScroll = () => {
-      if(sticky.value === false) return
+  const onScroll = () => {
+    if(sticky.value === false) return
+    scrolling('#container-strands', '#sticky-disable')
+  }
 
-      if(document.querySelector("#container-strands").getBoundingClientRect().y <= 65) {
-        document.querySelector("#container-strands").style.position = 'sticky'
-        document.querySelector("#container-strands").style.top = '65px'
-        document.querySelector("#container-strands").classList.add('elevation-3')
-        document.querySelector("#sticky-disable").style.display = 'block'
-      } else {
-        document.querySelector("#container-strands").style.position = 'relative'
-        document.querySelector("#container-strands").style.top = 'inherit'
-        document.querySelector("#container-strands").classList.remove('elevation-3')
-        document.querySelector("#sticky-disable").style.display = 'none'
-      }
-    }
-    window.addEventListener('scroll', onScroll)    
+  window.addEventListener('scroll', onScroll)    
 
-    onUnmounted(() => {
-      window.removeEventListener('scroll', onScroll)
-    })
+  onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
-    const controlSticky = () => {
-      sticky.value = !sticky.value
-      if(sticky.value === false) {
-        document.querySelector("#container-strands").style.position = 'relative'
-        document.querySelector("#container-strands").style.top = 'inherit'
-        document.querySelector("#container-strands").classList.remove('elevation-3')
-        document.querySelector("#sticky-disable").style.display = 'none'
-        document.querySelector("#sticky-enable").style.display = 'block'
-      } else {        
-        document.querySelector("#sticky-enable").style.display = 'none'
-        if(document.querySelector("#container-strands").getBoundingClientRect().y <= 65) {
-          document.querySelector("#container-strands").style.position = 'sticky'
-          document.querySelector("#container-strands").style.top = '65px'
-          document.querySelector("#container-strands").classList.add('elevation-3')
-          document.querySelector("#sticky-disable").style.display = 'block'
-        }
-      }
-    }
+  const controlSticky = () => {
+    sticky.value = !sticky.value
+    ctrlSticky(sticky.value, '#container-strands', '#sticky-disable', '#sticky-enable')
+  }
 
 </script>
 
