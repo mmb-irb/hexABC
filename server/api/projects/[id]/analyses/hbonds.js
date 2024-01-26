@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 
     let hbonds = []
     let frames = 0
-    const factor = 1000
+    const factor = 100
     Object.keys(resp).forEach(key => {
         frames = resp[key].length
         hbonds.push({

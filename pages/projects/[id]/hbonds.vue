@@ -212,7 +212,7 @@
   onMounted(async () => {
 
     // provisional connection to REST API
-    datahb = await useFetch(`${config.public.apiBase}/projects/analyses/hbonds`)
+    datahb = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/hbonds`)
     numframes = datahb.data.value.frames
     downSamplingFactor = datahb.data.value.factor
     const parsedHBonds = getParsedHBonds(datahb.data.value.hbonds)
