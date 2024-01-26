@@ -74,7 +74,7 @@ export default defineNuxtConfig({
         '/api', 
         '/api/projects', 
         '/^\/api\/projects\/?([a-zA-Z0-9]+)?(\\?[\\w=&]+)?$/', 
-        '/^\/api\/projects\/[a-zA-Z0-9]+\/analyses\/\\b(hbonds|rise)\\b$/'
+        '/^\/api\/projects\/[a-zA-Z0-9]+\/analyses\/(hbonds|rise)(\\?.*)?$/'
       ]
     }
   },

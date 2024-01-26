@@ -16,7 +16,7 @@
         <v-range-slider
           v-model="range"
           :min="0"
-          :max="200"
+          :max="numframes"
           step="1"
           thumb-label="always"
           @end="handleRangeChange"
@@ -45,7 +45,8 @@
   import useHeatmapUtils from '@/modules/analysis/useHeatmapUtils' 
   import Plotly from 'plotly.js-dist-min';
 
-  const { pd } = defineProps(['pd'])
+  const { pd, nf } = defineProps(['pd', 'nf'])
+  const emit = defineEmits(['callParent']);
   const { $hbonds } = useNuxtApp()
 
   const { getPlotlyForImage } = useHeatmapUtils()
@@ -55,6 +56,7 @@
   const plotLayout = $hbonds.layout
   // load plot config
   const plotConfig = $hbonds.config
+  const numframes = ref(nf)
 
   const pngImage = ref(null);
   const imageCreated = ref(false)
@@ -81,6 +83,21 @@
       image.src = pngImage.value;
 
       imageCreated.value = true
+
+      // *****
+      // PUT IN A FUNCTION
+      let sliders = document.querySelectorAll('.hm-slider.v-locale--is-ltr.v-slider.v-input--horizontal .v-slider-thumb__label');
+      if (sliders[0]) {
+        sliders[0].style.transform = 'translateX(-50%) translateY(-10px)';  // replace with your styles
+      }
+      if (sliders[1]) {
+        sliders[1].style.transform = 'translateX(-50%) translateY(73px)';  // replace with your styles
+      }
+      let slidersb = document.querySelectorAll('.hm-slider.v-slider.v-input--horizontal .v-slider-thumb__label');
+      slidersb.forEach((slider, index) => {
+        slider.classList.add(`thumb-label-${index}`);
+      });
+      // *****
     }
 
     plotlyHTMLElement.on?.('plotly_click', (e) => {
@@ -93,15 +110,16 @@
   /* TODO: START WORKING WITH RANGE SLIDER AND RANGE SELECTOR */
 
   const rangeDisabled = ref(true);
-  const range = ref([0, 20]);
-  const maxTotalRange = 20;
+  const range = ref([0, 25000]);
+  const maxTotalRange = 25000;
   const rangeWidth = ref(500);
 
-  const newRange = ref([0, 20])
+  const newRange = ref([0, 25000])
 
   // Handle range change event and update range model
   const handleRangeChange = (e) => {
     range.value = newRange.value
+    emit('callParent', range.value[0], range.value[1]);
   };
 
   watch(range, (oldr, newr) => {
@@ -126,12 +144,14 @@
 
   });
 
-  /* TO FINIIIIIIIIISH */
-  const emit = defineEmits(['customEvent']);
+  /* CHANGE PLOT RESOLUTION */
 
   const handleZoom = () => {
     rangeDisabled.value = !rangeDisabled.value
-    emit('customEvent', 0, 1);
+    // if rangeDisabled is false, emit the range values and load new high resolution data
+    // if rangeDisabled is true, send nulls and load big picture data
+    if(!rangeDisabled.value) emit('callParent', range.value[0], range.value[1]);
+    else emit('callParent', null, null);
   }
 
 </script>
@@ -141,14 +161,9 @@
     margin-inline: 0;
   }
   #rangePlot { position: relative; margin: 0 auto; }
-  #rangeBg { opacity: 0.7; position: absolute; left: 0; top: 0; width: 100%; height: auto; }
-  .hm-slider.v-locale--is-ltr.v-slider.v-input--horizontal .v-slider-thumb__label, .v-locale--is-ltr .v-slider.v-input--horizontal .v-slider-thumb__label {
-    transform: translateX(-50%) translateY(73px)!important;
-  }
-  .hm-slider.v-slider.v-input--horizontal .v-slider-thumb__label::before {
-    top: -6px;
-    transform: scaleY(-1);
-  }
+  #rangeBg { opacity: 0.6; position: absolute; left: 0; top: 0; width: 100%; height: auto; }
+  .thumb-label-0::before { bottom: -0.35rem!important; }
+  .thumb-label-1::before { top: -0.37rem!important; transform: scaleY(-1); }
   .hm-slider.v-slider.v-input--horizontal .v-slider-track {
     height: 41px!important;
   }
@@ -160,6 +175,7 @@
     border-right: solid 4px #fff;
   }
   .hm-slider .v-slider-thumb__surface { opacity: 0; }
+  .hm-slider .v-messages { display: none; }
 </style>
 
 <style scoped>

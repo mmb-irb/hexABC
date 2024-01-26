@@ -27,7 +27,7 @@
 
               <v-row> 
                 <v-col lg="9" md="9" sm="12" xs="12">
-
+                  <!-- TODO: TRY TO PUT ALL THE DIFFERENT MAGIC SEQUENCES (AND ALL THEIR LOGIC???) INTO COMPONENTS -->
                   <v-sheet
                     color="grey-lighten-4"
                     class="pa-10 project-sheet"
@@ -119,7 +119,7 @@
               ></v-progress-linear>
             </div>
 
-            <HeatmapHBonds v-else :pd="plotData" @customEvent="parentFunction" />
+            <HeatmapHBonds v-else :pd="plotData" :nf="numframes" @callParent="loadData" />
 
           </template>
         </v-card>
@@ -183,6 +183,21 @@
       ]
   })
 
+  const getHbondsData = async(from = null, to = null) => {
+    let d
+
+    if(!from && !to) d = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/hbonds`)
+    else d = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/hbonds?from=${from}&to=${to}`)
+
+    const nfs = d.data.value.frames
+    const ds = d.data.value.factor
+    const phbonds = getParsedHBonds(d.data.value.hbonds)
+    const nbs = phbonds.h
+    const bs = phbonds.b
+    const xvls = downSamplingAxis(nfs, ds)
+
+    return { nfs: nfs, dfs: ds, hbonds: nbs, bs: bs, xvals: xvls, rhbonds: d.data.value.hbonds }
+  }
 
   /* MAGIC SEQUENCE */
 
@@ -206,19 +221,27 @@
   const dataLoaded = ref(false)
   let colorscale = $hbonds.colorscale
 
-  let datahb = {}
-  let numframes = 0
-  let downSamplingFactor = 0
+  //let datahb = {}
+  let hbs = ref(null)
+  let bps = ref(null)
+  let numframes = ref(0)
+  let downSamplingFactor = ref(0)
+  let rawHbonds = ref(null)
   onMounted(async () => {
 
     // provisional connection to REST API
-    datahb = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/hbonds`)
-    numframes = datahb.data.value.frames
+    const { nfs, dfs, hbonds, bs, xvals, rhbonds } = await getHbondsData()
+    /*numframes = datahb.data.value.frames
     downSamplingFactor = datahb.data.value.factor
     const parsedHBonds = getParsedHBonds(datahb.data.value.hbonds)
     const hbonds = parsedHBonds.h
     const bps = parsedHBonds.b
-    const xvals = downSamplingAxis(numframes, downSamplingFactor)
+    const xvals = downSamplingAxis(numframes, downSamplingFactor)*/
+    hbs.value = hbonds
+    bps.value = bs
+    numframes.value = nfs
+    downSamplingFactor.value = dfs
+    rawHbonds.value = rhbonds
 
     dataLoaded.value = true
 
@@ -251,7 +274,7 @@
      
       let bps_sel = items.map((item) => item.id )
 
-      if(bps_sel.length == 0) bps_sel = bps.map((item) => `bp${item}`)
+      if(bps_sel.length == 0) bps_sel = bps.value.map((item) => `bp${item}`)
       else addBordersToBasePairs(bps_sel)
 
       const pureBps = bps_sel.map(item => item.replace(/^bp/, ''));
@@ -262,12 +285,12 @@
   })
 
   const loadBP = async(bs) => {
-    const filteredData = datahb.data.value.hbonds.filter(item => bs.includes(item.bp))
+    const filteredData = rawHbonds.value.filter(item => bs.includes(item.bp))
 
     const parsedHBonds = getParsedHBonds(filteredData)
     const hbonds = parsedHBonds.h
     const bps = parsedHBonds.b
-    const xvals = downSamplingAxis(numframes, downSamplingFactor)
+    const xvals = downSamplingAxis(numframes.value, downSamplingFactor.value)
 
     // get unique values for the color bar
     const cbVals = getHMUniqueValues(hbonds)
@@ -278,9 +301,36 @@
     plotData.val = $hbonds.data(hbonds, bps, xvals, cscale, cbVals, cbTxt)
   }
 
+
   /************** */
-  const parentFunction = (d1, d2) => {
-    console.log(d1, d2)
+  // take a look to fix that a little bit
+  // TODO: loadData taking into account the selectes base pairs in the magic sequence
+  const loadData = async (d1, d2) => {
+    let d
+    if(d1 === null || d2 === null) {
+      d = await getHbondsData()
+    } else {
+      d = await getHbondsData(d1, d2)
+    }
+
+    hbs.value = d.hbonds
+    bps.value = d.bs
+    numframes.value = d.nfs
+    downSamplingFactor.value = d.dfs
+    rawHbonds.value = d.rhbonds
+
+    dataLoaded.value = true
+
+    // get unique values for the color bar
+    const cbVals = getHMUniqueValues(d.hbonds)
+    // get color scale and color bar text
+    let cscale = getColorScale(cbVals, colorscale)
+    let cbTxt = getColorBarText(cbVals)
+
+    // load plot data
+    plotData.val = $hbonds.data(d.hbonds, bps, d.xvals, cscale, cbVals, cbTxt)
+    //console.log('plotData', plotData.val)
+
   }
   /************** */
 
