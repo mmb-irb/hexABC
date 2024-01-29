@@ -61,7 +61,8 @@ export default defineNuxtPlugin(() => {
           scrollZoom: true, 
           displayModeBar: false, 
           responsive: true 
-        }
+        },
+        range: 25000
 			}
 		}
 	}

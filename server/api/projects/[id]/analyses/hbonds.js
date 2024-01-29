@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     let { from, to } = getQuery(event);
 
     let type = 'rng'
-    if(!from && !to) type = 'all'
+    if(!from || !to) type = 'all'
       
     if(type === 'all') filePath = process.env.MOCK_ALL_HBONDS_PATH;
     else filePath = process.env.MOCK_RNG_HBONDS_PATH;
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
 
     let hbonds = []
     let frames = 0
-    const factor = type === 'all' ? 100 : 1
+    const factor = type === 'all' ? 1000 : 1
     Object.keys(resp).forEach(key => {
         frames = resp[key].length
         hbonds.push({

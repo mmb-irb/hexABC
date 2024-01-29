@@ -1,11 +1,21 @@
 <template>
-  <nuxt-plotly 
-    :data="plotData.val"
-    :layout="plotLayout"
-    :config="plotConfig"
-    style="width: 100%; height: 500px;"
-    @on-ready="myChartOnReady"
-   ></nuxt-plotly>
+  <div id="container-plot">
+    <div id="loader-plot" class="d-flex justify-center align-center" v-if="changingPlot">
+      <v-progress-circular
+        :width="5"
+        :size="80"
+        color="red"
+        indeterminate
+      ></v-progress-circular>
+    </div>
+    <nuxt-plotly 
+      :data="plotData.val"
+      :layout="plotLayout"
+      :config="plotConfig"
+      style="width: 100%; height: 500px;"
+      @on-ready="myChartOnReady"
+    ></nuxt-plotly>
+  </div>
 
   <v-row v-if="pngImage" class="my-4">
     <v-col lg="9" md="12" sm="12" cols="12" :style="rangeDisabled ? 'opacity:.5' : 'opacity:1'">
@@ -19,6 +29,7 @@
           :max="numframes"
           step="1"
           thumb-label="always"
+          @start="changingPlot = true"
           @end="handleRangeChange"
           strict
           :disabled="rangeDisabled"
@@ -36,6 +47,11 @@
         >
           {{ rangeDisabled ? 'Enable Zoom' : 'Disable Zoom' }}
         </v-btn>
+    </v-col>
+    <v-col cols="12">
+      <p>
+        To enable <strong>big resolution zoom</strong>, click on the button above and then use the <strong>range slider</strong> to select the <strong>range of frames</strong> you want to <strong>zoom in</strong>. The plot will load again with the selected range and with a <strong>resolution of 1ps</strong> for each frame.
+      </p>
     </v-col>
   </v-row>
 </template>
@@ -60,6 +76,7 @@
 
   const pngImage = ref(null);
   const imageCreated = ref(false)
+  const changingPlot = ref(false)
 
   const myChartOnReady = async (plotlyHTMLElement) => {
     if(!imageCreated.value) {
@@ -104,17 +121,19 @@
       console.log(e.points[0].x, e.points[0].y, e.points[0].z);
     })
 
+    changingPlot.value = false
+
   }
 
   /* RANGE SLIDER */
   /* TODO: START WORKING WITH RANGE SLIDER AND RANGE SELECTOR */
 
   const rangeDisabled = ref(true);
-  const range = ref([0, 25000]);
+  const range = ref([0, $hbonds.range]);
   const maxTotalRange = 25000;
   const rangeWidth = ref(500);
 
-  const newRange = ref([0, 25000])
+  const newRange = ref([0, $hbonds.range])
 
   // Handle range change event and update range model
   const handleRangeChange = (e) => {
@@ -148,6 +167,7 @@
 
   const handleZoom = () => {
     rangeDisabled.value = !rangeDisabled.value
+    changingPlot.value = true
     // if rangeDisabled is false, emit the range values and load new high resolution data
     // if rangeDisabled is true, send nulls and load big picture data
     if(!rangeDisabled.value) emit('callParent', range.value[0], range.value[1]);
@@ -179,6 +199,8 @@
 </style>
 
 <style scoped>
+  #container-plot { width:100%; height: 100%; position: relative; }
+  #loader-plot { position: absolute; top: 0; left: 0; background: rgba(255,255,255,0.8); width: 100%; height: 100%; z-index: 1; }
   @media only screen and (max-width: 1280px) {
     .col-btn-zoom-hbonds { margin-top: 20px;  }
   }

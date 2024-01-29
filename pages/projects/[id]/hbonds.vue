@@ -21,7 +21,7 @@
 
           <template v-slot:text>
 
-            <p><strong>Click or drag the base pairs</strong> in the sequence below to show them in the <strong>heatmap plot</strong>. Additionally, base pairs can be <strong>filtered by bonds</strong>. The plot is a <strong>downsampled version</strong> of the original one showing one frame each <strong>{{ downSamplingFactor }}ps</strong> for the sake of showing a <strong>big picture</strong> of the whole analysis. To browse through the plot <strong>in depth</strong> (seeing <strong>all the frames</strong> one by one), go below and <strong>enable the big resolution</strong> button.</p>
+            <p><strong>Click or drag the base pairs</strong> in the sequence below to show them in the <strong>heatmap plot</strong>. Additionally, base pairs can be <strong>filtered by bonds</strong>. The initial plot is a <strong>downsampled version</strong> of the original one showing one frame each <strong>1000ps</strong> for the sake of showing a <strong>big picture</strong> of the whole analysis. To browse through the plot <strong>in depth</strong> (seeing <strong>all the frames</strong> one by one), go below and <strong>enable the big resolution</strong> button.</p>
 
             <div id="container-strands" class="px-3">
 
@@ -186,7 +186,7 @@
   const getHbondsData = async(from = null, to = null) => {
     let d
 
-    if(!from && !to) d = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/hbonds`)
+    if(from === null || to === null) d = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/hbonds`)
     else d = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/hbonds?from=${from}&to=${to}`)
 
     const nfs = d.data.value.frames
@@ -227,6 +227,10 @@
   let numframes = ref(0)
   let downSamplingFactor = ref(0)
   let rawHbonds = ref(null)
+  let filteredBps = reactive({
+    status :false,
+    val: null
+  })
   onMounted(async () => {
 
     // provisional connection to REST API
@@ -274,10 +278,16 @@
      
       let bps_sel = items.map((item) => item.id )
 
-      if(bps_sel.length == 0) bps_sel = bps.value.map((item) => `bp${item}`)
-      else addBordersToBasePairs(bps_sel)
+      if(bps_sel.length == 0) {
+        bps_sel = bps.value.map((item) => `bp${item}`)
+        filteredBps.status = false
+      } else {
+        addBordersToBasePairs(bps_sel)
+        filteredBps.status = true
+      }
 
       const pureBps = bps_sel.map(item => item.replace(/^bp/, ''));
+      filteredBps.val = pureBps
       loadBP(pureBps)
 
     });
@@ -304,7 +314,7 @@
 
   /************** */
   // take a look to fix that a little bit
-  // TODO: loadData taking into account the selectes base pairs in the magic sequence
+  // TODO: loadData taking into account the selected base pairs in the magic sequence
   const loadData = async (d1, d2) => {
     let d
     if(d1 === null || d2 === null) {
@@ -319,17 +329,29 @@
     downSamplingFactor.value = d.dfs
     rawHbonds.value = d.rhbonds
 
+    // check if filtered is active and filter rawHbonds
+    let loadHbonds = d.hbonds
+    let loadBps = d.bs
+    if(filteredBps.status) {
+      console.log('filteredBps', filteredBps.val)
+      const filteredData = rawHbonds.value.filter(item => filteredBps.val.includes(item.bp))
+
+      const parsedHBonds = getParsedHBonds(filteredData)
+      loadHbonds = parsedHBonds.h
+      loadBps = parsedHBonds.b
+    }
+
     dataLoaded.value = true
 
     // get unique values for the color bar
-    const cbVals = getHMUniqueValues(d.hbonds)
+    const cbVals = getHMUniqueValues(loadHbonds)
     // get color scale and color bar text
     let cscale = getColorScale(cbVals, colorscale)
     let cbTxt = getColorBarText(cbVals)
 
     // load plot data
-    plotData.val = $hbonds.data(d.hbonds, bps, d.xvals, cscale, cbVals, cbTxt)
-    //console.log('plotData', plotData.val)
+    plotData.val = $hbonds.data(loadHbonds, loadBps, d.xvals, cscale, cbVals, cbTxt)
+    console.log('plotData', plotData.val)
 
   }
   /************** */
