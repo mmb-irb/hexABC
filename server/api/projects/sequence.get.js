@@ -5,12 +5,16 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
 
     // handle query params (GET)
-    let { limit, page, seq } = getQuery(event);
+    let { limit, page, seq, seqname } = getQuery(event);
 
     if(!limit) limit = 10;
     if(!page) page = 1;
 
-    const uri = `${config.public.externalApi}v1/projects?query={"metadata.SEQUENCES.0":{"$regex":"${seq}"}}&limit=${limit}&page=${page}`
+    let uri
+    if(seq)
+        uri = `${config.public.externalApi}v1/projects?query={"metadata.SEQUENCES.0":{"$regex":"${seq}"}}&limit=${limit}&page=${page}`
+    else if(seqname)
+        uri = `${config.public.externalApi}v1/projects?query={"metadata.NAME":{"$regex":"${seqname}"}}&limit=${limit}&page=${page}`
 
     let data
     try {

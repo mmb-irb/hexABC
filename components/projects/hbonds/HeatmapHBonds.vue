@@ -138,7 +138,10 @@
   // Handle range change event and update range model
   const handleRangeChange = (e) => {
     range.value = newRange.value
-    emit('callParent', range.value[0], range.value[1]);
+    // timeout to avoid ralentization of range slider
+    setTimeout(() => {
+      emit('callParent', range.value[0], range.value[1]);
+    }, 500);
   };
 
   watch(range, (oldr, newr) => {

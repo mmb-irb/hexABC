@@ -311,10 +311,7 @@
     plotData.val = $hbonds.data(hbonds, bps, xvals, cscale, cbVals, cbTxt)
   }
 
-
-  /************** */
-  // take a look to fix that a little bit
-  // TODO: loadData taking into account the selected base pairs in the magic sequence
+  // load data from HeatmapHBonds component with the range values
   const loadData = async (d1, d2) => {
     let d
     if(d1 === null || d2 === null) {
@@ -333,7 +330,6 @@
     let loadHbonds = d.hbonds
     let loadBps = d.bs
     if(filteredBps.status) {
-      console.log('filteredBps', filteredBps.val)
       const filteredData = rawHbonds.value.filter(item => filteredBps.val.includes(item.bp))
 
       const parsedHBonds = getParsedHBonds(filteredData)
@@ -351,7 +347,6 @@
 
     // load plot data
     plotData.val = $hbonds.data(loadHbonds, loadBps, d.xvals, cscale, cbVals, cbTxt)
-    console.log('plotData', plotData.val)
 
   }
   /************** */

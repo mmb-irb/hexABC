@@ -73,8 +73,9 @@ export default defineNuxtConfig({
       apiEndPoints: [
         '/api', 
         '/api/projects', 
-        '/^\/api\/projects\/?([a-zA-Z0-9]+)?(\\?[\\w=&]+)?$/', 
-        '/^\/api\/projects\/[a-zA-Z0-9]+\/analyses\/(hbonds|rise)(\\?.*)?$/'
+        // TODO: FIX REGEX FOR PROJECTS ID WHEN WORKING WITH FAIR ID'S
+        '/^\/api\/projects\/?([a-zA-Z0-9\_\.]+)?(\\?[\\w=&]+)?$/', 
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(hbonds|rise)(\\?.*)?$/'
       ]
     }
   },

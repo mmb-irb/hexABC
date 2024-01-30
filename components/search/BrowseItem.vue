@@ -10,11 +10,11 @@
       
       <div class="bl-anal">
         <v-row>
-          <v-col cols="6">
+          <v-col lg="6" md="6" sm="12" cols="12">
             <h4 v-html="highlightSequence(item.sequences[0])"></h4>
             <h4>{{ [...item.sequences[1]].reverse().join("") }}</h4>
           </v-col>
-          <v-col cols="6">
+          <v-col lg="6" md="6" sm="12" cols="12">
             <v-select
               label="Analyses"
               v-model="modelAnalyses"
