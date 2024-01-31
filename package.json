@@ -31,6 +31,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.5",
     "dragselect": "^3.0.4",
+    "ngl": "^2.0.0-dev.36",
     "swagger-ui": "^5.10.5"
   }
 }

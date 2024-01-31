@@ -16,10 +16,33 @@
           <template v-slot:text>
 
             <p>{{ project.metadata.DESCRIPTION }}</p>
-            <p id="sequences">
-              {{ project.metadata.SEQUENCES[0] }}<br>
-              {{ [...project.metadata.SEQUENCES[1]].reverse().join("") }}
-            </p>
+
+          </template>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row> 
+      <v-col cols="12">
+        <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
+
+          <template v-slot:title>
+            <v-icon size="small" icon="mdi-atom-variant"></v-icon> &nbsp;TRAJECTORY
+          </template>
+
+          <template v-slot:text>
+
+            <v-row class="mt-3"> 
+              <v-col lg="7" md="6" sm="12" cols="12">
+                <p id="sequences">
+                  {{ project.metadata.SEQUENCES[0] }}<br>
+                  {{ [...project.metadata.SEQUENCES[1]].reverse().join("") }}
+                </p>
+              </v-col>
+              <v-col lg="5" md="6" sm="12" cols="12" >
+                <div id="viewport"></div>
+              </v-col>
+            </v-row>
 
           </template>
         </v-card>
@@ -37,7 +60,7 @@
           <template v-slot:text>
 
             <v-row> 
-              <v-col lg="3" md="6" sm="6" xs="12">
+              <v-col lg="3" md="4" sm="6" xs="12">
                 <v-hover v-slot:default="{ isHovering, props }">
                   <v-card
                     class="mx-auto"
@@ -63,7 +86,7 @@
                 </v-hover>
               </v-col>
 
-              <v-col lg="3" md="6" sm="6" xs="12">
+              <v-col lg="3" md="4" sm="6" xs="12">
                 <v-hover v-slot:default="{ isHovering, props }">
                   <v-card
                     class="mx-auto"
@@ -105,8 +128,12 @@ import { ref } from 'vue';
   import curvesImg from '/img/projects/analyses/curves/curves-analyses.png'
   import hbondsImg from '/img/projects/analyses/hbonds/hbonds.png'
 
+  import useStage from "@/modules/ngl/useStage"
+
   const { id } = useRoute().params
   const config = useRuntimeConfig()
+
+  const { createStage, /*getStage, createTrajectoryPlayer*/ } = useStage()
 
   const datap = await useFetch(`${config.public.apiBase}/projects/${id}`)
   if(datap.status.value === 'error')  throw createError({ statusCode: datap.error.value.statusCode, message: datap.error.value.statusMessage, fatal: true })
@@ -121,12 +148,29 @@ import { ref } from 'vue';
     ]
   })
 
+  onMounted(async () => {
+
+    const stage = createStage("viewport")
+    console.log(stage)
+
+    const topology = await useFetch('https://files.rcsb.org/download/3EBP.pdb')
+
+    const blob = new Blob([topology.data.value], { type: "text/plain" });
+
+    stage.loadFile(blob, { defaultRepresentation: true, ext: 'pdb'})
+    .then(async function (component) {
+      console.log(component)
+    })
+
+  })
+
 </script>
 
 <style scoped>
   #sequences { font-size: 25px; color: var(--dark-text); font-weight:500; line-height: 25px; font-family: 'Roboto Mono', monospace; }
   .v-card .v-card-title { border-top: 1px solid var(--grey-light); text-align: center; }
   .v-card .v-card-title a { text-decoration: none; }
+  #viewport { width: 100%; height: 300px; background-color: black; }
   .bg-link {
     display: block;
     transition: background-color 0.3s ease;

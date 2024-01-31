@@ -163,18 +163,11 @@
 
   <v-snackbar
     v-model="snackbar"
-    :timeout="2000"
+    :timeout="3000"
+    color="amber-darken-2"
+    elevation="4"
   >
     {{ textSnackbar }}
-    <template v-slot:actions>
-      <!--<v-btn
-        color="blue"
-        variant="text"
-        @click="snackbar = false"
-      >
-        Close
-      </v-btn>-->
-    </template>
   </v-snackbar>
 </template>
 
@@ -317,7 +310,7 @@
           const pureBps = bps_sel.map(item => item.replace(/^bp/, ''));
           filteredBps.val = pureBps
 
-          console.log(filteredBps)
+          //console.log(filteredBps)
 
         }
 
