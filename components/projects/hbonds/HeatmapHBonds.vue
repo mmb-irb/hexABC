@@ -17,7 +17,7 @@
     ></nuxt-plotly>
   </div>
 
-  <v-row v-if="pngImage" class="my-4">
+  <v-row v-if="pngImage" class="my-6">
     <v-col lg="9" md="12" sm="12" cols="12" :style="rangeDisabled ? 'opacity:.5' : 'opacity:1'">
       <div id="rangePlot">
         <div id="rangeBg">
@@ -48,7 +48,7 @@
           {{ rangeDisabled ? 'Enable Zoom' : 'Disable Zoom' }}
         </v-btn>
     </v-col>
-    <v-col cols="12">
+    <v-col cols="12" class="mt-4">
       <p>
         To enable <strong>big resolution zoom</strong>, click on the button above and then use the <strong>range slider</strong> to select the <strong>range of frames</strong> you want to <strong>zoom in</strong>. The plot will load again with the selected range and with a <strong>resolution of 1ps</strong> for each frame.
       </p>

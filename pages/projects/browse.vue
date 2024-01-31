@@ -80,7 +80,6 @@
 
 <script setup>
   import { useDisplay } from 'vuetify'
-  //import { ref } from 'vue';
 
   const { $globals } = useNuxtApp()
   const config = useRuntimeConfig()

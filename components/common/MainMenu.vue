@@ -111,7 +111,6 @@
 
   const projects_menu = [
     { title: 'Browse', to: '/projects/browse', icon: 'mdi-compass-outline' },
-    { title: 'Plain Search', to: '', icon: 'mdi-magnify' },
     { title: 'Advanced Search', to: '', icon: 'mdi-tune' }
         
   ]

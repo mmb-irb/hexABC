@@ -21,7 +21,7 @@
 
           <template v-slot:text>
 
-            <p><strong>Click or drag the base pairs</strong> in the sequence below to show them in the <strong>heatmap plot</strong>. Additionally, base pairs can be <strong>filtered by bonds</strong>. The initial plot is a <strong>downsampled version</strong> of the original one showing one frame each <strong>1000ps</strong> for the sake of showing a <strong>big picture</strong> of the whole analysis. To browse through the plot <strong>in depth</strong> (seeing <strong>all the frames</strong> one by one), go below and <strong>enable the big resolution</strong> button.</p>
+            <p><strong>Click or drag the base pairs</strong> in the sequence below to show them in the <strong>heatmap plot</strong>. Additionally, base pairs can be <strong>filtered by bonds</strong>, selecting <strong>number of bonds</strong> and <strong>percentage</strong> of this number in each <strong>base pair</strong>. The initial plot is a <strong>downsampled version</strong> of the original one showing one frame each <strong>1000ps</strong> for the sake of showing a <strong>big picture</strong> of the whole analysis. To browse through the plot <strong>in depth</strong> (seeing <strong>all the frames</strong> one by one), go below and <strong>enable the big resolution</strong> button.</p>
 
             <div id="container-strands" class="px-3">
 
@@ -77,21 +77,38 @@
 
                 </v-col>
 
-                <v-col lg="3" md="3" sm="12" xs="12">
-                  <v-btn-toggle
-                    v-model="hbondsSel"
-                    rounded="0"
-                    color="red-darken-4"
-                    group
-                    divided
-                    multiple
-                    variant="outlined"
-                  >
-                    <v-btn icon="mdi-numeric-0-circle"></v-btn>
-                    <v-btn icon="mdi-numeric-1-circle"></v-btn>
-                    <v-btn icon="mdi-numeric-2-circle"></v-btn>
-                    <v-btn icon="mdi-numeric-3-circle"></v-btn>
-                  </v-btn-toggle>
+                <v-col lg="3" md="3" sm="12" xs="12" class="">
+                  <p style="font-size: .8rem;">Select base pairs by number of hbonds predominance:</p>
+
+                  <div v-bind:class="{ 'd-flex': display.sm }">
+                    <v-btn-toggle
+                      v-model="hbondsSel"
+                      rounded="0"
+                      group
+                      divided
+                      @update:modelValue="filterByHbonds"
+                      variant="outlined"
+                    >
+                      <v-btn icon="mdi-numeric-0-circle" color="black" ></v-btn>
+                      <v-btn icon="mdi-numeric-1-circle" color="light-blue-darken-4"></v-btn>
+                      <v-btn icon="mdi-numeric-2-circle" color="green-darken-2"></v-btn>
+                      <v-btn icon="mdi-numeric-3-circle" color="amber-lighten-1"></v-btn>
+                    </v-btn-toggle>
+                    <v-slider
+                      v-model="sliderHbonds"
+                      class="align-center mt-3"
+                      :min="0"
+                      :max="1"
+                      :step="0.01"
+                      @end="filterByHbonds"
+                      color="blue-grey-lighten-1"
+                      hide-details
+                    >
+                      <template v-slot:append>
+                        <span id="hbonds-percent">{{ sliderHbonds.toFixed(2) }}</span>
+                      </template>
+                    </v-slider>
+                  </div>
                 </v-col>
 
                 <div id="sticky-disable">
@@ -143,10 +160,27 @@
     </v-row>
 
   </v-container>
+
+  <v-snackbar
+    v-model="snackbar"
+    :timeout="2000"
+  >
+    {{ textSnackbar }}
+    <template v-slot:actions>
+      <!--<v-btn
+        color="blue"
+        variant="text"
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>-->
+    </template>
+  </v-snackbar>
 </template>
 
 <script setup>
 
+  import { useDisplay } from 'vuetify'
   import DragSelect from 'dragselect'
   import useHeatmapUtils from '@/modules/analysis/useHeatmapUtils' 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
@@ -154,6 +188,7 @@
 
   const { id } = useRoute().params
   const config = useRuntimeConfig()
+  const display = ref(useDisplay())
   const { $hbonds } = useNuxtApp()
 
   const { 
@@ -211,7 +246,89 @@
 
   /* SELECT BY HBONDS */
 
-  const hbondsSel = ref([0, 1, 2, 3])
+  const snackbar = ref(false)
+  const textSnackbar = ref('')
+  const hbondsSel = ref(null)
+  const sliderHbonds = ref(0.2)
+
+  // check this function with logs
+  const percentageOfValueInArray = (array, value) => {
+    const count = array.reduce((n, x) => n + (x === value), 0);
+    //console.log((count / array.length) * 100)
+    return (count / array.length) * 100;
+  };
+
+  const filterByHbonds = () => {
+    //console.log(hbondsSel.value, sliderHbonds.value)
+    let fBps = []
+    let empty = false
+    if(hbondsSel.value !== null && hbondsSel.value !== undefined) {
+      if(sliderHbonds.value === 0) {
+        fBps = rawHbonds.value.filter(item => !item.hbonds.includes(hbondsSel.value));
+      } else {
+        fBps = rawHbonds.value.filter(item => 
+          item.hbonds.includes(hbondsSel.value) && 
+          percentageOfValueInArray(item.hbonds, hbondsSel.value) >= sliderHbonds.value*100
+        );
+      }
+
+      if(fBps.length === 0) {
+        empty = true
+        fBps = rawHbonds.value
+        snackbar.value = true
+        ds.clearSelection()
+        removeBordersFromBasePairs()
+        filteredBps.status = false
+        textSnackbar.value = 'No results for this selection'
+      }
+
+      if(fBps.length > 0) {
+        
+        const parsedHBonds = getParsedHBonds(fBps)
+        const hbonds = parsedHBonds.h
+        const bps = parsedHBonds.b
+        const xvals = downSamplingAxis(numframes.value, downSamplingFactor.value)
+
+        // get unique values for the color bar
+        const cbVals = getHMUniqueValues(hbonds)
+        // get color scale and color bar text
+        let cscale = getColorScale(cbVals, colorscale)
+        let cbTxt = getColorBarText(cbVals)
+
+        plotData.val = $hbonds.data(hbonds, bps, xvals, cscale, cbVals, cbTxt)
+
+        if(!empty) {
+          //console.log(filteredBps)
+          //const itemsToSelect = [document.querySelector('#bp1G40C'), document.querySelector('#bp2C39G')];
+          const itemsToSelect = fBps.map((item) => document.querySelector(`#bp${item.bp}`));
+          
+          //console.log(itemsToSelect)
+
+          ds.clearSelection();
+          ds.addSelection(itemsToSelect);
+
+          const bps_sel = itemsToSelect.map((item) => item.id )
+
+          removeBordersFromBasePairs()
+          addBordersToBasePairs(bps_sel)
+
+          filteredBps.status = true
+
+          const pureBps = bps_sel.map(item => item.replace(/^bp/, ''));
+          filteredBps.val = pureBps
+
+          console.log(filteredBps)
+
+        }
+
+      }
+
+    } else {
+      snackbar.value = true
+      textSnackbar.value = 'Please select a number of hbonds'
+    }
+
+  }
 
   /* HEATMAP */
 
@@ -231,6 +348,7 @@
     status :false,
     val: null
   })
+  let ds
   onMounted(async () => {
 
     // provisional connection to REST API
@@ -262,7 +380,7 @@
 
     /* DRAG SELECT */
 
-    const ds = new DragSelect({
+    ds = new DragSelect({
       selectables: document.getElementsByClassName("base-pair"),
       area: document.getElementById("container-strands-sheet"),
       draggability: false,
@@ -285,6 +403,8 @@
         addBordersToBasePairs(bps_sel)
         filteredBps.status = true
       }
+
+      hbondsSel.value = null
 
       const pureBps = bps_sel.map(item => item.replace(/^bp/, ''));
       filteredBps.val = pureBps
@@ -325,6 +445,8 @@
     numframes.value = d.nfs
     downSamplingFactor.value = d.dfs
     rawHbonds.value = d.rhbonds
+
+    console.log(filteredBps)
 
     // check if filtered is active and filter rawHbonds
     let loadHbonds = d.hbonds
@@ -369,7 +491,14 @@
 
 </script>
 
+<style>
+  @media only screen and (max-width: 1280px) {
+    .v-btn--icon.v-btn--density-default { width: 44px;}
+  }
+</style>
+
 <style scoped>
+  .v-btn-group { color:#546E7A; }
   .mdi-combined {
     position: relative;
     display: inline-block;
@@ -441,6 +570,8 @@
       color: var(--palette-4);
     }
   .project-sheet{ overflow: hidden;}
+
+  #hbonds-percent { font-weight: 600; font-size: .9rem;}
 
   #sticky-disable { position: absolute; right: -.8rem; bottom: -.8rem; display: none; }
   #sticky-enable { position: fixed; top: 55px; right:0px; display: none; }
