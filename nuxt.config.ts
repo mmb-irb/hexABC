@@ -58,7 +58,8 @@ export default defineNuxtConfig({
     { path: '~/components/common', extensions: ['vue'] },
     { path: '~/components/search', extensions: ['vue'] },
     { path: '~/components/projects/curves', extensions: ['vue'] },
-    { path: '~/components/projects/hbonds', extensions: ['vue'] }
+    { path: '~/components/projects/hbonds', extensions: ['vue'] },
+    { path: '~/components/projects/sequences', extensions: ['vue'] }
   ],
   plugins: [
     // define here all plugins in nested folders
@@ -75,6 +76,7 @@ export default defineNuxtConfig({
         '/api/projects', 
         // TODO: FIX REGEX FOR PROJECTS ID WHEN WORKING WITH FAIR ID'S
         '/^\/api\/projects\/?([a-zA-Z0-9\_\.]+)?(\\?[\\w=&]+)?$/', 
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/topology$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(hbonds|rise)(\\?.*)?$/'
       ]
     }

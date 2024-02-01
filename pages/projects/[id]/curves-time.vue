@@ -29,54 +29,12 @@
             <v-row id="container-strands"> 
               <v-col lg="9" md="9" sm="12" xs="12">
 
-                <v-sheet
-                  color="grey-lighten-4"
-                  class="pa-10 project-sheet"
-                  id="container-strands-sheet"
-                >
-                  <v-row class="project-row" justify="center">
-                    <div 
-                      class="number" 
-                      v-for="(item, index) in strand1"
-                      :key="index"
-                      :value="index"
-                      > {{ index + 1 }} </div>
-                  </v-row>
-                  <v-row class="pb-0 pt-2 px-4 project-row" justify="space-around">
-                    <div class="end"> {{ ends1[0] }} </div>
-                    <div class="d-flex">
-                      <div 
-                      class="nucleotide" 
-                      v-for="(item, index) in strand1"
-                      :key="index"
-                      :value="index"
-                      :id="`${item}-${index + 1}-strand1`"
-                      > {{ item }} </div>
-                    </div>
-                    <div class="end"> {{ ends1[1] }} </div>
-                  </v-row>
-                  <v-row class="pt-0 pb-2 px-4 project-row" justify="space-around">
-                    <div class="end"> {{ ends2[0] }} </div>
-                    <div class="d-flex">
-                      <div 
-                      class="nucleotide" 
-                      v-for="(item, index) in strand2"
-                      :key="index"
-                      :value="index"
-                      :id="`${item}-${strand2.length*2 - index}-strand2`"
-                      > {{ item }} </div>
-                    </div>
-                    <div class="end"> {{ ends2[1] }} </div>
-                  </v-row>
-                  <v-row class="project-row" justify="center">
-                    <div 
-                      class="number" 
-                      v-for="(item, index) in strand2"
-                      :key="index"
-                      :value="index"
-                      > {{ strand2.length*2 - index }} </div>
-                  </v-row>
-                </v-sheet>
+                <SequenceInteractive 
+                  :strands="{ strand1: strand1, strand2: strand2 }" 
+                  :ends="{ ends1: ends1, ends2: ends2 }" 
+                  @dsEnd="handleDsEnd" 
+                  @dsStart="handleDsStart" 
+                />
 
               </v-col>
 
@@ -95,21 +53,9 @@
                   <v-btn value="4" @click="firstLevelChange('4')" class="btn-section disabled" id="btn-section-4"> <v-icon style="transform: scaleX(-1);"> mdi-set-square mdi-rotate-45 </v-icon> &nbsp;Grooves </v-btn>
                 </v-btn-toggle>
               </v-col>
-              <div id="sticky-disable">
-                <v-tooltip text="Disable sticky" location="bottom">
-                  <template v-slot:activator="{ props }">
-                    <v-btn 
-                      v-bind="props" 
-                      density="compact" 
-                      id="btn-sticky-disable" 
-                      color="blue-grey-lighten-4" 
-                      variant="flat" 
-                      icon="mdi-arrow-expand-up"
-                      @click="controlSticky"
-                    ></v-btn>
-                  </template>
-                </v-tooltip>
-              </div>
+              
+              <StickyDisable @cSticky="controlSticky" />
+
             </v-row>
 
             <v-row class="mt-8" v-if="showAlert">
@@ -147,20 +93,7 @@
         </v-card>
       </v-col>
 
-      <div id="sticky-enable">
-        <v-tooltip text="Enable sticky" location="bottom">
-          <template v-slot:activator="{ props }">
-            <v-btn 
-              v-bind="props" 
-              density="compact" 
-              id="btn-sticky-enable" 
-              color="blue-grey-lighten-4" 
-              icon="mdi-chevron-double-down"
-              @click="controlSticky"
-            ></v-btn>
-          </template>
-        </v-tooltip>
-      </div>
+      <StickyEnable @cSticky="controlSticky" />
 
     </v-row>
     
@@ -169,7 +102,6 @@
 
 <script setup>
 
-  import DragSelect from 'dragselect'
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
   import useScroll from '@/modules/analysis/useScroll' 
 
@@ -186,7 +118,7 @@
     getSequenceSettings, 
     checkNucleotides,
     addBordersToNucleotides,
-    removeBordersFromNucleotides 
+    removeBordersFromNucleotides
   } = useInteractiveSequence()
   const { scrolling, ctrlSticky } = useScroll()
 
@@ -261,49 +193,39 @@
     }, 1);
   }
 
-  onMounted(async () => {
-    const ds = new DragSelect({
-      selectables: document.getElementsByClassName("nucleotide"),
-      area: document.getElementById("container-strands-sheet"),
-      draggability: false,
-      multiSelectKeys: ['Shift']
-    });
+  /* HANDLE MAGIC SEQUENCE */
 
-    ds.subscribe("DS:start", (e) => {
-      //console.log('selection started');
-      removeBordersFromNucleotides()
-    });
+  const handleDsStart = () => {
+    //console.log('selection started');
+    removeBordersFromNucleotides()
+  }
 
-    ds.subscribe("DS:end", ({items}) => {
+  const handleDsEnd = (items) => {
+    const nucleotides = items.map((item) => item.id )
 
-      const nucleotides = items.map((item) => item.id )
+    const checkNuc = checkNucleotides(nucleotides, sequence.length)
+    
+    disableSectionButtons()
 
-      const checkNuc = checkNucleotides(nucleotides, sequence.length)
+    // reset section menu
+    section.value = null
 
-      disableSectionButtons()
+    if (checkNuc.status) {
+      // get message
+      message.value = checkNuc.msg
+      // modify styles for selected nucleotides
+      addBordersToNucleotides(nucleotides)
+      // get menu
+      activeMenu = seqmenu[checkNuc.type].sections
+      enableSectionButtons(activeMenu)
+    } else {
+      // get message
+      message.value = checkNuc.msg
+    }
 
-      // reset section menu
-      section.value = null
-
-      if (checkNuc.status) {
-        // get message
-        message.value = checkNuc.msg
-        // modify styles for selected nucleotides
-        addBordersToNucleotides(nucleotides)
-        // get menu
-        activeMenu = seqmenu[checkNuc.type].sections
-        enableSectionButtons(activeMenu)
-      } else {
-        // get message
-        message.value = checkNuc.msg
-      }
-
-      alertType.value = checkNuc.alert
-      showAlert.value = !checkNuc.status
-
-    });
-
-  })
+    alertType.value = checkNuc.alert
+    showAlert.value = !checkNuc.status
+  }
 
   // STICKY CONTAINER STRANDS 
   let sticky = ref(true)
@@ -337,31 +259,6 @@
   .v-card {
     overflow: inherit !important;  
   }
-  .nucleotide {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1.5rem;
-    line-height: 1.6rem;
-    font-weight: 500;
-    padding: .5rem 0.5rem;
-    margin: 0;
-    color: var(--palette-6);
-    user-select: none; 
-  }
-  .nucleotide.all { box-shadow: inset 0 0 0 1px var(--palette-2); }
-  .nucleotide.top-bp { box-shadow: inset 1px 0 0 var(--palette-2), inset -1px 0 0 var(--palette-2), inset 0 1px 0 var(--palette-2); }
-  .nucleotide.bottom-bp { box-shadow: inset 1px 0 0 var(--palette-2), inset -1px 0 0 var(--palette-2), inset 0 -1px 0 var(--palette-2); }
-  .nucleotide.left-bs { box-shadow: inset 1px 0 0 var(--palette-2), inset 0 1px 0 var(--palette-2), inset 0 -1px 0 var(--palette-2); }
-  .nucleotide.right-bs { box-shadow: inset -1px 0 0 var(--palette-2), inset 0 1px 0 var(--palette-2), inset 0 -1px 0 var(--palette-2); }
-  .nucleotide.top-left-bps { box-shadow: inset 1px 1px 0px 0px var(--palette-2); }
-  .nucleotide.top-right-bps { box-shadow: inset -1px 1px 0px 0px var(--palette-2); }
-  .nucleotide.top-bps { box-shadow: inset 0px 1px 0px 0px var(--palette-2); }
-  .nucleotide.bottom-left-bps { box-shadow: inset 1px -1px 0px 0px var(--palette-2); }
-  .nucleotide.bottom-right-bps { box-shadow: inset -1px -1px 0px 0px var(--palette-2); }
-  .nucleotide.bottom-bps { box-shadow: inset 0px -1px 0px 0px var(--palette-2); }
-  .ds-selected {
-    background-color: var(--light-text);
-    color: var(--palette-4);
-  }
 
   .v-btn-group {
     flex-direction: column;
@@ -378,36 +275,7 @@
     opacity: 0.25;
   }
 
-  .number {
-    font-family: monospace;
-    font-size: .75rem;
-    width: 1.91rem;
-    text-align: center;
-    color: var(--palette-2);
-    user-select: none; 
-    line-height: .2rem;
-  }
-  .end {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1.25rem;
-    font-weight: 200;
-    color: var(--strand-end);
-    user-select: none; 
-    padding: .75rem 0;
-  }
-  .project-sheet{ overflow: hidden;}
-
-  #sticky-disable { position: absolute; right: -.8rem; bottom: -.8rem; display: none; }
-  #sticky-enable { position: fixed; top: 55px; right:0px; display: none; }
-  #btn-sticky-disable, #btn-sticky-enable { color: #fff!important; }
-  #btn-sticky-disable { font-size: 12px!important; }
-
   @media only screen and (max-width: 1280px) {
-    .nucleotide { padding: .3rem 0.35rem; }
-    .number { width: 1.62rem; }
-    .end { padding: .5rem 0; font-size: 1.2rem; }
-    .project-sheet{ overflow-x: auto;}
-    .project-row { min-width: 630px; }
     .v-btn-group .v-btn { padding: .44rem .2rem; }
   }
 

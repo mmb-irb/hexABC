@@ -151,16 +151,19 @@ import { ref } from 'vue';
   onMounted(async () => {
 
     const stage = createStage("viewport")
-    console.log(stage)
+    stage.setParameters({ backgroundColor: '#dedede' });
 
-    const topology = await useFetch('https://files.rcsb.org/download/3EBP.pdb')
-
+    const topology = await useFetch(`${config.public.apiBase}/projects/${id}/topology`)
     const blob = new Blob([topology.data.value], { type: "text/plain" });
 
-    stage.loadFile(blob, { defaultRepresentation: true, ext: 'pdb'})
-    .then(async function (component) {
-      console.log(component)
-    })
+    stage.loadFile(blob, { defaultRepresentation: false, ext: 'pdb'})
+      .then(async function (component) {
+        component.addRepresentation("cartoon");
+        component.addRepresentation("base");
+        component.autoView('nucleic');
+      })
+
+    window.addEventListener("resize", () => stage.viewer.handleResize())
 
   })
 
@@ -170,7 +173,7 @@ import { ref } from 'vue';
   #sequences { font-size: 25px; color: var(--dark-text); font-weight:500; line-height: 25px; font-family: 'Roboto Mono', monospace; }
   .v-card .v-card-title { border-top: 1px solid var(--grey-light); text-align: center; }
   .v-card .v-card-title a { text-decoration: none; }
-  #viewport { width: 100%; height: 300px; background-color: black; }
+  #viewport { width: 100%; height: 400px; }
   .bg-link {
     display: block;
     transition: background-color 0.3s ease;

@@ -132,6 +132,7 @@
   }
 
   const checkSeqSearch = async (e) => {
+    seqNameSearch.value = ''
     page.value = 1
     if(seqSearch.value && seqValid.value) {
       const seqList = await useFetch(`${config.public.apiBase}/projects/sequence?seq=${seqSearch.value}&limit=${rows.value}`)
@@ -170,6 +171,7 @@
   }
 
   const checkSeqName = async (e) => {
+    seqSearch.value = ''
     page.value = 1
     if(seqNameSearch.value && seqNameValid.value) {
       const seqList = await useFetch(`${config.public.apiBase}/projects/sequence?seqname=${seqNameSearch.value}&limit=${rows.value}`)

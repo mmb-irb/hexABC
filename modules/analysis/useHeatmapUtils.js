@@ -86,13 +86,36 @@ export default function useHeatmapUtils() {
     return { dataCopy: dataCopy, layoutCopy: layoutCopy };
   }
 
+  const percentageOfValueInArray = (array, value) => {
+    const count = array.reduce((n, x) => n + (x === value), 0);
+    //console.log((count / array.length) * 100)
+    return (count / array.length) * 100;
+  };
+
+  const getPlotHbondsData = (fBps, numframes, downSamplingFactor, colorscale, $hbonds) => {
+    const parsedHBonds = getParsedHBonds(fBps)
+    const hbonds = parsedHBonds.h
+    const bps = parsedHBonds.b
+    const xvals = downSamplingAxis(numframes.value, downSamplingFactor.value)
+
+    // get unique values for the color bar
+    const cbVals = getHMUniqueValues(hbonds)
+    // get color scale and color bar text
+    let cscale = getColorScale(cbVals, colorscale)
+    let cbTxt = getColorBarText(cbVals)
+
+    return $hbonds.data(hbonds, bps, xvals, cscale, cbVals, cbTxt)
+  }
+
   return {
     getParsedHBonds,
     getColorScale,
     getColorBarText,
     getHMUniqueValues,
     downSamplingAxis,
-    getPlotlyForImage
+    getPlotlyForImage,
+    percentageOfValueInArray,
+    getPlotHbondsData
   }
 
 }

@@ -27,105 +27,29 @@
 
               <v-row> 
                 <v-col lg="9" md="9" sm="12" xs="12">
-                  <!-- TODO: TRY TO PUT ALL THE DIFFERENT MAGIC SEQUENCES (AND ALL THEIR LOGIC???) INTO COMPONENTS -->
-                  <v-sheet
-                    color="grey-lighten-4"
-                    class="pa-10 project-sheet"
-                    id="container-strands-sheet"
-                  >
-                    <v-row class="project-row" justify="center">
-                      <div 
-                        class="number" 
-                        v-for="(item, index) in strand1"
-                        :key="index"
-                        :value="index"
-                        > {{ index + 1 }} </div>
-                    </v-row>
-                    <v-row class="pb-0 pt-2 px-4 project-row" justify="space-around">
-                      <div class="d-flex">
-                        <div class="end" style="left: -20px;"> 
-                          <div>{{ ends1[0] }}</div> 
-                          <div class="mt-4">{{ ends1[1] }}</div> 
-                        </div>
-                        <div 
-                          class="base-pair" 
-                          v-for="(item, index) in strands"
-                          :key="index"
-                          :value="index"
-                          :id="`bp${index + 1}${item[0]}${strands.length*2 - index}${item[1]}`"
-                          > 
-                          <div class="flex">
-                            <div class="nucleotide">{{ item[0] }}</div> 
-                            <div class="nucleotide">{{ item[1] }}</div>
-                          </div> 
-                        </div>
-                        <div class="end" style="left: 20px;"> 
-                          <div>{{ ends2[0] }}</div> 
-                          <div class="mt-4">{{ ends2[1] }}</div> 
-                        </div>
-                      </div>
-                    </v-row>
-                    <v-row class="project-row" justify="center">
-                      <div 
-                        class="number mt-3" 
-                        v-for="(item, index) in strand2"
-                        :key="index"
-                        :value="index"
-                        > {{ strand2.length*2 - index }} </div>
-                    </v-row>
-                  </v-sheet>
+
+                  <SequenceInteractiveBps 
+                    :strandsObj="{ strands: strands, strand1: strand1, strand2: strand2 }" 
+                    :ends="{ ends1: ends1, ends2: ends2 }" 
+                    :sequence="sequence"
+                    @dsEnd="handleDsEnd" 
+                    @dsStart="handleDsStart" 
+                    ref="seqIntBpsRef"
+                  />
 
                 </v-col>
 
                 <v-col lg="3" md="3" sm="12" xs="12" class="">
-                  <p style="font-size: .8rem;">Select base pairs by number of hbonds predominance:</p>
 
-                  <div v-bind:class="{ 'd-flex': display.sm }">
-                    <v-btn-toggle
-                      v-model="hbondsSel"
-                      rounded="0"
-                      group
-                      divided
-                      @update:modelValue="filterByHbonds"
-                      variant="outlined"
-                    >
-                      <v-btn icon="mdi-numeric-0-circle" color="black" ></v-btn>
-                      <v-btn icon="mdi-numeric-1-circle" color="light-blue-darken-4"></v-btn>
-                      <v-btn icon="mdi-numeric-2-circle" color="green-darken-2"></v-btn>
-                      <v-btn icon="mdi-numeric-3-circle" color="amber-lighten-1"></v-btn>
-                    </v-btn-toggle>
-                    <v-slider
-                      v-model="sliderHbonds"
-                      class="align-center mt-3"
-                      :min="0"
-                      :max="1"
-                      :step="0.01"
-                      @end="filterByHbonds"
-                      color="blue-grey-lighten-1"
-                      hide-details
-                    >
-                      <template v-slot:append>
-                        <span id="hbonds-percent">{{ sliderHbonds.toFixed(2) }}</span>
-                      </template>
-                    </v-slider>
-                  </div>
+                  <FilterByHBonds 
+                    @fltrBHbs="handleFilterByHbonds"
+                    ref="filtByHBondsRef"
+                  />
+
                 </v-col>
 
-                <div id="sticky-disable">
-                  <v-tooltip text="Disable sticky" location="bottom">
-                    <template v-slot:activator="{ props }">
-                      <v-btn 
-                        v-bind="props" 
-                        density="compact" 
-                        id="btn-sticky-disable" 
-                        color="blue-grey-lighten-4" 
-                        variant="flat" 
-                        icon="mdi-arrow-expand-up"
-                        @click="controlSticky"
-                      ></v-btn>
-                    </template>
-                  </v-tooltip>
-                </div>
+                <StickyDisable @cSticky="controlSticky" />
+
               </v-row> 
             </div>
 
@@ -142,20 +66,7 @@
         </v-card>
       </v-col>
 
-      <div id="sticky-enable">
-          <v-tooltip text="Enable sticky" location="bottom">
-            <template v-slot:activator="{ props }">
-              <v-btn 
-                v-bind="props" 
-                density="compact" 
-                id="btn-sticky-enable" 
-                color="blue-grey-lighten-4" 
-                icon="mdi-chevron-double-down"
-                @click="controlSticky"
-              ></v-btn>
-            </template>
-          </v-tooltip>
-        </div>
+      <StickyEnable @cSticky="controlSticky" />
 
     </v-row>
 
@@ -173,15 +84,12 @@
 
 <script setup>
 
-  import { useDisplay } from 'vuetify'
-  import DragSelect from 'dragselect'
   import useHeatmapUtils from '@/modules/analysis/useHeatmapUtils' 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
   import useScroll from '@/modules/analysis/useScroll' 
 
   const { id } = useRoute().params
   const config = useRuntimeConfig()
-  const display = ref(useDisplay())
   const { $hbonds } = useNuxtApp()
 
   const { 
@@ -190,6 +98,8 @@
     getColorBarText, 
     getHMUniqueValues, 
     downSamplingAxis,
+    percentageOfValueInArray,
+    getPlotHbondsData
   } = useHeatmapUtils()
   const { 
       getSequenceSettings,
@@ -211,6 +121,7 @@
       ]
   })
 
+  // get data from REST API
   const getHbondsData = async(from = null, to = null) => {
     let d
 
@@ -232,71 +143,94 @@
   const sequence = project.value.metadata.SEQUENCES[0]
   const { strand1, strand2, ends1, ends2 } = getSequenceSettings(sequence)
   const strands = [];
+  const seqIntBpsRef = ref(null)
 
   for (let i = 0; i < Math.min(strand1.length, strand2.length); i++) {
     strands.push([strand1[i], strand2[i]]);
   }
 
-  /* SELECT BY HBONDS */
+  const handleDsStart = () => {
+    removeBordersFromBasePairs()
+  }
+
+  const handleDsEnd = (items) => {
+    let bps_sel = items.map((item) => item.id )
+
+    if(bps_sel.length == 0) {
+      bps_sel = bps.value.map((item) => `bp${item}`)
+      filteredBps.status = false
+    } else {
+      addBordersToBasePairs(bps_sel)
+      filteredBps.status = true
+    }
+
+    hbondsSel.value = null
+
+    const pureBps = bps_sel.map(item => item.replace(/^bp/, ''));
+    filteredBps.val = pureBps
+
+    const filteredData = rawHbonds.value.filter(item => pureBps.includes(item.bp))
+
+    plotData.val = getPlotHbondsData(filteredData, numframes, downSamplingFactor, colorscale, $hbonds)
+
+  }
+
+  /* FILTER BY HBONDS */
 
   const snackbar = ref(false)
   const textSnackbar = ref('')
-  const hbondsSel = ref(null)
-  const sliderHbonds = ref(0.2)
+  // hbondsSel is a model inside FilterByHBonds component
+  const hbondsSel = computed({
+    get() {
+      return filtByHBondsRef.value.hbondsSel
+    },
+    set(value) {
+      filtByHBondsRef.value.hbondsSel = value
+    }
+  })
+  // sliderHbonds is a model inside FilterByHBonds component
+  const sliderHbonds = computed({
+    get() {
+      return filtByHBondsRef.value.sliderHbonds
+    },
+    set(value) {
+      filtByHBondsRef.value.sliderHbonds = value
+    }
+  })
+  const filtByHBondsRef = ref(null)
 
-  // check this function with logs
-  const percentageOfValueInArray = (array, value) => {
-    const count = array.reduce((n, x) => n + (x === value), 0);
-    //console.log((count / array.length) * 100)
-    return (count / array.length) * 100;
-  };
+  const resetWhenNoResults = () => {
+    snackbar.value = true
+    ds.clearSelection()
+    removeBordersFromBasePairs()
+    filteredBps.status = false
+  }
 
-  const filterByHbonds = () => {
-    //console.log(hbondsSel.value, sliderHbonds.value)
+  const handleFilterByHbonds = () => {
+    console.log(hbondsSel.value, sliderHbonds.value)
     let fBps = []
     let empty = false
     if(hbondsSel.value !== null && hbondsSel.value !== undefined) {
       if(sliderHbonds.value === 0) {
         fBps = rawHbonds.value.filter(item => !item.hbonds.includes(hbondsSel.value));
       } else {
-        fBps = rawHbonds.value.filter(item => 
-          item.hbonds.includes(hbondsSel.value) && 
-          percentageOfValueInArray(item.hbonds, hbondsSel.value) >= sliderHbonds.value*100
-        );
+        fBps = rawHbonds.value.filter(item => item.hbonds.includes(hbondsSel.value) && percentageOfValueInArray(item.hbonds, hbondsSel.value) >= sliderHbonds.value*100);
       }
 
       if(fBps.length === 0) {
+        resetWhenNoResults()
         empty = true
         fBps = rawHbonds.value
-        snackbar.value = true
-        ds.clearSelection()
-        removeBordersFromBasePairs()
-        filteredBps.status = false
         textSnackbar.value = 'No results for this selection'
       }
 
       if(fBps.length > 0) {
         
-        const parsedHBonds = getParsedHBonds(fBps)
-        const hbonds = parsedHBonds.h
-        const bps = parsedHBonds.b
-        const xvals = downSamplingAxis(numframes.value, downSamplingFactor.value)
-
-        // get unique values for the color bar
-        const cbVals = getHMUniqueValues(hbonds)
-        // get color scale and color bar text
-        let cscale = getColorScale(cbVals, colorscale)
-        let cbTxt = getColorBarText(cbVals)
-
-        plotData.val = $hbonds.data(hbonds, bps, xvals, cscale, cbVals, cbTxt)
+        plotData.val = getPlotHbondsData(fBps, numframes, downSamplingFactor, colorscale, $hbonds)
 
         if(!empty) {
-          //console.log(filteredBps)
-          //const itemsToSelect = [document.querySelector('#bp1G40C'), document.querySelector('#bp2C39G')];
           const itemsToSelect = fBps.map((item) => document.querySelector(`#bp${item.bp}`));
           
-          //console.log(itemsToSelect)
-
           ds.clearSelection();
           ds.addSelection(itemsToSelect);
 
@@ -310,8 +244,6 @@
           const pureBps = bps_sel.map(item => item.replace(/^bp/, ''));
           filteredBps.val = pureBps
 
-          //console.log(filteredBps)
-
         }
 
       }
@@ -319,11 +251,18 @@
     } else {
       snackbar.value = true
       textSnackbar.value = 'Please select a number of hbonds'
+
+      if(rawHbonds.value.length > 0) {
+        resetWhenNoResults()
+        empty = true
+        fBps = rawHbonds.value
+        plotData.val = getPlotHbondsData(fBps, numframes, downSamplingFactor, colorscale, $hbonds)
+      }
     }
 
   }
 
-  /* HEATMAP */
+  /* GLOBAL VARIABLES */
 
   let plotData = reactive({
     val: []
@@ -331,7 +270,6 @@
   const dataLoaded = ref(false)
   let colorscale = $hbonds.colorscale
 
-  //let datahb = {}
   let hbs = ref(null)
   let bps = ref(null)
   let numframes = ref(0)
@@ -346,12 +284,6 @@
 
     // provisional connection to REST API
     const { nfs, dfs, hbonds, bs, xvals, rhbonds } = await getHbondsData()
-    /*numframes = datahb.data.value.frames
-    downSamplingFactor = datahb.data.value.factor
-    const parsedHBonds = getParsedHBonds(datahb.data.value.hbonds)
-    const hbonds = parsedHBonds.h
-    const bps = parsedHBonds.b
-    const xvals = downSamplingAxis(numframes, downSamplingFactor)*/
     hbs.value = hbonds
     bps.value = bs
     numframes.value = nfs
@@ -373,56 +305,11 @@
 
     /* DRAG SELECT */
 
-    ds = new DragSelect({
-      selectables: document.getElementsByClassName("base-pair"),
-      area: document.getElementById("container-strands-sheet"),
-      draggability: false,
-      multiSelectKeys: ['Shift']
-    });
+    ds = seqIntBpsRef.value.getDragSelect()
 
-    ds.subscribe("DS:start", (e) => {
-      console.log('selection started');
-      removeBordersFromBasePairs()
-    });
+  }) 
 
-    ds.subscribe("DS:end", ({items}) => {
-     
-      let bps_sel = items.map((item) => item.id )
-
-      if(bps_sel.length == 0) {
-        bps_sel = bps.value.map((item) => `bp${item}`)
-        filteredBps.status = false
-      } else {
-        addBordersToBasePairs(bps_sel)
-        filteredBps.status = true
-      }
-
-      hbondsSel.value = null
-
-      const pureBps = bps_sel.map(item => item.replace(/^bp/, ''));
-      filteredBps.val = pureBps
-      loadBP(pureBps)
-
-    });
-
-  })
-
-  const loadBP = async(bs) => {
-    const filteredData = rawHbonds.value.filter(item => bs.includes(item.bp))
-
-    const parsedHBonds = getParsedHBonds(filteredData)
-    const hbonds = parsedHBonds.h
-    const bps = parsedHBonds.b
-    const xvals = downSamplingAxis(numframes.value, downSamplingFactor.value)
-
-    // get unique values for the color bar
-    const cbVals = getHMUniqueValues(hbonds)
-    // get color scale and color bar text
-    let cscale = getColorScale(cbVals, colorscale)
-    let cbTxt = getColorBarText(cbVals)
-
-    plotData.val = $hbonds.data(hbonds, bps, xvals, cscale, cbVals, cbTxt)
-  }
+  /* HEATMAP */
 
   // load data from HeatmapHBonds component with the range values
   const loadData = async (d1, d2) => {
@@ -438,8 +325,6 @@
     numframes.value = d.nfs
     downSamplingFactor.value = d.dfs
     rawHbonds.value = d.rhbonds
-
-    console.log(filteredBps)
 
     // check if filtered is active and filter rawHbonds
     let loadHbonds = d.hbonds
@@ -464,7 +349,6 @@
     plotData.val = $hbonds.data(loadHbonds, loadBps, d.xvals, cscale, cbVals, cbTxt)
 
   }
-  /************** */
 
   // STICKY CONTAINER STRANDS 
   let sticky = ref(true)
@@ -523,68 +407,5 @@
   .v-card {
     overflow: inherit !important;  
   }
-  .base-pair {
-    color: var(--palette-6);
-    margin-right: 1px;
-  }
-  .nucleotide {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1.5rem;
-    line-height: 1.6rem;
-    font-weight: 500;
-    padding: .5rem .5rem;
-    margin: 0;
-    /*color: var(--palette-6);*/
-    user-select: none; 
-  }
-  .number {
-    font-family: monospace;
-    font-size: .75rem;
-    width: 1.98rem;
-    text-align: center;
-    color: var(--palette-2);
-    user-select: none; 
-    line-height: .2rem;
-  }
-  .end {
-    display:flex; 
-    flex-direction: column;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1.25rem;
-    font-weight: 200;
-    color: var(--strand-end);
-    user-select: none; 
-    padding: .75rem 0;
-    position: relative;
-  }
-  .base-pair.selected { box-shadow: inset 0 0 0 1px var(--palette-2); }
-  .ds-selected {
-      background-color: var(--light-text);
-      color: var(--palette-4);
-    }
-  .project-sheet{ overflow: hidden;}
 
-  #hbonds-percent { font-weight: 600; font-size: .9rem;}
-
-  #sticky-disable { position: absolute; right: -.8rem; bottom: -.8rem; display: none; }
-  #sticky-enable { position: fixed; top: 55px; right:0px; display: none; }
-  #btn-sticky-disable, #btn-sticky-enable { color: #fff!important; }
-  #btn-sticky-disable { font-size: 12px!important; }
-
-  @media only screen and (max-width: 1280px) {
-    .nucleotide { padding: .3rem 0.35rem; }
-    .number { width: 1.68rem; }
-    .end { padding: .5rem 0; font-size: 1.2rem; }
-    .project-sheet{ overflow-x: auto;}
-    .project-row { min-width: 630px; }
-    /*.v-btn-group .v-btn { padding: .44rem .2rem; }*/
-  }
-
-  @media only screen and (max-width: 960px) {
-    /*.v-btn-group {
-      flex-direction: inherit;
-      overflow: scroll !important;
-    }
-    .v-btn-group .v-btn { padding: .44rem .35rem; }*/
-  }
 </style>
