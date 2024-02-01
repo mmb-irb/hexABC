@@ -4,43 +4,43 @@
     class="pa-10 project-sheet"
     id="container-strands-sheet"
   >
-    <v-row class="project-row" justify="center">
+    <v-row :class="`project-row ${type}`" justify="center">
       <div 
-        class="number" 
+        :class="`number ${type}`" 
         v-for="(item, index) in strand1"
         :key="index"
         :value="index"
         > {{ index + 1 }} </div>
     </v-row>
-    <v-row class="pb-0 pt-2 px-4 project-row" justify="space-around">
-      <div class="end"> {{ ends1[0] }} </div>
+    <v-row :class="`pb-0 pt-2 px-4 project-row ${type}`" justify="space-around">
+      <div class="end" v-if="ends"> {{ ends1[0] }} </div>
       <div class="d-flex">
         <div 
-        class="nucleotide" 
+        :class="`nucleotide ${type}`" 
         v-for="(item, index) in strand1"
         :key="index"
         :value="index"
         :id="`${item}-${index + 1}-strand1`"
         > {{ item }} </div>
       </div>
-      <div class="end"> {{ ends1[1] }} </div>
+      <div class="end" v-if="ends"> {{ ends1[1] }} </div>
     </v-row>
-    <v-row class="pt-0 pb-2 px-4 project-row" justify="space-around">
-      <div class="end"> {{ ends2[0] }} </div>
+    <v-row :class="`pt-0 pb-2 px-4 project-row ${type}`" justify="space-around">
+      <div class="end" v-if="ends"> {{ ends2[0] }} </div>
       <div class="d-flex">
         <div 
-        class="nucleotide" 
+        :class="`nucleotide ${type}`" 
         v-for="(item, index) in strand2"
         :key="index"
         :value="index"
         :id="`${item}-${strand2.length*2 - index}-strand2`"
         > {{ item }} </div>
       </div>
-      <div class="end"> {{ ends2[1] }} </div>
+      <div class="end" v-if="ends"> {{ ends2[1] }} </div>
     </v-row>
-    <v-row class="project-row" justify="center">
+    <v-row :class="`project-row ${type}`" justify="center">
       <div 
-        class="number" 
+        :class="`number ${type}`" 
         v-for="(item, index) in strand2"
         :key="index"
         :value="index"
@@ -53,11 +53,12 @@
 
   import DragSelect from 'dragselect'
 
-  const { strands, ends } = defineProps(['strands', 'ends'])
-	const strand1 = strands.strand1
-	const strand2 = strands.strand2
-	const ends1 = ends.ends1
-	const ends2 = ends.ends2
+  const props = defineProps(['strands', 'ends', 'type'])
+	const strand1 = props.strands.strand1
+	const strand2 = props.strands.strand2
+	const ends1 = !props.ends ? ['', ''] : props.ends.ends1
+	const ends2 = !props.ends ? ['', ''] : props.ends.ends2
+  const type = props.type ? props.type : 'common'
 
   const emit = defineEmits(['dsEnd', 'dsStart']);
 
@@ -92,6 +93,8 @@
     color: var(--palette-6);
     user-select: none; 
   }
+  .nucleotide.compact { padding: .3rem 0.35rem; }
+
   .nucleotide.all { box-shadow: inset 0 0 0 1px var(--palette-2); }
   .nucleotide.top-bp { box-shadow: inset 1px 0 0 var(--palette-2), inset -1px 0 0 var(--palette-2), inset 0 1px 0 var(--palette-2); }
   .nucleotide.bottom-bp { box-shadow: inset 1px 0 0 var(--palette-2), inset -1px 0 0 var(--palette-2), inset 0 -1px 0 var(--palette-2); }
@@ -116,6 +119,7 @@
     user-select: none; 
     line-height: .2rem;
   }
+  .number.compact { width: 1.62rem; }
   .end {
     font-family: 'Roboto Mono', monospace;
     font-size: 1.25rem;
@@ -132,6 +136,7 @@
     .end { padding: .5rem 0; font-size: 1.2rem; }
     .project-sheet{ overflow-x: auto;}
     .project-row { min-width: 630px; }
+    .project-row.compact { min-width: 520px; }
   }
 </style>
     

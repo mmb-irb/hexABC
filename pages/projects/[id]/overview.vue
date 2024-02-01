@@ -34,12 +34,18 @@
 
             <v-row class="mt-3"> 
               <v-col lg="7" md="6" sm="12" cols="12">
-                <p id="sequences">
-                  {{ project.metadata.SEQUENCES[0] }}<br>
-                  {{ [...project.metadata.SEQUENCES[1]].reverse().join("") }}
-                </p>
+
+                <p>Using the below <strong>interactive sequence</strong>, users can select the desired <strong>nucleotides</strong> (single or grouped) in order to <strong>view</strong> them in the <strong>3D visualization</strong> at right. <strong>Nucleotides</strong> can be selected <strong>individually</strong> <img src="/img/projects/analyses/curves/nucleotide.png" alt="nucleotide" style="vertical-align: middle;" /> , by <strong>base step</strong>  <img src="/img/projects/analyses/curves/base-step.png" alt="base step" style="vertical-align: middle;" /> , by <strong>base pair</strong> <img src="/img/projects/analyses/curves/base-pair.png" alt="base pair" style="vertical-align: middle;" /> , by <strong>base pair step</strong> <img src="/img/projects/analyses/curves/base-pair-step.png" alt="base pair step" style="vertical-align: middle;" /> , by <strong>tetramers</strong> <img src="/img/projects/analyses/curves/tetramer.png" alt="tetramer" style="vertical-align: middle;" />  and by <strong>hexamers</strong>  <img src="/img/projects/analyses/curves/hexamer.png" alt="hexamer" style="vertical-align: middle;" /> . </p>
+
+                <SequenceInteractive 
+                  :strands="{ strand1: strand1, strand2: strand2 }" 
+                  type="compact"
+                  @dsEnd="handleDsEnd" 
+                  @dsStart="handleDsStart" 
+                />
               </v-col>
               <v-col lg="5" md="6" sm="12" cols="12" >
+                <!-- TO PUT IN A NEW COMPONENT??? -->
                 <div id="viewport"></div>
               </v-col>
             </v-row>
@@ -61,55 +67,21 @@
 
             <v-row> 
               <v-col lg="3" md="4" sm="6" xs="12">
-                <v-hover v-slot:default="{ isHovering, props }">
-                  <v-card
-                    class="mx-auto"
-                  >
-                  <NuxtLink :to="`/projects/${id}/curves-average`"
-                    v-bind="props"
-                    :class="isHovering ? 'bg-link-hover' : 'bg-link'">
-                    <v-img
-                      :src="curvesImg"
-                      height="200px"
-                      cover
-                      v-bind="props"
-                      :class="isHovering ? 'bg-img-hover' : 'bg-img'"
-                    >
-                    </v-img>
-                  </NuxtLink>
-
-                  <v-card-title>
-                    <NuxtLink :to="`/projects/${id}/curves-average`">Curves Analyses</NuxtLink>
-                  </v-card-title>
-
-                  </v-card>
-                </v-hover>
+                <AnalysisButton 
+                  :id="id"
+                  :image="curvesImg"
+                  slug="curves-average"
+                  title="Curves Average"
+                />
               </v-col>
 
               <v-col lg="3" md="4" sm="6" xs="12">
-                <v-hover v-slot:default="{ isHovering, props }">
-                  <v-card
-                    class="mx-auto"
-                  >
-                  <NuxtLink :to="`/projects/${id}/hbonds`"
-                    v-bind="props"
-                    :class="isHovering ? 'bg-link-hover' : 'bg-link'">
-                    <v-img
-                      :src="hbondsImg"
-                      height="200px"
-                      cover
-                      v-bind="props"
-                      :class="isHovering ? 'bg-img-hover' : 'bg-img'"
-                    >
-                    </v-img>
-                  </NuxtLink>
-
-                  <v-card-title>
-                    <NuxtLink :to="`/projects/${id}/hbonds`">HBonds Analyses</NuxtLink>
-                  </v-card-title>
-
-                  </v-card>
-                </v-hover>
+                <AnalysisButton 
+                  :id="id"
+                  :image="hbondsImg"
+                  slug="hbonds"
+                  title="HBonds Average"
+                />
               </v-col>
             </v-row>
 
@@ -122,18 +94,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
 
-  // vuetify images must be imported like this
+  // vuetify images must be imported like this (and they cannot be imported in the AnalysisButton.vue component)
   import curvesImg from '/img/projects/analyses/curves/curves-analyses.png'
   import hbondsImg from '/img/projects/analyses/hbonds/hbonds.png'
 
-  import useStage from "@/modules/ngl/useStage"
+  import useStage from '@/modules/ngl/useStage'
+  import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
 
   const { id } = useRoute().params
   const config = useRuntimeConfig()
 
   const { createStage, /*getStage, createTrajectoryPlayer*/ } = useStage()
+  const { 
+    getSequenceSettings
+  } = useInteractiveSequence()
 
   const datap = await useFetch(`${config.public.apiBase}/projects/${id}`)
   if(datap.status.value === 'error')  throw createError({ statusCode: datap.error.value.statusCode, message: datap.error.value.statusMessage, fatal: true })
@@ -147,6 +122,9 @@ import { ref } from 'vue';
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;500&display=swap' }
     ]
   })
+
+  const sequence = project.value.metadata.SEQUENCES[0]
+  const { strand1, strand2, ends1, ends2 } = getSequenceSettings(sequence)
 
   onMounted(async () => {
 
@@ -167,27 +145,20 @@ import { ref } from 'vue';
 
   })
 
+  /* HANDLE MAGIC SEQUENCE */
+
+  const handleDsStart = () => {
+    console.log('selection started');
+    //removeBordersFromNucleotides()
+  }
+
+  const handleDsEnd = (items) => {
+    console.log('selection ended');
+    //addBordersToNucleotides(items)
+  }
+
 </script>
 
-<style scoped>
-  #sequences { font-size: 25px; color: var(--dark-text); font-weight:500; line-height: 25px; font-family: 'Roboto Mono', monospace; }
-  .v-card .v-card-title { border-top: 1px solid var(--grey-light); text-align: center; }
-  .v-card .v-card-title a { text-decoration: none; }
+<style scoped> 
   #viewport { width: 100%; height: 400px; }
-  .bg-link {
-    display: block;
-    transition: background-color 0.3s ease;
-  }
-  .bg-link-hover {
-    display: block;
-    transition: background-color 0.3s ease;
-    background-color: rgba(0, 0, 0, 0.15);
-  }
-  .bg-img {
-    transition: transform 0.3s ease;
-  }
-  .bg-img-hover {
-    transition: transform 0.3s ease;
-    transform: scale(0.9);
-  }
 </style>

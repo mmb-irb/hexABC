@@ -59,6 +59,7 @@ export default defineNuxtConfig({
     { path: '~/components/search', extensions: ['vue'] },
     { path: '~/components/projects/curves', extensions: ['vue'] },
     { path: '~/components/projects/hbonds', extensions: ['vue'] },
+    { path: '~/components/projects/overview', extensions: ['vue'] },
     { path: '~/components/projects/sequences', extensions: ['vue'] }
   ],
   plugins: [
