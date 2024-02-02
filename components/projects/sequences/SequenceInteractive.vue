@@ -16,11 +16,13 @@
       <div class="end" v-if="ends"> {{ ends1[0] }} </div>
       <div class="d-flex">
         <div 
-        :class="`nucleotide ${type}`" 
+        :class="`nucleotide ${type} ${hover ? 'hover' : ''}`" 
         v-for="(item, index) in strand1"
         :key="index"
         :value="index"
         :id="`${item}-${index + 1}-strand1`"
+        @mouseover="handleNuclMouseOver"
+        @mouseout="handleNuclMouseOut"
         > {{ item }} </div>
       </div>
       <div class="end" v-if="ends"> {{ ends1[1] }} </div>
@@ -29,11 +31,13 @@
       <div class="end" v-if="ends"> {{ ends2[0] }} </div>
       <div class="d-flex">
         <div 
-        :class="`nucleotide ${type}`" 
+        :class="`nucleotide ${type} ${hover ? 'hover' : ''}`" 
         v-for="(item, index) in strand2"
         :key="index"
         :value="index"
         :id="`${item}-${strand2.length*2 - index}-strand2`"
+        @mouseover="handleNuclMouseOver"
+        @mouseout="handleNuclMouseOut"
         > {{ item }} </div>
       </div>
       <div class="end" v-if="ends"> {{ ends2[1] }} </div>
@@ -53,14 +57,15 @@
 
   import DragSelect from 'dragselect'
 
-  const props = defineProps(['strands', 'ends', 'type'])
+  const props = defineProps(['strands', 'ends', 'type', 'hover'])
 	const strand1 = props.strands.strand1
 	const strand2 = props.strands.strand2
 	const ends1 = !props.ends ? ['', ''] : props.ends.ends1
 	const ends2 = !props.ends ? ['', ''] : props.ends.ends2
-  const type = props.type ? props.type : 'common'
+  const type = ref(props.type ? props.type : 'common')
+  const hover = ref(props.hover ? props.hover : false)
 
-  const emit = defineEmits(['dsEnd', 'dsStart']);
+  const emit = defineEmits(['dsEnd', 'dsStart', 'dsUpdate', 'nuclMouseOver', 'nuclMouseOut']);
 
   onMounted(async () => {
     const ds = new DragSelect({
@@ -78,7 +83,19 @@
       emit('dsEnd', items);
     });
 
+    ds.subscribe("DS:update", ({items}) => {
+      emit('dsUpdate', items);
+    });
+
   })
+
+  const handleNuclMouseOver = (e) => {
+    if(hover.value) emit('nuclMouseOver', e.target.id)
+  }
+
+  const handleNuclMouseOut = (e) => {
+    if(hover.value) emit('nuclMouseOut', e.target.id)
+  }
 
 </script>
 
@@ -94,6 +111,8 @@
     user-select: none; 
   }
   .nucleotide.compact { padding: .3rem 0.35rem; }
+  .nucleotide.hover { cursor: pointer; }
+  .nucleotide.hover:hover { color: var(--palette-4); }
 
   .nucleotide.all { box-shadow: inset 0 0 0 1px var(--palette-2); }
   .nucleotide.top-bp { box-shadow: inset 1px 0 0 var(--palette-2), inset -1px 0 0 var(--palette-2), inset 0 1px 0 var(--palette-2); }

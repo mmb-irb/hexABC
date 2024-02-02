@@ -35,13 +35,17 @@
             <v-row class="mt-3"> 
               <v-col lg="7" md="6" sm="12" cols="12">
 
-                <p>Using the below <strong>interactive sequence</strong>, users can select the desired <strong>nucleotides</strong> (single or grouped) in order to <strong>view</strong> them in the <strong>3D visualization</strong> at right. <strong>Nucleotides</strong> can be selected <strong>individually</strong> <img src="/img/projects/analyses/curves/nucleotide.png" alt="nucleotide" style="vertical-align: middle;" /> , by <strong>base step</strong>  <img src="/img/projects/analyses/curves/base-step.png" alt="base step" style="vertical-align: middle;" /> , by <strong>base pair</strong> <img src="/img/projects/analyses/curves/base-pair.png" alt="base pair" style="vertical-align: middle;" /> , by <strong>base pair step</strong> <img src="/img/projects/analyses/curves/base-pair-step.png" alt="base pair step" style="vertical-align: middle;" /> , by <strong>tetramers</strong> <img src="/img/projects/analyses/curves/tetramer.png" alt="tetramer" style="vertical-align: middle;" />  and by <strong>hexamers</strong>  <img src="/img/projects/analyses/curves/hexamer.png" alt="hexamer" style="vertical-align: middle;" /> . </p>
+                <p>Using the below <strong>interactive sequence</strong>, users can select the desired <strong>nucleotides</strong> (single or grouped) in order to <strong>view</strong> them in the <strong>3D visualization</strong> at right. Selection can be performed either <strong>clicking and dragging</strong> over a <strong>group of nucleotides</strong> or <strong>clicking</strong> them individually while <strong>pressing shift / ⇧</strong> key at the same time for <strong>multiple selection</strong>.</p>
 
                 <SequenceInteractive 
                   :strands="{ strand1: strand1, strand2: strand2 }" 
                   type="compact"
+                  :hover="true"
                   @dsEnd="handleDsEnd" 
                   @dsStart="handleDsStart" 
+                  @dsUpdate="handleDsUpdate" 
+                  @nuclMouseOver="handleNuclMouseOver" 
+                  @nuclMouseOut="handleNuclMouseOut" 
                 />
               </v-col>
               <v-col lg="5" md="6" sm="12" cols="12" >
@@ -124,11 +128,12 @@
   })
 
   const sequence = project.value.metadata.SEQUENCES[0]
-  const { strand1, strand2, ends1, ends2 } = getSequenceSettings(sequence)
+  const { strand1, strand2 } = getSequenceSettings(sequence)
 
+  let stage = null
   onMounted(async () => {
 
-    const stage = createStage("viewport")
+    stage = createStage("viewport", true)
     stage.setParameters({ backgroundColor: '#dedede' });
 
     const topology = await useFetch(`${config.public.apiBase}/projects/${id}/topology`)
@@ -136,8 +141,9 @@
 
     stage.loadFile(blob, { defaultRepresentation: false, ext: 'pdb'})
       .then(async function (component) {
-        component.addRepresentation("cartoon");
-        component.addRepresentation("base");
+        /*component.addRepresentation("cartoon");
+        component.addRepresentation("base");*/
+        component.addRepresentation("licorice", { sele: "nucleic", color: '#ccc' });
         component.autoView('nucleic');
       })
 
@@ -147,14 +153,55 @@
 
   /* HANDLE MAGIC SEQUENCE */
 
+  const selecting = ref(false)
+
+  let selectBP = null
   const handleDsStart = () => {
     console.log('selection started');
-    //removeBordersFromNucleotides()
+    selecting.value = true
+  }
+
+  const handleDsUpdate = (items) => {
+    console.log('selection updated', items.length);
+    const residues = items.map((item) => item.id.split('-')[1] )
+
+    if(items.length > 0) {
+      stage.compList[0].removeRepresentation(selectBP);
+      selectBP = stage.compList[0].addRepresentation( "ball+stick", {
+        sele: residues.join(' '), radius: .2
+      } );
+    }
   }
 
   const handleDsEnd = (items) => {
-    console.log('selection ended');
-    //addBordersToNucleotides(items)
+
+    if(items.length === 0) stage.compList[0].removeRepresentation(selectBP);
+    else {
+      const residues = items.map((item) => item.id.split('-')[1] )
+      stage.compList[0].removeRepresentation(selectBP);
+      selectBP = stage.compList[0].addRepresentation( "ball+stick", {
+        sele: residues.join(' '), radius: .2
+      } );
+    
+    }
+
+    selecting.value = false
+  }
+
+  let hoverBP = null
+  const handleNuclMouseOver = (id) => {
+    if(!selecting.value) {
+      var res = id.split('-')[1];
+      hoverBP = stage.compList[0].addRepresentation( "licorice", {
+        sele: res, radius: .4, opacity: 0.6
+      } );
+    }
+  }
+
+  const handleNuclMouseOut = (id) => {
+    if(!selecting.value) {
+      stage.compList[0].removeRepresentation(hoverBP);	
+    }
   }
 
 </script>

@@ -19,14 +19,14 @@ export default function useStage() {
     })
 
 
-    const createStage = (/*NGL,*/ layer) => {
+    const createStage = (/*NGL,*/ layer, tooltip = false) => {
 
         const mdsrvDatasource = new NGL.MdsrvDatasource( 'https://mmb.irbbarcelona.org/mdsrv/api/' )
         NGL.DatasourceRegistry.add("file", mdsrvDatasource)
         //setListingDatasource(mdsrvDatasource)
         NGL.setTrajectoryDatasource(mdsrvDatasource)
 
-        stage = new NGL.Stage(layer, { tooltip:false/*, cameraType: 'perspective'*/ })
+        stage = new NGL.Stage(layer, { tooltip: tooltip/*, cameraType: 'perspective'*/ })
         //console.log('stage created')
         return stage 
         
