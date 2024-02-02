@@ -49,8 +49,7 @@
                 />
               </v-col>
               <v-col lg="5" md="6" sm="12" cols="12" >
-                <!-- TO PUT IN A NEW COMPONENT??? -->
-                <div id="viewport"></div>
+                <TrajectoryViewer :id="id" ref="trjViewerRef" />
               </v-col>
             </v-row>
 
@@ -103,13 +102,11 @@
   import curvesImg from '/img/projects/analyses/curves/curves-analyses.png'
   import hbondsImg from '/img/projects/analyses/hbonds/hbonds.png'
 
-  import useStage from '@/modules/ngl/useStage'
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
 
   const { id } = useRoute().params
   const config = useRuntimeConfig()
 
-  const { createStage, /*getStage, createTrajectoryPlayer*/ } = useStage()
   const { 
     getSequenceSettings
   } = useInteractiveSequence()
@@ -130,59 +127,33 @@
   const sequence = project.value.metadata.SEQUENCES[0]
   const { strand1, strand2 } = getSequenceSettings(sequence)
 
-  let stage = null
-  onMounted(async () => {
+  const trjViewerRef = ref(null)
 
-    stage = createStage("viewport", true)
-    stage.setParameters({ backgroundColor: '#dedede' });
-
-    const topology = await useFetch(`${config.public.apiBase}/projects/${id}/topology`)
-    const blob = new Blob([topology.data.value], { type: "text/plain" });
-
-    stage.loadFile(blob, { defaultRepresentation: false, ext: 'pdb'})
-      .then(async function (component) {
-        /*component.addRepresentation("cartoon");
-        component.addRepresentation("base");*/
-        component.addRepresentation("licorice", { sele: "nucleic", color: '#ccc' });
-        component.autoView('nucleic');
-      })
-
-    window.addEventListener("resize", () => stage.viewer.handleResize())
-
-  })
-
-  /* HANDLE MAGIC SEQUENCE */
+  /* HANDLE MAGIC SEQUENCE INTERACTION WITH NGL */
 
   const selecting = ref(false)
 
   let selectBP = null
   const handleDsStart = () => {
-    console.log('selection started');
     selecting.value = true
   }
 
   const handleDsUpdate = (items) => {
-    console.log('selection updated', items.length);
     const residues = items.map((item) => item.id.split('-')[1] )
 
     if(items.length > 0) {
-      stage.compList[0].removeRepresentation(selectBP);
-      selectBP = stage.compList[0].addRepresentation( "ball+stick", {
-        sele: residues.join(' '), radius: .2
-      } );
+      trjViewerRef.value.removeRepresentation(selectBP);
+      selectBP = trjViewerRef.value.addRepresentation("ball+stick", { sele: residues.join(' '), radius: .2 })
     }
   }
 
   const handleDsEnd = (items) => {
 
-    if(items.length === 0) stage.compList[0].removeRepresentation(selectBP);
+    if(items.length === 0) trjViewerRef.value.removeRepresentation(selectBP);
     else {
       const residues = items.map((item) => item.id.split('-')[1] )
-      stage.compList[0].removeRepresentation(selectBP);
-      selectBP = stage.compList[0].addRepresentation( "ball+stick", {
-        sele: residues.join(' '), radius: .2
-      } );
-    
+      trjViewerRef.value.removeRepresentation(selectBP);
+      selectBP = trjViewerRef.value.addRepresentation("ball+stick", { sele: residues.join(' '), radius: .2 })
     }
 
     selecting.value = false
@@ -192,20 +163,18 @@
   const handleNuclMouseOver = (id) => {
     if(!selecting.value) {
       var res = id.split('-')[1];
-      hoverBP = stage.compList[0].addRepresentation( "licorice", {
-        sele: res, radius: .4, opacity: 0.6
-      } );
+      hoverBP = trjViewerRef.value.addRepresentation("licorice", { sele: res, radius: .4, opacity: 0.6 })
     }
   }
 
   const handleNuclMouseOut = (id) => {
     if(!selecting.value) {
-      stage.compList[0].removeRepresentation(hoverBP);	
+      trjViewerRef.value.removeRepresentation(hoverBP)
     }
   }
 
 </script>
 
 <style scoped> 
-  #viewport { width: 100%; height: 400px; }
+  
 </style>

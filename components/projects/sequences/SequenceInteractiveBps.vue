@@ -63,17 +63,17 @@
 	let ds
 	onMounted(async () => {
 		ds = new DragSelect({
-      selectables: document.getElementsByClassName("base-pair"),
-      area: document.getElementById("container-strands-sheet"),
-      draggability: false,
-      multiSelectKeys: ['Shift']
-    });
+		selectables: document.getElementsByClassName("base-pair"),
+		area: document.getElementById("container-strands-sheet"),
+		draggability: false,
+		multiSelectKeys: ['Shift']
+		});
 
-    ds.subscribe("DS:start", (e) => {
+		ds.subscribe("DS:start", (e) => {
 			emit('dsStart');
-    });
+		});
 
-    ds.subscribe("DS:end", ({items}) => {
+		ds.subscribe("DS:end", ({items}) => {
 			emit('dsEnd', items);
 		})
 	})
