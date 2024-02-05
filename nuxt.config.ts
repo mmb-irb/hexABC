@@ -65,6 +65,7 @@ export default defineNuxtConfig({
   plugins: [
     // define here all plugins in nested folders
     '~/plugins/plots/hbonds',
+    '~/plugins/plots/curves',
   ],
   runtimeConfig: {
     public: {

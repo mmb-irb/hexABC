@@ -16,24 +16,22 @@
   <v-window v-model="model_menu" class="elevation-2 pa-5" id="container-window">
 
     <v-window-item :value="0"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/rise.png" alt="Rise" >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="rise"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="rise" :stype="stype" :img="riseImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="rise" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="1"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/roll.png" alt="Roll"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="roll"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="roll" :stype="stype" :img="rollImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="roll" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
@@ -85,24 +83,18 @@
 </template>
 
 <script setup>
-    // SECOND LEVEL MENU
-    const model_menu = ref(0)
+
+  // vuetify images must be imported like this (and they cannot be imported in the AnalysisButton.vue component)
+  import riseImg from '/img/projects/analyses/curves/inter-base-pair/rise.png'
+  import rollImg from '/img/projects/analyses/curves/inter-base-pair/roll.png'
+
+  const { label, stype } = defineProps(['label', 'stype'])
+
+  // SECOND LEVEL MENU
+  const model_menu = ref(0)
+
 </script>
 
 <style scoped>
-  .col-left {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .col-left img { max-width: 100%; }
-  #container-window { height: 440px; }
-
-  @media only screen and (max-width: 960px) {
-    .col-left img { max-width: 80%; }
-  }
-
-  @media only screen and (max-width: 600px) {
-    #container-window { height: auto; }
-    .col-left { display: none; }
-  }</style>
+  #container-window { height: 500px; }
+</style>

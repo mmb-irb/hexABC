@@ -84,7 +84,7 @@
                 <TimeBackboneTorsions v-if="section === '0'" />
                 <TimeAxisBasePair v-if="section === '1'" />
                 <TimeIntraBasePair v-if="section === '2'" />
-                <TimeInterBasePair v-if="section === '3'" />
+                <TimeInterBasePair v-if="section === '3'" :label="seqLabel" :stype="seqType" />
                 <TimeGrooves v-if="section === '4'" />
               </v-col>
             </v-row>
@@ -136,6 +136,9 @@
   const sequence = project.value.metadata.SEQUENCES[0]
   const { strand1, strand2, ends1, ends2 } = getSequenceSettings(sequence)
   
+  const seqLabel = ref('')
+  const seqType = ref('')
+
   // FIRST LEVEL MENU
   const section = ref(null)
   let activeMenu = []
@@ -218,6 +221,9 @@
       // get menu
       activeMenu = seqmenu[checkNuc.type].sections
       enableSectionButtons(activeMenu)
+      // update label & type
+      seqLabel.value = checkNuc.label
+      seqType.value = checkNuc.type
     } else {
       // get message
       message.value = checkNuc.msg

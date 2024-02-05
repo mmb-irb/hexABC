@@ -113,6 +113,57 @@ export default function useInteractiveSequence() {
         return true;
     }
 
+    const getNumberAndLetters = (nucleotides) => {
+        // Filter the array to get only the 'strand1' items
+        const strand1Items = nucleotides.filter(item => item.includes('strand1'));
+
+        // Sort the 'strand1' items by the index
+        const sortedItems = strand1Items.sort((a, b) => {
+            const indexA = Number(a.split('-')[1]);
+            const indexB = Number(b.split('-')[1]);
+            return indexA - indexB;
+        });
+
+        // Get the letters of the sorted 'strand1' items
+        const letters = sortedItems.map(item => item.split('-')[0]).join('');
+
+        // Get the numbers of the sorted 'strand1' items and find the lowest number
+        const lowestNumber = sortedItems
+            .map(item => Number(item.split('-')[1]))
+            .reduce((lowest, current) => (current < lowest ? current : lowest), Infinity);
+
+        return `${lowestNumber}_${letters}`;
+    }
+
+    const getSelectionLabel = (nucleotides, type = 0) => {
+        let label = ''
+        if(nucleotides.length === 1) {
+            label = nucleotides[0].split('-')[1] + '_' + nucleotides[0].split('-')[0]
+        }
+
+        if(nucleotides.length === 2 && type === 2) {
+            label = getNumberAndLetters(nucleotides)
+        }
+
+        if(nucleotides.length === 2 && type === 1) {
+            label = getNumberAndLetters(nucleotides)
+        }
+
+        if(nucleotides.length === 4 && type === 3) {
+            label = getNumberAndLetters(nucleotides)
+        }
+
+        if(nucleotides.length === 8 && type === 4) {
+            label = getNumberAndLetters(nucleotides)
+        }
+
+        if(nucleotides.length === 12 && type === 5) {
+            label = getNumberAndLetters(nucleotides)
+        }
+
+        return label
+    }
+
     const checkNucleotides = (nucleotides, seql) => {
 
         //console.log(nucleotides, seql)
@@ -145,6 +196,7 @@ export default function useInteractiveSequence() {
                 status: true,
                 type: 0, // single nucleotide
                 nucleotides: [n],
+                label: getSelectionLabel([n]),
                 msg: `Single nucleotide <strong>${n}</strong> selected.`
             };
         }
@@ -162,6 +214,7 @@ export default function useInteractiveSequence() {
                         status: true,
                         type: 2, // base pair
                         nucleotides: getNucleotidesList(nucleotides),
+                        label: getSelectionLabel(nucleotides, 2),
                         msg: `Base pair <strong>${getNucleotidesList(nucleotides).join(', ')}</strong> selected.`
                     };
                 } else {
@@ -180,6 +233,7 @@ export default function useInteractiveSequence() {
                         status: true,
                         type: 1, // base step
                         nucleotides: getNucleotidesList(nucleotides),
+                        label: getSelectionLabel(nucleotides, 1),
                         msg: `Base step <strong>${getNucleotidesList(nucleotides).join(', ')}</strong> selected.`
                     };
                 
@@ -209,6 +263,7 @@ export default function useInteractiveSequence() {
                         status: true,
                         type: 3, // base pair step
                         nucleotides: getNucleotidesList(nucleotides),
+                        label: getSelectionLabel(nucleotides, 3),
                         msg: `Base pair step <strong>${getNucleotidesList(nucleotides).join(', ')}</strong> selected.`
                     };
                 } else {
@@ -244,6 +299,7 @@ export default function useInteractiveSequence() {
                         status: true,
                         type: 4, // tetramer
                         nucleotides: getNucleotidesList(nucleotides),
+                        label: getSelectionLabel(nucleotides, 4),
                         msg: `Tetramer <strong>${getNucleotidesList(nucleotides).join(', ')}</strong> selected.`
                     };
                 } else {
@@ -280,6 +336,7 @@ export default function useInteractiveSequence() {
                         status: true,
                         type: 5, // hexamer
                         nucleotides: getNucleotidesList(nucleotides),
+                        label: getSelectionLabel(nucleotides, 5),
                         msg: `Hexamer <strong>${getNucleotidesList(nucleotides).join(', ')}</strong> selected.`
                     };
                 } else {

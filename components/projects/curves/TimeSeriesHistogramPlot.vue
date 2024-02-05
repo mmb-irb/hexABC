@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%; height:400px; background-color:#ccc; display:flex; justify-content: center; align-items: center;">
+  <div style="width:100%; height:470px; background-color:#ccc; display:flex; justify-content: center; align-items: center;">
 
       <v-progress-circular
         :size="70"
