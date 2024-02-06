@@ -16,68 +16,62 @@
   <v-window v-model="model_menu" class="elevation-2 pa-5" id="container-window">
 
     <v-window-item :value="0"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/rise.png" alt="Rise" >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <ErrorBarsPlot id="rise"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" id="rise" :img="riseImg">
+          <template #plot>
+            <ErrorBarsPlot id="rise" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="1"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/roll.png" alt="Roll"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <ErrorBarsPlot id="roll"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" id="roll" :img="rollImg">
+          <template #plot>
+            <ErrorBarsPlot id="roll" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="2"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/shift.png" alt="Shift"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <ErrorBarsPlot id="shift"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" id="shift" :img="shiftImg">
+          <template #plot>
+            <ErrorBarsPlot id="shift" />
+          </template>
+        </CurvesPlot>
+      </v-row>
+    </v-window-item>
+
+    <v-window-item :value="3">
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" id="slide" :img="slideImg">
+          <template #plot>
+            <ErrorBarsPlot id="slide" />
+          </template>
+        </CurvesPlot>
+      </v-row>
+    </v-window-item>
+
+    <v-window-item :value="3">
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" id="tilt" :img="tiltImg">
+          <template #plot>
+            <ErrorBarsPlot id="tilt" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="3"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/slide.png" alt="Slide"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <ErrorBarsPlot id="slide"/>
-        </v-col>
-      </v-row>
-    </v-window-item>
-
-    <v-window-item :value="3"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/tilt.png" alt="Tilt"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <ErrorBarsPlot id="tilt"/>
-        </v-col>
-      </v-row>
-    </v-window-item>
-
-    <v-window-item :value="3"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/twist.png" alt="Twist"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <ErrorBarsPlot id="twist"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" id="twist" :img="twistImg">
+          <template #plot>
+            <ErrorBarsPlot id="twist" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
@@ -85,25 +79,21 @@
 </template>
 
 <script setup>
-    // SECOND LEVEL MENU
-    const model_menu = ref(0)
+
+  // vuetify images must be imported like this (and they cannot be imported in the AnalysisButton.vue component)
+  import riseImg from '/img/projects/analyses/curves/inter-base-pair/rise.png'
+  import rollImg from '/img/projects/analyses/curves/inter-base-pair/roll.png'
+  import shiftImg from '/img/projects/analyses/curves/inter-base-pair/shift.png'
+  import slideImg from '/img/projects/analyses/curves/inter-base-pair/slide.png'
+  import tiltImg from '/img/projects/analyses/curves/inter-base-pair/tilt.png'
+  import twistImg from '/img/projects/analyses/curves/inter-base-pair/twist.png'
+
+
+  // SECOND LEVEL MENU
+  const model_menu = ref(0)
+
 </script>
 
 <style scoped>
-  .col-left {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .col-left img { max-width: 100%; }
-  #container-window { height: 440px; }
-
-  @media only screen and (max-width: 960px) {
-    .col-left img { max-width: 80%; }
-  }
-
-  @media only screen and (max-width: 600px) {
-    #container-window { height: auto; }
-    .col-left { display: none; }
-  }
+  #container-window { height: 500px; }
 </style>

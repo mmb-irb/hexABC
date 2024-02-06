@@ -81,11 +81,11 @@
 
             <v-row justify="end" v-if="section">
               <v-col cols="12">
-                <TimeBackboneTorsions v-if="section === '0'" />
-                <TimeAxisBasePair v-if="section === '1'" />
-                <TimeIntraBasePair v-if="section === '2'" />
+                <TimeBackboneTorsions v-if="section === '0'" :label="seqLabel" :stype="seqType" />
+                <TimeAxisBasePair v-if="section === '1'" :label="seqLabel" :stype="seqType" />
+                <TimeIntraBasePair v-if="section === '2'" :label="seqLabel" :stype="seqType" />
                 <TimeInterBasePair v-if="section === '3'" :label="seqLabel" :stype="seqType" />
-                <TimeGrooves v-if="section === '4'" />
+                <TimeGrooves v-if="section === '4'" :label="seqLabel" :stype="seqType" />
               </v-col>
             </v-row>
 

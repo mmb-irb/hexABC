@@ -36,46 +36,42 @@
     </v-window-item>
 
     <v-window-item :value="2"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/shift.png" alt="Shift"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="shift"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="shift" :stype="stype" :img="shiftImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="shift" />
+          </template>
+        </CurvesPlot>
+      </v-row>
+    </v-window-item>
+
+    <v-window-item :value="3">
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="slide" :stype="stype" :img="slideImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="slide" />
+          </template>
+        </CurvesPlot>
+      </v-row>
+    </v-window-item>
+
+    <v-window-item :value="3">
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="tilt" :stype="stype" :img="tiltImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="tilt" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="3"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/slide.png" alt="Slide"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="slide"/>
-        </v-col>
-      </v-row>
-    </v-window-item>
-
-    <v-window-item :value="3"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/tilt.png" alt="Tilt"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="tilt"/>
-        </v-col>
-      </v-row>
-    </v-window-item>
-
-    <v-window-item :value="3"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/inter-base-pair/twist.png" alt="Twist"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="twist"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="twist" :stype="stype" :img="twistImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="twist" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
@@ -87,6 +83,10 @@
   // vuetify images must be imported like this (and they cannot be imported in the AnalysisButton.vue component)
   import riseImg from '/img/projects/analyses/curves/inter-base-pair/rise.png'
   import rollImg from '/img/projects/analyses/curves/inter-base-pair/roll.png'
+  import shiftImg from '/img/projects/analyses/curves/inter-base-pair/shift.png'
+  import slideImg from '/img/projects/analyses/curves/inter-base-pair/slide.png'
+  import tiltImg from '/img/projects/analyses/curves/inter-base-pair/tilt.png'
+  import twistImg from '/img/projects/analyses/curves/inter-base-pair/twist.png'
 
   const { label, stype } = defineProps(['label', 'stype'])
 

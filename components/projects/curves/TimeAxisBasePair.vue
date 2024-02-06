@@ -14,46 +14,42 @@
   <v-window v-model="model_menu" class="elevation-2 pa-5" id="container-window">
 
     <v-window-item :value="0"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/inclination.png" alt="Inclination" >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="inclination"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="inclination" :stype="stype" :img="inclinationImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="inclination" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="1"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/tip.png" alt="Tip"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="tip"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="tip" :stype="stype" :img="tipImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="tip" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="2"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/xdisp.png" alt="X-Displacement"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="xdisplacement"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="xdisp" :stype="stype" :img="xdispImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="xdisp" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="3"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/ydisp.png" alt="Y-Displacement"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="ydisplacement"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="ydisp" :stype="stype" :img="ydispImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="ydisp" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
@@ -61,25 +57,20 @@
 </template>
 
 <script setup>
-    // SECOND LEVEL MENU
-    const model_menu = ref(0)
+
+  // vuetify images must be imported like this (and they cannot be imported in the AnalysisButton.vue component)
+  import inclinationImg from '/img/projects/analyses/curves/base-pair/inclination.png'
+  import tipImg from '/img/projects/analyses/curves/base-pair/tip.png'
+  import xdispImg from '/img/projects/analyses/curves/base-pair/xdisp.png'
+  import ydispImg from '/img/projects/analyses/curves/base-pair/ydisp.png'
+  
+  const { label, stype } = defineProps(['label', 'stype'])
+
+  // SECOND LEVEL MENU
+  const model_menu = ref(0)
+
 </script>
 
 <style scoped>
-  .col-left {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .col-left img { max-width: 100%; }
-  #container-window { height: 440px; }
-
-  @media only screen and (max-width: 960px) {
-    .col-left img { max-width: 80%; }
-  }
-
-  @media only screen and (max-width: 600px) {
-    #container-window { height: auto; }
-    .col-left { display: none; }
-  }
+  #container-window { height: 500px; }
 </style>

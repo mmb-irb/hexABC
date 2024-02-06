@@ -16,68 +16,62 @@
   <v-window v-model="model_menu" class="elevation-2 pa-5" id="container-window">
 
     <v-window-item :value="0"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/intra-base-pair/shear.png" alt="Shear" >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="shear"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="shear" :stype="stype" :img="shearImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="shear" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="1"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/intra-base-pair/stretch.png" alt="Stretch"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="stretch"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="stretch" :stype="stype" :img="stretchImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="stretch" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="2"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/intra-base-pair/stagger.png" alt="Stagger"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="stagger"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="stagger" :stype="stype" :img="staggerImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="stagger" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="3"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/intra-base-pair/buckle.png" alt="Buckle"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="buckle"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="buckle" :stype="stype" :img="buckleImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="buckle" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="3"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/intra-base-pair/propeller.png" alt="Propeller"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="propeller"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="propeller" :stype="stype" :img="propellerImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="propeller" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="3"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/intra-base-pair/opening.png" alt="Opening"  >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <TimeSeriesHistogramPlot id="opening"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" :label="label" id="opening" :stype="stype" :img="openingImg">
+          <template #plot>
+            <TimeSeriesHistogramPlot id="opening" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
@@ -85,25 +79,22 @@
 </template>
 
 <script setup>
-    // SECOND LEVEL MENU
-    const model_menu = ref(0)
+
+  // vuetify images must be imported like this (and they cannot be imported in the AnalysisButton.vue component)
+  import shearImg from '/img/projects/analyses/curves/intra-base-pair/shear.png'
+  import stretchImg from '/img/projects/analyses/curves/intra-base-pair/stretch.png'
+  import staggerImg from '/img/projects/analyses/curves/intra-base-pair/stagger.png'
+  import buckleImg from '/img/projects/analyses/curves/intra-base-pair/buckle.png'
+  import propellerImg from '/img/projects/analyses/curves/intra-base-pair/propeller.png'
+  import openingImg from '/img/projects/analyses/curves/intra-base-pair/opening.png'
+  
+  const { label, stype } = defineProps(['label', 'stype'])
+
+  // SECOND LEVEL MENU
+  const model_menu = ref(0)
+
 </script>
 
 <style scoped>
-  .col-left {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .col-left img { max-width: 100%; }
-  #container-window { height: 440px; }
-
-  @media only screen and (max-width: 960px) {
-    .col-left img { max-width: 80%; }
-  }
-
-  @media only screen and (max-width: 600px) {
-    #container-window { height: auto; }
-    .col-left { display: none; }
-  }
+  #container-window { height: 500px; }
 </style>

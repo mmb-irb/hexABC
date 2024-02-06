@@ -14,46 +14,42 @@
   <v-window v-model="model_menu" class="elevation-2 pa-5" id="container-window">
 
     <v-window-item :value="0"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/inclination.png" alt="Inclination" >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <ErrorBarsPlot id="inclination"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" id="inclination" :img="inclinationImg">
+          <template #plot>
+            <ErrorBarsPlot id="inclination" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="1"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/tip.png" alt="Tip" >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <ErrorBarsPlot id="tip"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" id="tip" :img="tipImg">
+          <template #plot>
+            <ErrorBarsPlot id="tip" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="2"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/xdisp.png" alt="X-Displacement" >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <ErrorBarsPlot id="xdisplacement"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" id="xdisp" :img="xdispImg">
+          <template #plot>
+            <ErrorBarsPlot id="xdisp" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
     <v-window-item :value="3"> 
-      <v-row>
-        <v-col lg="3" md="4" sm="4" xs="12" class="col-left">
-          <img src="/img/projects/analyses/curves/base-pair/ydisp.png" alt="Y-Displacement" >
-        </v-col>
-        <v-col lg="9" md="8" sm="8" xs="12">
-          <ErrorBarsPlot id="ydisplacement"/>
-        </v-col>
+      <v-row class="pa-2">
+        <CurvesPlot style="z-index:2" id="ydisp" :img="ydispImg">
+          <template #plot>
+            <ErrorBarsPlot id="ydisp" />
+          </template>
+        </CurvesPlot>
       </v-row>
     </v-window-item>
 
@@ -61,25 +57,18 @@
 </template>
 
 <script setup>
-    // SECOND LEVEL MENU
-    const model_menu = ref(0)
+
+  // vuetify images must be imported like this (and they cannot be imported in the AnalysisButton.vue component)
+  import inclinationImg from '/img/projects/analyses/curves/base-pair/inclination.png'
+  import tipImg from '/img/projects/analyses/curves/base-pair/tip.png'
+  import xdispImg from '/img/projects/analyses/curves/base-pair/xdisp.png'
+  import ydispImg from '/img/projects/analyses/curves/base-pair/ydisp.png'
+
+  // SECOND LEVEL MENU
+  const model_menu = ref(0)
+
 </script>
 
 <style scoped>
-  .col-left {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .col-left img { max-width: 100%; }
-  #container-window { height: 440px; }
-
-  @media only screen and (max-width: 960px) {
-    .col-left img { max-width: 80%; }
-  }
-
-  @media only screen and (max-width: 600px) {
-    #container-window { height: auto; }
-    .col-left { display: none; }
-  }
+  #container-window { height: 500px; }
 </style>

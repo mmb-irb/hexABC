@@ -1,6 +1,6 @@
 <template>
 	<div id="sticky-disable">
-    <v-tooltip text="Disable sticky" location="bottom">
+    <v-tooltip text="Disable sticky sequence" location="bottom">
       <template v-slot:activator="{ props }">
         <v-btn 
           v-bind="props" 
