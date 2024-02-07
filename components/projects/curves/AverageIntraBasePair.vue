@@ -17,9 +17,9 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="shear" :img="shearImg">
+        <CurvesPlot style="z-index:2" type="shear" :img="shearImg">
           <template #plot>
-            <ErrorBarsPlot id="shear" />
+            <ErrorBarsPlot type="shear" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -27,9 +27,9 @@
 
     <v-window-item :value="1"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="stretch" :img="stretchImg">
+        <CurvesPlot style="z-index:2" type="stretch" :img="stretchImg">
           <template #plot>
-            <ErrorBarsPlot id="stretch" />
+            <ErrorBarsPlot type="stretch" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -37,9 +37,9 @@
 
     <v-window-item :value="2"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="stagger" :img="staggerImg">
+        <CurvesPlot style="z-index:2" type="stagger" :img="staggerImg">
           <template #plot>
-            <ErrorBarsPlot id="stagger" />
+            <ErrorBarsPlot type="stagger" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -47,9 +47,9 @@
 
     <v-window-item :value="3"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="buckle" :img="buckleImg">
+        <CurvesPlot style="z-index:2" type="buckle" :img="buckleImg">
           <template #plot>
-            <ErrorBarsPlot id="buckle" />
+            <ErrorBarsPlot type="buckle" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -57,9 +57,9 @@
 
     <v-window-item :value="3"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="propeller" :img="propellerImg">
+        <CurvesPlot style="z-index:2" type="propeller" :img="propellerImg">
           <template #plot>
-            <ErrorBarsPlot id="propeller" />
+            <ErrorBarsPlot type="propeller" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -67,9 +67,9 @@
 
     <v-window-item :value="3"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="opening" :img="openingImg">
+        <CurvesPlot style="z-index:2" type="opening" :img="openingImg">
           <template #plot>
-            <ErrorBarsPlot id="opening" />
+            <ErrorBarsPlot type="opening" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -87,6 +87,8 @@
   import buckleImg from '/img/projects/analyses/curves/intra-base-pair/buckle.png'
   import propellerImg from '/img/projects/analyses/curves/intra-base-pair/propeller.png'
   import openingImg from '/img/projects/analyses/curves/intra-base-pair/opening.png'
+
+  const { id } = defineProps(['id'])
 
   // SECOND LEVEL MENU
   const model_menu = ref(0)

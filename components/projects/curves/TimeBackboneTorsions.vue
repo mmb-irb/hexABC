@@ -18,9 +18,10 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="alpha" :stype="stype" :img="alphaImg">
+        <CurvesPlot style="z-index:2" :label="label" type="alpha" :stype="stype" :img="alphaImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="alpha" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="alpha" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -28,9 +29,10 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="beta" :stype="stype" :img="betaImg">
+        <CurvesPlot style="z-index:2" :label="label" type="beta" :stype="stype" :img="betaImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="beta" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="beta" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -38,9 +40,10 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="gamma" :stype="stype" :img="gammaImg">
+        <CurvesPlot style="z-index:2" :label="label" type="gamma" :stype="stype" :img="gammaImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="gamma" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="gamma" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -48,9 +51,10 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="delta" :stype="stype" :img="deltaImg">
+        <CurvesPlot style="z-index:2" :label="label" type="delta" :stype="stype" :img="deltaImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="delta" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="delta" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -58,9 +62,10 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="chi" :stype="stype" :img="chiImg">
+        <CurvesPlot style="z-index:2" :label="label" type="chi" :stype="stype" :img="chiImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="chi" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="chi" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -68,9 +73,10 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="epsilon" :stype="stype" :img="epsilonImg">
+        <CurvesPlot style="z-index:2" :label="label" type="epsilon" :stype="stype" :img="epsilonImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="epsilon" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="epsilon" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -78,9 +84,10 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="theta" :stype="stype" :img="thetaImg">
+        <CurvesPlot style="z-index:2" :label="label" type="theta" :stype="stype" :img="thetaImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="theta" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="theta" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -100,7 +107,7 @@
   import epsilonImg from '/img/projects/analyses/curves/backbone/epsilon-torsions.png'
   import thetaImg from '/img/projects/analyses/curves/backbone/theta-torsions.png'
   
-  const { label, stype } = defineProps(['label', 'stype'])
+  const { id, label, stype, nucl } = defineProps(['id', 'label', 'stype', 'nucl'])
 
   // SECOND LEVEL MENU
   const model_menu = ref(0)

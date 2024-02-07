@@ -2,18 +2,14 @@ import { readFile } from 'fs/promises';
 
 export default defineEventHandler(async (event) => { 
     // Get the path to the JSON file (PROVISIONAL)
-    let filePath 
+    let filePath = process.env.MOCK_ROLL_PATH;
 
     // handle query params (GET)
-    let { from, to } = getQuery(event);
+    let { bp } = getQuery(event);
 
-    let type = 'rng'
-    if(!from || !to) type = 'all'
-      
-    if(type === 'all') filePath = process.env.MOCK_ALL_HBONDS_PATH;
-    else filePath = process.env.MOCK_RNG_HBONDS_PATH;
+    if(!bp) return { rise: [] }
 
-    let resp = {}
+    let resp = []
 
     // Read the JSON file (PROVISIONAL)
     await (async () => {
@@ -31,7 +27,7 @@ export default defineEventHandler(async (event) => {
 
     // TODO: CATCH ERROR IN CASE PROJECT ID IS NOT FOUND
 
-    let hbonds = []
+    /*let hbonds = []
     let frames = 0
     const factor = type === 'all' ? 1000 : 1
     Object.keys(resp).forEach(key => {
@@ -44,11 +40,9 @@ export default defineEventHandler(async (event) => {
         })
     });
 
-    hbonds = hbonds.reverse()
+    hbonds = hbonds.reverse()*/
 
     return {
-      frames: frames,
-      factor: factor,
-      hbonds: hbonds  
+      roll: resp
     }
 });

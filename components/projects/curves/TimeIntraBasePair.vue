@@ -17,9 +17,10 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="shear" :stype="stype" :img="shearImg">
+        <CurvesPlot style="z-index:2" :label="label" type="shear" :stype="stype" :img="shearImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="shear" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="shear" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -27,9 +28,10 @@
 
     <v-window-item :value="1"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="stretch" :stype="stype" :img="stretchImg">
+        <CurvesPlot style="z-index:2" :label="label" type="stretch" :stype="stype" :img="stretchImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="stretch" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="stretch" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -37,9 +39,10 @@
 
     <v-window-item :value="2"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="stagger" :stype="stype" :img="staggerImg">
+        <CurvesPlot style="z-index:2" :label="label" type="stagger" :stype="stype" :img="staggerImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="stagger" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="stagger" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -47,9 +50,10 @@
 
     <v-window-item :value="3"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="buckle" :stype="stype" :img="buckleImg">
+        <CurvesPlot style="z-index:2" :label="label" type="buckle" :stype="stype" :img="buckleImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="buckle" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="buckle" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -57,9 +61,10 @@
 
     <v-window-item :value="3"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="propeller" :stype="stype" :img="propellerImg">
+        <CurvesPlot style="z-index:2" :label="label" type="propeller" :stype="stype" :img="propellerImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="propeller" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="propeller" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -67,9 +72,10 @@
 
     <v-window-item :value="3"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="opening" :stype="stype" :img="openingImg">
+        <CurvesPlot style="z-index:2" :label="label" type="opening" :stype="stype" :img="openingImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="opening" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="opening" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -88,7 +94,7 @@
   import propellerImg from '/img/projects/analyses/curves/intra-base-pair/propeller.png'
   import openingImg from '/img/projects/analyses/curves/intra-base-pair/opening.png'
   
-  const { label, stype } = defineProps(['label', 'stype'])
+  const { id, label, stype, nucl } = defineProps(['id', 'label', 'stype', 'nucl'])
 
   // SECOND LEVEL MENU
   const model_menu = ref(0)

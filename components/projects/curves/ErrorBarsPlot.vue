@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-  const { id } = defineProps(['id'])
+  const { type } = defineProps(['type'])
   
   const loading = ref(true)
 

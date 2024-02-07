@@ -15,9 +15,10 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="inclination" :stype="stype" :img="inclinationImg">
+        <CurvesPlot style="z-index:2" :label="label" type="inclination" :stype="stype" :img="inclinationImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="inclination" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="inclination" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -25,9 +26,10 @@
 
     <v-window-item :value="1"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="tip" :stype="stype" :img="tipImg">
+        <CurvesPlot style="z-index:2" :label="label" type="tip" :stype="stype" :img="tipImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="tip" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="tip" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -35,9 +37,10 @@
 
     <v-window-item :value="2"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="xdisp" :stype="stype" :img="xdispImg">
+        <CurvesPlot style="z-index:2" :label="label" type="xdisp" :stype="stype" :img="xdispImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="xdisp" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="xdisp" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -45,9 +48,10 @@
 
     <v-window-item :value="3"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="ydisp" :stype="stype" :img="ydispImg">
+        <CurvesPlot style="z-index:2" :label="label" type="ydisp" :stype="stype" :img="ydispImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="ydisp" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="ydisp" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -64,7 +68,7 @@
   import xdispImg from '/img/projects/analyses/curves/base-pair/xdisp.png'
   import ydispImg from '/img/projects/analyses/curves/base-pair/ydisp.png'
   
-  const { label, stype } = defineProps(['label', 'stype'])
+  const { id, label, stype, nucl } = defineProps(['id', 'label', 'stype', 'nucl'])
 
   // SECOND LEVEL MENU
   const model_menu = ref(0)

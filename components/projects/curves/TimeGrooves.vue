@@ -15,9 +15,10 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="majorgd" :stype="stype" :img="majorImg">
+        <CurvesPlot style="z-index:2" :label="label" type="majorgd" :stype="stype" :img="majorImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="majorgd" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="majorgd" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -25,9 +26,10 @@
 
     <v-window-item :value="1"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="majorgw" :stype="stype" :img="majorImg">
+        <CurvesPlot style="z-index:2" :label="label" type="majorgw" :stype="stype" :img="majorImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="majorgw" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="majorgw" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -35,9 +37,10 @@
 
     <v-window-item :value="2"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="minorgd" :stype="stype" :img="minorImg">
+        <CurvesPlot style="z-index:2" :label="label" type="minorgd" :stype="stype" :img="minorImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="minorgd" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="minorgd" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -45,9 +48,10 @@
 
     <v-window-item :value="3"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="minorgw" :stype="stype" :img="minorImg">
+        <CurvesPlot style="z-index:2" :label="label" type="minorgw" :stype="stype" :img="minorImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="minorgw" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="minorgw" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -62,7 +66,7 @@
   import majorImg from '/img/projects/analyses/curves/grooves/major.png'
   import minorImg from '/img/projects/analyses/curves/grooves/minor.png'
 
-  const { label, stype } = defineProps(['label', 'stype'])
+  const { id, label, stype, nucl } = defineProps(['id', 'label', 'stype', 'nucl'])
 
   // SECOND LEVEL MENU
   const model_menu = ref(0)

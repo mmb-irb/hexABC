@@ -79,7 +79,8 @@ export default defineNuxtConfig({
         // TODO: FIX REGEX FOR PROJECTS ID WHEN WORKING WITH FAIR ID'S
         '/^\/api\/projects\/?([a-zA-Z0-9\_\.]+)?(\\?[\\w=&]+)?$/', 
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/topology$/',
-        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(hbonds|rise)(\\?.*)?$/'
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(hbonds)(\\?.*)?$/',
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/time\/(rise|roll|shift|slide|tilt|twist)(\\?bp=\\d+\_[A-Z]+)?$/'
       ]
     }
   },

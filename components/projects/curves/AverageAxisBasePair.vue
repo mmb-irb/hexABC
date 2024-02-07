@@ -15,9 +15,9 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="inclination" :img="inclinationImg">
+        <CurvesPlot style="z-index:2" type="inclination" :img="inclinationImg">
           <template #plot>
-            <ErrorBarsPlot id="inclination" />
+            <ErrorBarsPlot type="inclination" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -25,9 +25,9 @@
 
     <v-window-item :value="1"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="tip" :img="tipImg">
+        <CurvesPlot style="z-index:2" type="tip" :img="tipImg">
           <template #plot>
-            <ErrorBarsPlot id="tip" />
+            <ErrorBarsPlot type="tip" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -35,9 +35,9 @@
 
     <v-window-item :value="2"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="xdisp" :img="xdispImg">
+        <CurvesPlot style="z-index:2" type="xdisp" :img="xdispImg">
           <template #plot>
-            <ErrorBarsPlot id="xdisp" />
+            <ErrorBarsPlot type="xdisp" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -45,9 +45,9 @@
 
     <v-window-item :value="3"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="ydisp" :img="ydispImg">
+        <CurvesPlot style="z-index:2" type="ydisp" :img="ydispImg">
           <template #plot>
-            <ErrorBarsPlot id="ydisp" />
+            <ErrorBarsPlot type="ydisp" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -63,6 +63,8 @@
   import tipImg from '/img/projects/analyses/curves/base-pair/tip.png'
   import xdispImg from '/img/projects/analyses/curves/base-pair/xdisp.png'
   import ydispImg from '/img/projects/analyses/curves/base-pair/ydisp.png'
+
+  const { id } = defineProps(['id'])
 
   // SECOND LEVEL MENU
   const model_menu = ref(0)

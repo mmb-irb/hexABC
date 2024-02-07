@@ -10,7 +10,7 @@
       ></v-progress-circular>
 
       <div v-else>
-        <h2>{{ id }}</h2>
+        <h2>{{ type }}</h2>
 
         STACKED HISTOGRAM PLOT<br>
         https://plotly.com/javascript/histograms/#stacked-histograms
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-  const { id } = defineProps(['id'])
+  const { type } = defineProps(['type'])
   
   const loading = ref(true)
 

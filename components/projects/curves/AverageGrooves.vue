@@ -15,9 +15,9 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="majorgd" :img="majorImg">
+        <CurvesPlot style="z-index:2" type="majorgd" :img="majorImg">
           <template #plot>
-            <ErrorBarsPlot id="majorgd" />
+            <ErrorBarsPlot type="majorgd" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -25,9 +25,9 @@
 
     <v-window-item :value="1"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="majorgw" :img="majorImg">
+        <CurvesPlot style="z-index:2" type="majorgw" :img="majorImg">
           <template #plot>
-            <ErrorBarsPlot id="majorgw" />
+            <ErrorBarsPlot type="majorgw" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -35,9 +35,9 @@
 
     <v-window-item :value="2"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="minorgd" :img="minorImg">
+        <CurvesPlot style="z-index:2" type="minorgd" :img="minorImg">
           <template #plot>
-            <ErrorBarsPlot id="minorgd" />
+            <ErrorBarsPlot type="minorgd" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -45,9 +45,9 @@
 
     <v-window-item :value="3"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="minorgw" :img="minorImg">
+        <CurvesPlot style="z-index:2" type="minorgw" :img="minorImg">
           <template #plot>
-            <ErrorBarsPlot id="minorgw" />
+            <ErrorBarsPlot type="minorgw" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -61,6 +61,8 @@
   // vuetify images must be imported like this (and they cannot be imported in the AnalysisButton.vue component)
   import majorImg from '/img/projects/analyses/curves/grooves/major.png'
   import minorImg from '/img/projects/analyses/curves/grooves/minor.png'
+
+  const { id } = defineProps(['id'])
 
   // SECOND LEVEL MENU
   const model_menu = ref(0)

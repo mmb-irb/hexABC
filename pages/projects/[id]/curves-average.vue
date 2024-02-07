@@ -55,11 +55,11 @@
 
             <v-row justify="end" v-if="section">
               <v-col cols="12">
-                <AverageBackboneTorsions v-if="section === '0'" />
-                <AverageAxisBasePair v-if="section === '1'" />
-                <AverageIntraBasePair v-if="section === '2'" />
-                <AverageInterBasePair v-if="section === '3'" />
-                <AverageGrooves v-if="section === '4'" />
+                <AverageBackboneTorsions v-if="section === '0'" :id="id" />
+                <AverageAxisBasePair v-if="section === '1'" :id="id" />
+                <AverageIntraBasePair v-if="section === '2'" :id="id" />
+                <AverageInterBasePair v-if="section === '3'" :id="id" />
+                <AverageGrooves v-if="section === '4'" :id="id" />
               </v-col>
             </v-row>
 

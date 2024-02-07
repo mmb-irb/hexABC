@@ -50,13 +50,13 @@
 
 <script setup>
 
-	const { id, label, stype, img } = defineProps(['id', 'label', 'stype', 'img'])
+	const { type, label, stype, img } = defineProps(['type', 'label', 'stype', 'img'])
 
   const { $curves } = useNuxtApp()
 
-  const title = $curves[id].title
-  const selType = $curves.type[stype]
-  const description = $curves[id].description
+  const title = $curves.descriptions[type].title
+  const selType = $curves.sel_type[stype]
+  const description = $curves.descriptions[type].description
 
 	// DRAWER
   const drawer = ref(false)

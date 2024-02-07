@@ -17,9 +17,10 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="rise" :stype="stype" :img="riseImg">
+        <CurvesPlot style="z-index:2" :label="label" type="rise" :stype="stype" :img="riseImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="rise" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot :id="id" type="rise" :seq="label" :nucl="nucl" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -27,9 +28,10 @@
 
     <v-window-item :value="1"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="roll" :stype="stype" :img="rollImg">
+        <CurvesPlot style="z-index:2" :label="label" type="roll" :stype="stype" :img="rollImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="roll" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot :id="id" type="roll" :seq="label" :nucl="nucl" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -37,9 +39,10 @@
 
     <v-window-item :value="2"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="shift" :stype="stype" :img="shiftImg">
+        <CurvesPlot style="z-index:2" :label="label" type="shift" :stype="stype" :img="shiftImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="shift" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="shift" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -47,9 +50,10 @@
 
     <v-window-item :value="3">
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="slide" :stype="stype" :img="slideImg">
+        <CurvesPlot style="z-index:2" :label="label" type="slide" :stype="stype" :img="slideImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="slide" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="slide" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -57,9 +61,10 @@
 
     <v-window-item :value="3">
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="tilt" :stype="stype" :img="tiltImg">
+        <CurvesPlot style="z-index:2" :label="label" type="tilt" :stype="stype" :img="tiltImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="tilt" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="tilt" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -67,9 +72,10 @@
 
     <v-window-item :value="3"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" :label="label" id="twist" :stype="stype" :img="twistImg">
+        <CurvesPlot style="z-index:2" :label="label" type="twist" :stype="stype" :img="twistImg">
           <template #plot>
-            <TimeSeriesHistogramPlot id="twist" />
+            <!-- TODO: ADD id, seq and nucl -->
+            <TimeSeriesHistogramPlot type="twist" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -88,7 +94,7 @@
   import tiltImg from '/img/projects/analyses/curves/inter-base-pair/tilt.png'
   import twistImg from '/img/projects/analyses/curves/inter-base-pair/twist.png'
 
-  const { label, stype } = defineProps(['label', 'stype'])
+  const { id, label, stype, nucl } = defineProps(['id', 'label', 'stype', 'nucl'])
 
   // SECOND LEVEL MENU
   const model_menu = ref(0)

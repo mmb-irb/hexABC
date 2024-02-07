@@ -74,7 +74,7 @@
                   :id="id"
                   :image="curvesImg"
                   slug="curves-average"
-                  title="Curves Average"
+                  title="Helical Parameters"
                 />
               </v-col>
 
@@ -83,7 +83,7 @@
                   :id="id"
                   :image="hbondsImg"
                   slug="hbonds"
-                  title="HBonds Average"
+                  title="Hydrogen Bonds"
                 />
               </v-col>
             </v-row>

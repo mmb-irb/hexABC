@@ -17,9 +17,9 @@
 
     <v-window-item :value="0"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="rise" :img="riseImg">
+        <CurvesPlot style="z-index:2" type="rise" :img="riseImg">
           <template #plot>
-            <ErrorBarsPlot id="rise" />
+            <ErrorBarsPlot type="rise" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -27,9 +27,9 @@
 
     <v-window-item :value="1"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="roll" :img="rollImg">
+        <CurvesPlot style="z-index:2" type="roll" :img="rollImg">
           <template #plot>
-            <ErrorBarsPlot id="roll" />
+            <ErrorBarsPlot type="roll" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -37,9 +37,9 @@
 
     <v-window-item :value="2"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="shift" :img="shiftImg">
+        <CurvesPlot style="z-index:2" type="shift" :img="shiftImg">
           <template #plot>
-            <ErrorBarsPlot id="shift" />
+            <ErrorBarsPlot type="shift" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -47,9 +47,9 @@
 
     <v-window-item :value="3">
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="slide" :img="slideImg">
+        <CurvesPlot style="z-index:2" type="slide" :img="slideImg">
           <template #plot>
-            <ErrorBarsPlot id="slide" />
+            <ErrorBarsPlot type="slide" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -57,9 +57,9 @@
 
     <v-window-item :value="3">
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="tilt" :img="tiltImg">
+        <CurvesPlot style="z-index:2" type="tilt" :img="tiltImg">
           <template #plot>
-            <ErrorBarsPlot id="tilt" />
+            <ErrorBarsPlot type="tilt" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -67,9 +67,9 @@
 
     <v-window-item :value="3"> 
       <v-row class="pa-2">
-        <CurvesPlot style="z-index:2" id="twist" :img="twistImg">
+        <CurvesPlot style="z-index:2" type="twist" :img="twistImg">
           <template #plot>
-            <ErrorBarsPlot id="twist" />
+            <ErrorBarsPlot type="twist" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -88,6 +88,7 @@
   import tiltImg from '/img/projects/analyses/curves/inter-base-pair/tilt.png'
   import twistImg from '/img/projects/analyses/curves/inter-base-pair/twist.png'
 
+  const { id } = defineProps(['id'])
 
   // SECOND LEVEL MENU
   const model_menu = ref(0)

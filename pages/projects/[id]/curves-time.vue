@@ -81,11 +81,11 @@
 
             <v-row justify="end" v-if="section">
               <v-col cols="12">
-                <TimeBackboneTorsions v-if="section === '0'" :label="seqLabel" :stype="seqType" />
-                <TimeAxisBasePair v-if="section === '1'" :label="seqLabel" :stype="seqType" />
-                <TimeIntraBasePair v-if="section === '2'" :label="seqLabel" :stype="seqType" />
-                <TimeInterBasePair v-if="section === '3'" :label="seqLabel" :stype="seqType" />
-                <TimeGrooves v-if="section === '4'" :label="seqLabel" :stype="seqType" />
+                <TimeBackboneTorsions v-if="section === '0'" :label="seqLabel" :stype="seqType" :nucl="selNucl" :id="id" />
+                <TimeAxisBasePair v-if="section === '1'" :label="seqLabel" :stype="seqType" :nucl="selNucl" :id="id" />
+                <TimeIntraBasePair v-if="section === '2'" :label="seqLabel" :stype="seqType" :nucl="selNucl" :id="id" />
+                <TimeInterBasePair v-if="section === '3'" :label="seqLabel" :stype="seqType" :nucl="selNucl" :id="id" />
+                <TimeGrooves v-if="section === '4'" :label="seqLabel" :stype="seqType" :nucl="selNucl" :id="id" />
               </v-col>
             </v-row>
 
@@ -136,6 +136,7 @@
   const sequence = project.value.metadata.SEQUENCES[0]
   const { strand1, strand2, ends1, ends2 } = getSequenceSettings(sequence)
   
+  const selNucl = ref('')
   const seqLabel = ref('')
   const seqType = ref('')
 
@@ -149,24 +150,6 @@
     setTimeout(() => {
       enableSectionButtons(activeMenu)
     }, 1);
-    
-    /*switch(section.value) {
-      case '0':
-        console.log(' section 0')
-        break;
-      case '1':
-        console.log(' section 1')
-        break;
-      case '2':
-        console.log(' section 2')
-        break;
-      case '3':
-        console.log(' section 3')
-        break;
-      case '4':
-        console.log(' section 4')
-        break;
-    }*/
 
   }
 
@@ -221,7 +204,8 @@
       // get menu
       activeMenu = seqmenu[checkNuc.type].sections
       enableSectionButtons(activeMenu)
-      // update label & type
+      // update nucleotides, label & type
+      selNucl.value = checkNuc.nucleotides
       seqLabel.value = checkNuc.label
       seqType.value = checkNuc.type
     } else {
