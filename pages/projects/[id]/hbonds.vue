@@ -60,7 +60,7 @@
               ></v-progress-linear>
             </div>
 
-            <HeatmapHBonds v-else :pd="plotData" :nf="numframes" @callParent="loadData" />
+            <HeatmapHBonds v-else :pd="plotData" :nf="numframes" :id="id" @callParent="loadData" />
 
           </template>
         </v-card>

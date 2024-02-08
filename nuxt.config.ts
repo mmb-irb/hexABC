@@ -57,6 +57,7 @@ export default defineNuxtConfig({
   components: [
     { path: '~/components/common', extensions: ['vue'] },
     { path: '~/components/search', extensions: ['vue'] },
+    { path: '~/components/projects/analyses', extensions: ['vue'] },
     { path: '~/components/projects/curves', extensions: ['vue'] },
     { path: '~/components/projects/hbonds', extensions: ['vue'] },
     { path: '~/components/projects/overview', extensions: ['vue'] },

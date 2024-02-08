@@ -54,18 +54,28 @@
       </p>
     </v-col>
   </v-row>
+
+  <PlotDialog v-model="dialog" ref="plotDialogRef">
+    <template #viewer>
+      <HBondsViewer :id="id" ref="hBondsViewerRef" />
+    </template>
+  </PlotDialog>
+  
+
 </template>
 
 <script setup>
 
   import useHeatmapUtils from '@/modules/analysis/useHeatmapUtils' 
+  import common from '@/modules/common/common' 
   import Plotly from 'plotly.js-dist-min';
 
-  const { pd, nf } = defineProps(['pd', 'nf'])
+  const { id, pd, nf } = defineProps(['id', 'pd', 'nf'])
   const emit = defineEmits(['callParent']);
   const { $hbonds } = useNuxtApp()
 
   const { getPlotlyForImage } = useHeatmapUtils()
+  const { sleep } = common()
 
   const plotData = ref(pd)
   // load plot layout
@@ -77,6 +87,10 @@
   const pngImage = ref(null);
   const imageCreated = ref(false)
   const changingPlot = ref(false)
+
+  const dialog = ref(false)
+  const hBondsViewerRef = ref(null)
+  const plotDialogRef = ref(null);
 
   const myChartOnReady = async (plotlyHTMLElement) => {
     if(!imageCreated.value) {
@@ -117,8 +131,38 @@
       // *****
     }
 
+    let debounceTimeout
+    let dclick = false
     plotlyHTMLElement.on?.('plotly_click', (e) => {
-      console.log(e.points[0].x, e.points[0].y, e.points[0].z);
+      debounceTimeout = setTimeout(async () => {
+        if(!dclick) {
+          //console.log(e.points[0].x, e.points[0].y, e.points[0].z);
+          dialog.value = true
+          // set dialog title
+          var ns = e.points[0].y.replace(/([A-Za-z])(\d+)/g, '$1-$2');
+          var title = `Hydrogen Bonds - Frame ${e.points[0].x} - BP ${ns}`
+          plotDialogRef.value.updateTitle(title)
+          // get residue numbers for selected nucleotides
+          var residues = e.points[0].y.match(/\d+/g).map(Number)
+          // trick for avoiding problems on loading the viewer
+          await sleep(500)
+          try {
+            hBondsViewerRef.value.addRepresentationHBonds(residues.join(' '))
+          } catch (error) {
+            //console.log('Error adding representation:', error)
+            await sleep(500)
+            hBondsViewerRef.value.addRepresentationHBonds(residues.join(' '))
+          }
+        }
+        clearTimeout(debounceTimeout)
+        dclick = false
+      }, 300)
+
+    })
+
+    plotlyHTMLElement.on?.('plotly_doubleclick', (e) => {
+      dclick = true
+      clearTimeout(debounceTimeout)
     })
 
     changingPlot.value = false
