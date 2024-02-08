@@ -4,6 +4,9 @@ export default defineEventHandler(async (event) => {
     // Get the path to the JSON file (PROVISIONAL)
     let filePath 
 
+    // get project id
+    const { id } = event.context.params
+
     // handle query params (GET)
     let { from, to } = getQuery(event);
 

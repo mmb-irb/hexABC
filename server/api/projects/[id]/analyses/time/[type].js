@@ -1,8 +1,12 @@
 import { readFile } from 'fs/promises';
 
 export default defineEventHandler(async (event) => { 
+
+    // get project id
+    const { id, type } = event.context.params
+
     // Get the path to the JSON file (PROVISIONAL)
-    let filePath = process.env.MOCK_ROLL_PATH;
+    let filePath = (type === 'rise') ? process.env.MOCK_RISE_PATH : process.env.MOCK_ROLL_PATH;
 
     // handle query params (GET)
     let { bp } = getQuery(event);
@@ -43,6 +47,6 @@ export default defineEventHandler(async (event) => {
     hbonds = hbonds.reverse()*/
 
     return {
-      roll: resp
+      [type]: resp
     }
 });

@@ -63,7 +63,7 @@
         <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
 
           <template v-slot:title>
-            <v-icon size="small" icon="mdi-chart-box-multiple-outline"></v-icon> &nbsp;ANALYSES
+            <v-icon size="small" icon="mdi-rotate-orbit"></v-icon> &nbsp;HELICAL PARAMETERS
           </template>
 
           <template v-slot:text>
@@ -72,12 +72,38 @@
               <v-col lg="3" md="4" sm="6" xs="12">
                 <AnalysisButton 
                   :id="id"
-                  :image="curvesImg"
+                  :image="avgImg"
                   slug="curves-average"
-                  title="Helical Parameters"
+                  title="Average Results"
                 />
               </v-col>
 
+              <v-col lg="3" md="4" sm="6" xs="12">
+                <AnalysisButton 
+                  :id="id"
+                  :image="timeImg"
+                  slug="curves-time"
+                  title="Results by Time"
+                />
+              </v-col>
+            </v-row>
+
+          </template>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row> 
+      <v-col cols="12">
+        <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
+
+          <template v-slot:title>
+            <v-icon size="small" icon="mdi-dots-grid"></v-icon> &nbsp;INTERACTIONS
+          </template>
+
+          <template v-slot:text>
+
+            <v-row> 
               <v-col lg="3" md="4" sm="6" xs="12">
                 <AnalysisButton 
                   :id="id"
@@ -93,13 +119,31 @@
       </v-col>
     </v-row>
 
+    <v-row> 
+      <v-col cols="12">
+        <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
+
+          <template v-slot:title>
+            <v-icon size="small" icon="mdi-chart-box-multiple-outline"></v-icon> &nbsp;QUALITY CONTROL
+          </template>
+
+          <template v-slot:text>
+
+            
+
+          </template>
+        </v-card>
+      </v-col>
+    </v-row>
+
   </v-container>
 </template>
 
 <script setup>
 
   // vuetify images must be imported like this (and they cannot be imported in the AnalysisButton.vue component)
-  import curvesImg from '/img/projects/analyses/curves/curves-analyses.png'
+  import avgImg from '/img/projects/analyses/curves/curves-average.png'
+  import timeImg from '/img/projects/analyses/curves/curves-time.png'
   import hbondsImg from '/img/projects/analyses/hbonds/hbonds.png'
 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
