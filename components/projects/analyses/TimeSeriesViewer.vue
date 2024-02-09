@@ -60,15 +60,14 @@
 
 	})
 
-	const addRepresentationHBonds = (sele) => {
-		// TO MODIFY FOR REPRESENTING THE HBONDS VIA DISTANCES!!!
+	const addRepresentation = (sele) => {
 		const r = stage.compList[0].addRepresentation( "ball+stick", { sele: sele, radius: .2 })
 		stage.compList[0].autoView(sele, 500);
 		return r
 	}
 
 	defineExpose({
-		addRepresentationHBonds
+		addRepresentation
 	});
 
 </script>

@@ -16,14 +16,15 @@
 <style>
 	.legend {
 		position: absolute;
-		top: 0;
-		right: 0;
+		top: 5px;
+		right: 5px;
 		background-color: #ffffffcc;
 		padding: 10px;
+		border-radius: 5px;
 		z-index: 2;
 	}
-	.legend.tl { bottom: auto; right: auto; top: 0; left: 0; }
-	.legend.tr { bottom: auto; left: auto; top: 0; right: 0; }
-	.legend.bl { top: auto; right: auto; bottom: 0; left: 0; }
-	.legend.br { top: auto; left: auto; bottom: 0; right: 0; }
+	.legend.tl { bottom: auto; right: auto; top: 5px; left: 5px; }
+	.legend.tr { bottom: auto; left: auto; top: 5px; right: 5px; }
+	.legend.bl { top: auto; right: auto; bottom: 5px; left: 5px; }
+	.legend.br { top: auto; left: auto; bottom: 5px; right: 5px; }
 </style>

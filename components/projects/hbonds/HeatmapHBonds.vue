@@ -60,7 +60,6 @@
       <HBondsViewer :id="id" ref="hBondsViewerRef" />
     </template>
   </PlotDialog>
-  
 
 </template>
 
@@ -139,8 +138,8 @@
           //console.log(e.points[0].x, e.points[0].y, e.points[0].z);
           dialog.value = true
           // set dialog title
-          var ns = e.points[0].y.replace(/([A-Za-z])(\d+)/g, '$1-$2');
-          var title = `Hydrogen Bonds - Frame ${e.points[0].x} - BP ${ns}`
+          var ns = e.points[0].y.replace(/([A-Za-z])(\d+)/g, '$1 - $2');
+          var title = `Hydrogen Bonds :: Frame ${e.points[0].x} :: BP ${ns}`
           plotDialogRef.value.updateTitle(title)
           // get residue numbers for selected nucleotides
           var residues = e.points[0].y.match(/\d+/g).map(Number)

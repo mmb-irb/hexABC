@@ -47,6 +47,8 @@
                   @nuclMouseOver="handleNuclMouseOver" 
                   @nuclMouseOut="handleNuclMouseOut" 
                 />
+
+                <p>TODO: SELECTOR WITH HEXAMERS LIST</p>
               </v-col>
               <v-col lg="5" md="6" sm="12" cols="12" >
                 <TrajectoryViewer :id="id" ref="trjViewerRef" />
@@ -129,7 +131,16 @@
 
           <template v-slot:text>
 
-            
+            <v-row> 
+              <v-col lg="3" md="4" sm="6" xs="12">
+                <AnalysisButton 
+                  :id="id"
+                  :image="rmsdImg"
+                  slug="first-rmsd"
+                  title="RMSd"
+                />
+              </v-col>
+            </v-row>
 
           </template>
         </v-card>
@@ -145,6 +156,7 @@
   import avgImg from '/img/projects/analyses/curves/curves-average.png'
   import timeImg from '/img/projects/analyses/curves/curves-time.png'
   import hbondsImg from '/img/projects/analyses/hbonds/hbonds.png'
+  import rmsdImg from '/img/projects/analyses/rmsd/rmsd.png'
 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
 

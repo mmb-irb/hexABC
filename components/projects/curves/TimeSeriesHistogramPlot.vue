@@ -32,16 +32,25 @@
       </v-row>
     </div>
 
-    </div>
+  <PlotDialog v-model="dialog" ref="plotDialogRef">
+    <template #viewer>
+      <TimeSeriesViewer :id="id" ref="tSeriesViewerRef" />
+    </template>
+  </PlotDialog>
+
+  </div>
 </template>
 
 <script setup>
   import { useDisplay } from 'vuetify'
+  import common from '@/modules/common/common' 
 
   const { id, type, seq, nucl } = defineProps(['id', 'type', 'seq', 'nucl'])
   const display = ref(useDisplay())
   const config = useRuntimeConfig()
   const { $curves } = useNuxtApp()
+
+  const { sleep } = common()
   
   const loading = ref(true)
 
@@ -89,10 +98,69 @@
 
   })
 
+  const dialog = ref(false)
+  const tSeriesViewerRef = ref(null)
+  const plotDialogRef = ref(null);
+
+  const getTypeofSelection = (nucl) => {
+    var tp = ''
+    switch(nucl.length) {
+      case 1:
+        tp = ''
+        break
+      case 2: 
+        const numbers = nucl.map(item => Number(item.split('-')[1]));
+        if (numbers.every((number, index) => index === 0 || number === numbers[index - 1] + 1)) tp = 'BS'
+        else tp = 'BP'
+        break
+      case 4:
+        tp = 'BPS'
+        break
+      case 8:
+        tp = 'TETR'
+        break
+      case 12:
+        tp = 'HEX'
+        break
+    }
+    return tp
+  }
+
   const myChartOnReady = (plotlyHTMLElement) => {
 
-    plotlyHTMLElement.on?.('plotly_click', (e) => {
+    // create double click logic
+    /*plotlyHTMLElement.on?.('plotly_click', (e) => {
       console.log(e.points[0].x, e.points[0].y, nucl);
+    })*/
+
+    let debounceTimeout
+    let dclick = false
+    plotlyHTMLElement.on?.('plotly_click', (e) => {
+      debounceTimeout = setTimeout(async () => {
+        if(!dclick) {
+          //console.log(e.points[0].x, e.points[0].y, e.points[0].z);
+          dialog.value = true
+          // set dialog title
+          var ns = nucl.map(item => item.split('-').reverse().join('')).join('-')
+          var tp = getTypeofSelection(nucl)
+          var title = `${$curves.descriptions[type].title} :: Frame ${e.points[0].x} :: ${tp} ${ns}`
+          plotDialogRef.value.updateTitle(title)
+          // get residue numbers for selected nucleotides
+          var residues = nucl.map(item => Number(item.match(/\d+/)[0]))
+          // trick for avoiding problems on loading the viewer
+          await sleep(500)
+          try {
+            tSeriesViewerRef.value.addRepresentation(residues.join(' '))
+          } catch (error) {
+            //console.log('Error adding representation:', error)
+            await sleep(500)
+            tSeriesViewerRef.value.addRepresentation(residues.join(' '))
+          }
+        }
+        clearTimeout(debounceTimeout)
+        dclick = false
+      }, 300)
+
     })
   }
 

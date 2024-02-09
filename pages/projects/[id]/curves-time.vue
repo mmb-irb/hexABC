@@ -14,11 +14,6 @@
               <div>
                 <v-icon size="small" icon="mdi-timer-outline"></v-icon> &nbsp;SEQUENCE RESULTS BY TIME
               </div>
-              <!--<v-btn prepend-icon="mdi-chart-bell-curve"
-                variant="outlined"
-                color="red-accent-4"
-                :to="`/projects/${id}/curves-average`"
-                >Average Results</v-btn>-->
             </div>
           </template>
 
