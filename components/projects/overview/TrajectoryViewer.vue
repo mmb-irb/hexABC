@@ -1,6 +1,8 @@
 <template>
-  <div id="viewport"></div>
-  <!-- TODO LEGEND!!!! -->
+	<div style="position: relative;">
+		<div id="viewport"></div>
+		<LegendViewer v-model="legendText" position="tr" v-if="legend" />
+	</div>
 </template>
 
 <script setup>
@@ -8,15 +10,20 @@
 	const config = useRuntimeConfig()
 
 	import useStage from '@/modules/ngl/useStage'
+	import mouseObserver from '@/modules/ngl/mouseObserver'
 
 	const { createStage } = useStage()
+	const { checkMouseSignals } = mouseObserver()
 
 	const { id } = defineProps(['id'])
+
+	const legend = ref(false)
+	const legendText = ref('')
 
 	let stage = null
 	onMounted(async () => {
 
-		stage = createStage("viewport", true)
+		stage = createStage("viewport")
 		stage.setParameters({ backgroundColor: '#dedede' });
 
 		const topology = await useFetch(`${config.public.apiBase}/projects/${id}/topology`)
@@ -29,6 +36,13 @@
 				component.addRepresentation("licorice", { sele: "nucleic", color: '#ccc' });
 				component.autoView('nucleic');
 			})
+		
+		const updateLegend = (v, s) => {
+			legendText.value = v
+			legend.value = s
+		}
+
+		checkMouseSignals(stage, updateLegend)
 
 		window.addEventListener("resize", () => stage.viewer.handleResize())
 
