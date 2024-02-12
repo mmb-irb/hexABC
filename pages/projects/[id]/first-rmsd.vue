@@ -3,7 +3,7 @@
 
     <h1>First frame RMSd</h1>
 
-    <Breadcrumbs :props="{id: id, text: 'RMSd', title: title}" />
+    <Breadcrumbs :props="{id: id, text: '1st frame RMSd', title: title}" />
 
     <v-row> 
       <v-col cols="12">
@@ -12,7 +12,7 @@
           <template v-slot:title>
             <div id="header-container">
               <div>
-                <v-icon size="small" icon="mdi-numeric-1-box-outline"></v-icon> &nbsp;FIRST FRAME RMSD
+                <v-icon size="small" icon="mdi-numeric-1-box-outline"></v-icon> &nbsp;FIRST FRAME RMSd
               </div>
               <v-btn prepend-icon="mdi-chart-bell-curve"
                 variant="outlined"
@@ -24,8 +24,9 @@
 
           <template v-slot:text>
 
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione eligendi iure commodi doloremque et qui delectus soluta unde laudantium vero nesciunt quibusdam aperiam laborum distinctio, officia, necessitatibus minus rerum molestiae.</p>
+            <p><strong>Root Mean Square deviation</strong> (RMSd) referred to the <strong>initial</strong> or <strong>reference</strong> structure, often taken as the starting point in a simulation or the <strong>first structure</strong> in a set.</p>
             
+            <RMSdPlot :id="id" type="firstframe" />
 
           </template>
         </v-card>
@@ -47,6 +48,10 @@
   const project = ref(datap.data.value)
 
   const title = project.value.metadata.NAME
+
+  useHead({
+    title: `First frame RMSd for ${title}`
+  })
 
 </script>
 

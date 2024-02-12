@@ -43,14 +43,11 @@
 
 <script setup>
   import { useDisplay } from 'vuetify'
-  import common from '@/modules/common/common' 
 
   const { id, type, seq, nucl } = defineProps(['id', 'type', 'seq', 'nucl'])
   const display = ref(useDisplay())
   const config = useRuntimeConfig()
-  const { $curves } = useNuxtApp()
-
-  const { sleep } = common()
+  const { $curves, $sleep } = useNuxtApp()
   
   const loading = ref(true)
 
@@ -148,12 +145,12 @@
           // get residue numbers for selected nucleotides
           var residues = nucl.map(item => Number(item.match(/\d+/)[0]))
           // trick for avoiding problems on loading the viewer
-          await sleep(500)
+          await $sleep(500)
           try {
             tSeriesViewerRef.value.addRepresentation(residues.join(' '))
           } catch (error) {
             //console.log('Error adding representation:', error)
-            await sleep(500)
+            await $sleep(500)
             tSeriesViewerRef.value.addRepresentation(residues.join(' '))
           }
         }
@@ -162,6 +159,12 @@
       }, 300)
 
     })
+
+    plotlyHTMLElement.on?.('plotly_doubleclick', (e) => {
+      dclick = true
+      clearTimeout(debounceTimeout)
+		})
+    
   }
 
 </script>

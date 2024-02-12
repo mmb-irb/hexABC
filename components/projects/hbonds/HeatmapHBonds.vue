@@ -66,15 +66,13 @@
 <script setup>
 
   import useHeatmapUtils from '@/modules/analysis/useHeatmapUtils' 
-  import common from '@/modules/common/common' 
   import Plotly from 'plotly.js-dist-min';
 
   const { id, pd, nf } = defineProps(['id', 'pd', 'nf'])
   const emit = defineEmits(['callParent']);
-  const { $hbonds } = useNuxtApp()
+  const { $hbonds, $sleep } = useNuxtApp()
 
   const { getPlotlyForImage } = useHeatmapUtils()
-  const { sleep } = common()
 
   const plotData = ref(pd)
   // load plot layout
@@ -144,12 +142,12 @@
           // get residue numbers for selected nucleotides
           var residues = e.points[0].y.match(/\d+/g).map(Number)
           // trick for avoiding problems on loading the viewer
-          await sleep(500)
+          await $sleep(500)
           try {
             hBondsViewerRef.value.addRepresentationHBonds(residues.join(' '))
           } catch (error) {
             //console.log('Error adding representation:', error)
-            await sleep(500)
+            await $sleep(500)
             hBondsViewerRef.value.addRepresentationHBonds(residues.join(' '))
           }
         }

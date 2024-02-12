@@ -61,12 +61,14 @@ export default defineNuxtConfig({
     { path: '~/components/projects/curves', extensions: ['vue'] },
     { path: '~/components/projects/hbonds', extensions: ['vue'] },
     { path: '~/components/projects/overview', extensions: ['vue'] },
+    { path: '~/components/projects/rmsd', extensions: ['vue'] },
     { path: '~/components/projects/sequences', extensions: ['vue'] }
   ],
   plugins: [
     // define here all plugins in nested folders
     '~/plugins/plots/hbonds',
     '~/plugins/plots/curves',
+    '~/plugins/plots/rmsd',
   ],
   runtimeConfig: {
     public: {
@@ -81,6 +83,7 @@ export default defineNuxtConfig({
         '/^\/api\/projects\/?([a-zA-Z0-9\_\.]+)?(\\?[\\w=&]+)?$/', 
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/topology$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(hbonds)(\\?.*)?$/',
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(firstframe|average)$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/time\/(rise|roll|shift|slide|tilt|twist)(\\?bp=\\d+\_[A-Z]+)?$/'
       ]
     }

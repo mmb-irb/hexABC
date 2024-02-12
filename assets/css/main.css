@@ -26,6 +26,7 @@ a { color: var(--palette-5); }
 a:hover { color: var(--palette-6); }
 h1 { color: var(--palette-6); line-height: 2rem; font-size: 30px; font-weight: 300; }
 p { margin-bottom: 1rem; }
+th { font-weight: 700!important; }
 
 /* breadcrumbs */
 .v-breadcrumbs { padding: 10px 0!important; overflow-x: auto; }

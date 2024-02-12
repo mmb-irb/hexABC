@@ -3,7 +3,7 @@
 
     <h1>Average RMSd</h1>
 
-    <Breadcrumbs :props="{id: id, text: 'RMSd', title: title}" />
+    <Breadcrumbs :props="{id: id, text: 'Average RMSd', title: title}" />
 
     <v-row> 
       <v-col cols="12">
@@ -24,8 +24,9 @@
 
           <template v-slot:text>
 
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione eligendi iure commodi doloremque et qui delectus soluta unde laudantium vero nesciunt quibusdam aperiam laborum distinctio, officia, necessitatibus minus rerum molestiae.</p>
+            <p><strong>Root Mean Square deviation</strong> (RMSd) average.</p>
             
+            <RMSdPlot :id="id" type="average" />
 
           </template>
         </v-card>
@@ -47,6 +48,10 @@
   const project = ref(datap.data.value)
 
   const title = project.value.metadata.NAME
+
+  useHead({
+    title: `Average RMSd for ${title}`
+  })
 
 </script>
 
