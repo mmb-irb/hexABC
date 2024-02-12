@@ -21,7 +21,6 @@ export default defineNuxtPlugin(() => {
 						tickmode:"array",
 						tickvals: cbvals,
 						ticktext: cbtxt,
-						
 					},
 					hovertemplate: 'bp: <b>%{y}</b>' +
 									'<br>frame <b>%{x}</b>' +

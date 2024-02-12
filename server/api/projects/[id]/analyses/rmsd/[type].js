@@ -34,7 +34,6 @@ export default defineEventHandler(async (event) => {
 		mean: Number(mean.toFixed(2)),
   	stdev: Number(stdDeviation.toFixed(2)),
 		rmsd: r.values,
-
 	}
 
  });

@@ -140,6 +140,14 @@
                   title="RMSd"
                 />
               </v-col>
+              <v-col lg="3" md="4" sm="6" xs="12">
+                <AnalysisButton 
+                  :id="id"
+                  :image="pairwiseImg"
+                  slug="rmsd-pairwise"
+                  title="RMSd pairwise"
+                />
+              </v-col>
             </v-row>
 
           </template>
@@ -157,6 +165,7 @@
   import timeImg from '/img/projects/analyses/curves/curves-time.png'
   import hbondsImg from '/img/projects/analyses/hbonds/hbonds.png'
   import rmsdImg from '/img/projects/analyses/rmsd/rmsd.png'
+  import pairwiseImg from '/img/projects/analyses/rmsd/pairwise.png'
 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
 

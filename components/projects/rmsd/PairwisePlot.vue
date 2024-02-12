@@ -10,24 +10,13 @@
       ></v-progress-circular>
   
       <div style="width:100%; " v-else>
-				<v-row class="mt-10"> 
-          <v-col cols="12">
-						<v-table id="tbl-rmsd" class="bg-red-lighten-4 pa-2">
-							<tr>
-								<td class="text-right"><strong>mean (Å):</strong></td>
-								<td class="text-left pl-2">{{ mean }}</td>
-								<td class="text-right"><strong>standard deviation (Å):</strong></td>
-								<td class="text-left pl-2">{{ stdev }}</td>
-							</tr>
-						</v-table>
-					</v-col>
-				</v-row>
-        <v-row class="mt-4"> 
+        <v-row> 
           <v-col cols="12">
             <nuxt-plotly 
               :data="plotData.val"
               :layout="plotLayout"
               :config="plotConfig"
+							style="width: 100%; height: 550px;"
               @on-ready="myChartOnReady"
             ></nuxt-plotly>
           </v-col>
@@ -45,14 +34,14 @@
   
   <script setup>
 
-    const { id, type } = defineProps(['id', 'type'])
+    const { id, type } = defineProps(['id'])
     const config = useRuntimeConfig()
     const { $rmsd, $sleep } = useNuxtApp()
     
     const loading = ref(true)
   
     let data
-		const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/rmsd/${type}`)
+		const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/rmsd/pairwise`)
 		if(dataAn.status.value === 'error')  throw createError({ statusCode: dataAn.error.value.statusCode, message: dataAn.error.value.statusMessage, fatal: true })
 		data = ref(dataAn.data.value)
   
@@ -65,25 +54,24 @@
     })
     let plotLayout = {}
     let plotConfig = {}
-  
-		const mean = data.value.mean
-		const stdev = data.value.stdev
 
     onMounted(async () => {
   
+			const xd = Array.from({length: data.value.rmsd.length}, (_, i) => i * data.value.step)
+
       // get data from REST API
-      const yd = data.value.rmsd
+      const zd = data.value.rmsd
   
       // load data & layout for timeseries plot
-      plotData.val = $rmsd.plots.rmsd.data(yd)
-      plotLayout = $rmsd.plots.rmsd.layout($rmsd[type].xtitle, $rmsd[type].ytitle)
-      plotConfig = $rmsd.plots.rmsd.config
+      plotData.val = $rmsd.plots.pairwise.data(xd, xd, zd)
+      plotLayout = $rmsd.plots.pairwise.layout($rmsd.pairwise.xtitle, $rmsd.pairwise.ytitle)
+      plotConfig = $rmsd.plots.pairwise.config
   
     })
   
     const dialog = ref(false)
     const tSeriesViewerRef = ref(null)
-    const plotDialogRef = ref(null)
+    const plotDialogRef = ref(null);
   
     const myChartOnReady = (plotlyHTMLElement) => {
   
@@ -95,7 +83,7 @@
           if(!dclick) {
             dialog.value = true
             // set dialog title
-            var title = `${$rmsd[type].title} :: Frame ${e.points[0].x}`
+            var title = `${$rmsd.pairwise.title} :: Frame ${e.points[0].x}`
             plotDialogRef.value.updateTitle(title)
           }
           clearTimeout(debounceTimeout)
@@ -119,7 +107,7 @@
   <style scoped>
     #container-plot { 
       width:100%; 
-      height: 470px; 
+      height: 550px; 
       position: relative;
       display:flex; 
       justify-content: center; 

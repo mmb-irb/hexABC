@@ -83,7 +83,7 @@ export default defineNuxtConfig({
         '/^\/api\/projects\/?([a-zA-Z0-9\_\.]+)?(\\?[\\w=&]+)?$/', 
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/topology$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(hbonds)(\\?.*)?$/',
-        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(firstframe|average)$/',
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(firstframe|average|pairwise)$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/time\/(rise|roll|shift|slide|tilt|twist)(\\?bp=\\d+\_[A-Z]+)?$/'
       ]
     }
