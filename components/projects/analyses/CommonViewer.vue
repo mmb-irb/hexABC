@@ -35,7 +35,7 @@
 		stage = createStage("viewport")
 		stage.setParameters({ backgroundColor: '#dedede' });
 
-		const topology = await useFetch(`${config.public.apiBase}/projects/${id}/topology`)
+		const topology = await useFetch(`${config.public.apiBase}/projects/${id}/structure`)
 		const blob = new Blob([topology.data.value], { type: "text/plain" });
 
 		stage.loadFile(blob, { defaultRepresentation: false, ext: 'pdb'})

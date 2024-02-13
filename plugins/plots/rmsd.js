@@ -19,18 +19,21 @@ export default defineNuxtPlugin(() => {
 				},
 				plots: {
 					rmsd: {
-						data: (ydata) => [{
+						data: (xdata, ydata) => [{
+							x: xdata,
 							y: ydata,
 							type: 'scatter',
 							mode: 'lines',
 							name: 'Linear Plot',
 							marker: { color: '#d90429' },
+							hovertemplate: `%{y:.2f}Å<extra></extra>`,
 						}],
 						layout: (xtit, ytit) => {
 							return {
 								title: null,
 								showlegend: false,
-								hovermode: "closest",
+								hovermode: "x",
+								hoverlabel: { bgcolor: "#f9f9f9" },
 								xaxis: {
 									tickformat: "d",
 									title: {

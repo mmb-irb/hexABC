@@ -73,9 +73,11 @@
   
       // get data from REST API
       const yd = data.value.rmsd
+
+      const xd = Array.from({length: yd.length}, (_, i) => i * data.value.step)
   
       // load data & layout for timeseries plot
-      plotData.val = $rmsd.plots.rmsd.data(yd)
+      plotData.val = $rmsd.plots.rmsd.data(xd, yd)
       plotLayout = $rmsd.plots.rmsd.layout($rmsd[type].xtitle, $rmsd[type].ytitle)
       plotConfig = $rmsd.plots.rmsd.config
   

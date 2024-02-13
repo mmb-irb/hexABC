@@ -7,8 +7,8 @@ export default defineEventHandler(async (event) => {
     // get project id
     const { id } = event.context.params
 
-    // get pdb topology
-    const uri = `${config.public.externalApi}v1/projects/${id}/structure`
+    // get pdb topology structure
+    const uri = `${config.public.externalApi}v1/projects/${id}/topology`
 
     const response = await $fetch(uri)
                 .catch((error) => {
@@ -18,5 +18,4 @@ export default defineEventHandler(async (event) => {
 
     return response
     
-
  });
