@@ -114,6 +114,14 @@
                   title="Hydrogen Bonds"
                 />
               </v-col>
+              <v-col lg="3" md="4" sm="6" xs="12">
+                <AnalysisButton 
+                  :id="id"
+                  :image="distImg"
+                  slug="dist-res-average"
+                  title="Distance per residue"
+                />
+              </v-col>
             </v-row>
 
           </template>
@@ -175,6 +183,7 @@
   import rmsdImg from '/img/projects/analyses/rmsd/rmsd.png'
   import pairwiseImg from '/img/projects/analyses/rmsd/pairwise.png'
   import rgyrImg from '/img/projects/analyses/rmsd/rgyr.png'
+  import distImg from '/img/projects/analyses/distance/distance.png'
 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
 

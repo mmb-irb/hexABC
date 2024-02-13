@@ -63,6 +63,7 @@ export default defineNuxtConfig({
     { path: '~/components/projects/overview', extensions: ['vue'] },
     { path: '~/components/projects/rmsd', extensions: ['vue'] },
     { path: '~/components/projects/rgyr', extensions: ['vue'] },
+    { path: '~/components/projects/distance', extensions: ['vue'] },
     { path: '~/components/projects/sequences', extensions: ['vue'] }
   ],
   plugins: [
@@ -71,6 +72,7 @@ export default defineNuxtConfig({
     '~/plugins/plots/curves',
     '~/plugins/plots/rmsd',
     '~/plugins/plots/rgyr',
+    '~/plugins/plots/distres',
   ],
   runtimeConfig: {
     public: {

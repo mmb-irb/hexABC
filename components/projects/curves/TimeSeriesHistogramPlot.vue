@@ -34,7 +34,7 @@
 
   <PlotDialog v-model="dialog" ref="plotDialogRef">
     <template #viewer>
-      <CommonViewer :id="id" ref="tSeriesViewerRef" />
+      <CommonViewer :id="id" ref="commonViewerRef" />
     </template>
   </PlotDialog>
 
@@ -96,7 +96,7 @@
   })
 
   const dialog = ref(false)
-  const tSeriesViewerRef = ref(null)
+  const commonViewerRef = ref(null)
   const plotDialogRef = ref(null);
 
   const getTypeofSelection = (nucl) => {
@@ -147,11 +147,11 @@
           // trick for avoiding problems on loading the viewer
           await $sleep(500)
           try {
-            tSeriesViewerRef.value.addRepresentation(residues.join(' '))
+            commonViewerRef.value.addRepresentation(residues.join(' '))
           } catch (error) {
             //console.log('Error adding representation:', error)
             await $sleep(500)
-            tSeriesViewerRef.value.addRepresentation(residues.join(' '))
+            commonViewerRef.value.addRepresentation(residues.join(' '))
           }
         }
         clearTimeout(debounceTimeout)

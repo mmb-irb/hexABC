@@ -36,7 +36,7 @@
   
     <PlotDialog v-model="dialog" ref="plotDialogRef">
       <template #viewer>
-        <CommonViewer :id="id" ref="tSeriesViewerRef" />
+        <CommonViewer :id="id" ref="commonViewerRef" />
       </template>
     </PlotDialog>
   
@@ -84,7 +84,7 @@
     })
   
     const dialog = ref(false)
-    const tSeriesViewerRef = ref(null)
+    const commonViewerRef = ref(null)
     const plotDialogRef = ref(null)
   
     const myChartOnReady = (plotlyHTMLElement) => {
