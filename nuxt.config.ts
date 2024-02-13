@@ -62,6 +62,7 @@ export default defineNuxtConfig({
     { path: '~/components/projects/hbonds', extensions: ['vue'] },
     { path: '~/components/projects/overview', extensions: ['vue'] },
     { path: '~/components/projects/rmsd', extensions: ['vue'] },
+    { path: '~/components/projects/rgyr', extensions: ['vue'] },
     { path: '~/components/projects/sequences', extensions: ['vue'] }
   ],
   plugins: [
@@ -69,6 +70,7 @@ export default defineNuxtConfig({
     '~/plugins/plots/hbonds',
     '~/plugins/plots/curves',
     '~/plugins/plots/rmsd',
+    '~/plugins/plots/rgyr',
   ],
   runtimeConfig: {
     public: {

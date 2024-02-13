@@ -25,7 +25,8 @@
   
     <PlotDialog v-model="dialog" ref="plotDialogRef">
       <template #viewer>
-        <TimeSeriesViewer :id="id" ref="tSeriesViewerRef" />
+        <!-- TODO: modify by DoubleFrameViewer (it should show both frames) -->
+        <CommonViewer :id="id" ref="tSeriesViewerRef" />
       </template>
     </PlotDialog>
   
@@ -83,7 +84,7 @@
           if(!dclick) {
             dialog.value = true
             // set dialog title
-            var title = `${$rmsd.pairwise.title} :: Frame ${e.points[0].x}`
+            var title = `${$rmsd.pairwise.title} :: Frames ${e.points[0].x}-${e.points[0].y}`
             plotDialogRef.value.updateTitle(title)
           }
           clearTimeout(debounceTimeout)

@@ -72,6 +72,9 @@ export default defineNuxtPlugin(() => {
 								title: 'RMSD (Å)',
 								titleside: 'right',
 							},
+							hovertemplate: 'frames: <b>%{x:d}</b> - <b>%{y:d}</b>' +
+									'<br>RMSd: <b>%{z:.2f}Å</b>' + 
+									'<extra></extra>',
 						}],
 						layout: (xtit, ytit) => {
 							return {

@@ -34,7 +34,7 @@
 
   <PlotDialog v-model="dialog" ref="plotDialogRef">
     <template #viewer>
-      <TimeSeriesViewer :id="id" ref="tSeriesViewerRef" />
+      <CommonViewer :id="id" ref="tSeriesViewerRef" />
     </template>
   </PlotDialog>
 
