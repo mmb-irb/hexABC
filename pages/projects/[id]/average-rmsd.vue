@@ -14,7 +14,7 @@
               <div>
                 <v-icon size="small" icon="mdi-chart-bell-curve"></v-icon> &nbsp;AVERAGE RMSD
               </div>
-              <v-btn prepend-icon="mdi-numeric-1-box-outline"
+              <v-btn prepend-icon="mdi-waveform"
                 variant="outlined"
                 color="red-accent-4"
                 :to="`/projects/${id}/first-rmsd`"

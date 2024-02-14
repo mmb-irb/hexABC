@@ -29,7 +29,7 @@
 </script>
 
 <style scoped>
-	.v-card .v-card-title { border-top: 1px solid var(--grey-light); text-align: center; }
+	.v-card .v-card-title { border-top: 1px solid var(--grey-light); text-align: center; z-index:2; position: inherit; background-color: #fff; }
   .v-card .v-card-title a { text-decoration: none; }
 	.bg-link {
     display: block;
@@ -45,7 +45,7 @@
   }
   .bg-img-hover {
     transition: transform 0.3s ease;
-    transform: scale(0.9);
+    transform: scale(1.05);
   }
 </style>
     

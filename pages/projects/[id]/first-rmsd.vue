@@ -12,7 +12,7 @@
           <template v-slot:title>
             <div id="header-container">
               <div>
-                <v-icon size="small" icon="mdi-numeric-1-box-outline"></v-icon> &nbsp;FIRST FRAME RMSd
+                <v-icon size="small" icon="mdi-waveform"></v-icon> &nbsp;FIRST FRAME RMSd
               </div>
               <v-btn prepend-icon="mdi-chart-bell-curve"
                 variant="outlined"

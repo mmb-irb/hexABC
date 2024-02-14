@@ -164,6 +164,14 @@
                   title="Rgyr"
                 />
               </v-col>
+              <v-col lg="3" md="4" sm="6" xs="12">
+                <AnalysisButton 
+                  :id="id"
+                  :image="rgyrImg"
+                  slug="fluctuation"
+                  title="Fluctuation"
+                />
+              </v-col>
             </v-row>
 
           </template>

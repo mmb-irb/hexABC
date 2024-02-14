@@ -63,6 +63,7 @@ export default defineNuxtConfig({
     { path: '~/components/projects/overview', extensions: ['vue'] },
     { path: '~/components/projects/rmsd', extensions: ['vue'] },
     { path: '~/components/projects/rgyr', extensions: ['vue'] },
+    { path: '~/components/projects/fluctuation', extensions: ['vue'] },
     { path: '~/components/projects/distance', extensions: ['vue'] },
     { path: '~/components/projects/sequences', extensions: ['vue'] }
   ],
@@ -72,7 +73,8 @@ export default defineNuxtConfig({
     '~/plugins/plots/curves',
     '~/plugins/plots/rmsd',
     '~/plugins/plots/rgyr',
-    '~/plugins/plots/distres',
+    '~/plugins/plots/distres', 
+    '~/plugins/plots/fluctuation',
   ],
   runtimeConfig: {
     public: {
@@ -88,6 +90,7 @@ export default defineNuxtConfig({
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/(topology|structure)$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(hbonds)(\\?.*)?$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/dist-res\/(means|stdvs)$/',
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/fluctuation$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rgyr$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(firstframe|average|pairwise)$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/time\/(rise|roll|shift|slide|tilt|twist)(\\?bp=\\d+\_[A-Z]+)?$/'
