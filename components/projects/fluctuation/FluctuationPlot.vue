@@ -6,19 +6,14 @@
       :width="7"
       color="red-darken-4"
       indeterminate
+      id="loader-plot"
       v-if="loading"
     ></v-progress-circular>
 
-    <div style="width:100%; " v-else>
+    <div style="width:100%;">
       <v-row class="mt-4"> 
         <v-col cols="12">
-          <nuxt-plotly 
-            ref="myPlot"
-            :data="plotData.val"
-            :layout="plotLayout"
-            :config="plotConfig"
-            @on-ready="myChartOnReady"
-          ></nuxt-plotly>
+          <div id="plotContainer"></div>
         </v-col>
       </v-row>
     </div>
@@ -28,7 +23,7 @@
 
 <script setup>
 
-  //import Plotly from 'plotly.js-dist-min';
+  import Plotly from 'plotly.js-dist-min';
 
   const { id } = defineProps(['id'])
   const config = useRuntimeConfig()
@@ -36,14 +31,7 @@
   
   const loading = ref(true)
 
-  let data
-  const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/fluctuation`)
-  if(dataAn.status.value === 'error')  throw createError({ statusCode: dataAn.error.value.statusCode, message: dataAn.error.value.statusMessage, fatal: true })
-  data = ref(dataAn.data.value)
-
   const emit = defineEmits(['updateTable', 'hoverPlot']);
-
-  emit('updateTable', data.value.average, data.value.stdev);
 
   setTimeout(() => {
     loading.value = false
@@ -54,16 +42,24 @@
   })
   let plotLayout = {}
   let plotConfig = {}
-  const myPlot = ref(null);
+  let xd, yd
   onMounted(async () => {
 
+    let datap
+    const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/fluctuation`)
+    if(dataAn.status.value === 'error')  throw createError({ statusCode: dataAn.error.value.statusCode, message: dataAn.error.value.statusMessage, fatal: true }) 
+    datap = ref(dataAn.data.value)
+
+    emit('updateTable', datap.value.average, datap.value.stdev);
+
     // get data from REST API
-    const yd = data.value.fluctuation
-    const xd = data.value.atoms.map((item) => (item.label))
+    yd = datap.value.fluctuation
+    xd = datap.value.atoms.map((item) => (item.label))
+    //console.log(xd, yd)
     const colors = [];
 
     // assign unique color to each atom
-    data.value.atoms.forEach(item => {
+    datap.value.atoms.forEach(item => {
       colors.push($fluctuation.atoms.find((i) => (i.atom === item.atom)).color);
     });
 
@@ -71,27 +67,36 @@
     plotLayout = $fluctuation.plot.layout($fluctuation.xtitle, $fluctuation.ytitle)
     plotConfig = $fluctuation.plot.config
 
-    //Plotly.newPlot('myDiv', plotData.val, plotLayout, plotConfig);
-    /*Plotly.Fx.hover('myDiv', [
-      {curveNumber:0, pointNumber:0}
-    ]);*/
+    Plotly.newPlot('plotContainer', plotData.val, plotLayout, plotConfig);   
+    
+    var myPlot = document.getElementById('plotContainer')
 
-  })
-
-  const myChartOnReady = async (plotlyHTMLElement) => {
-
-    plotlyHTMLElement.on?.('plotly_hover', (e) => {
+    myPlot.on('plotly_hover', function(e){
       const a = e.points[0].x.split(' (')[0]
       const r = e.points[0].x.split(' (')[1].match(/\d+/)[0]
       emit('hoverPlot', a, r)
-    })
+    });
 
-    plotlyHTMLElement.on?.('plotly_unhover', (e) => {
+    myPlot.on('plotly_unhover', function(e){
       emit('hoverPlot', null)
-    })
+    });
 
+  })
+
+  const selectValue = (label) => {
+    var idx = xd.indexOf(label)
+    if(idx > -1) {
+      Plotly.Fx.hover('plotContainer', [
+        {curveNumber:0, pointNumber:idx }
+      ]);
+    } else {
+      Plotly.Fx.unhover('plotContainer');
+    }
   }
 
+  defineExpose({
+		selectValue
+	});
 
 </script>
 
@@ -104,10 +109,12 @@
     width:100%; 
     height: 470px; 
     position: relative;
-    display:flex; 
-    justify-content: center; 
-    align-items: center;
   }
-  
+  #loader-plot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 </style>
   

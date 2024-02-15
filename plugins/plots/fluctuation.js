@@ -31,6 +31,7 @@ export default defineNuxtPlugin(() => {
             return {
               title: null,
               showlegend: false,
+              autosize: true,
               hovermode: "closest",
               hoverlabel: { bgcolor: "#f9f9f9" },
               xaxis: {

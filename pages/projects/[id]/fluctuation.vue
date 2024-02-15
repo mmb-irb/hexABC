@@ -25,10 +25,10 @@
             
             <v-row class="mt-3"> 
               <v-col lg="8" md="7" sm="12" cols="12">
-                <FluctuationPlot :id="id" @updateTable="handleUpdateTable" @hoverPlot="handleHoverPlot" />
+                <FluctuationPlot :id="id" ref="flcPlotRef" @updateTable="handleUpdateTable" @hoverPlot="handleHoverPlot" />
               </v-col>
               <v-col lg="4" md="5" sm="12" cols="12" >
-                <FluctuationViewer :id="id" ref="flcViewerRef" />
+                <FluctuationViewer :id="id" ref="flcViewerRef" @hoverViewer="handleHoverViewer" />
               </v-col>
             </v-row>
 
@@ -60,6 +60,7 @@
 
   const flcTableRef = ref(null)
   const flcViewerRef = ref(null) 
+  const flcPlotRef = ref(null)
 
   const handleUpdateTable = async (mean, stdev) => {
     await $sleep(10)
@@ -79,6 +80,10 @@
       flcViewerRef.value.initRepresentation()
       flcViewerRef.value.autoview('nucleic', 300)
     }
+  }
+
+  const handleHoverViewer = async (label) => {
+    flcPlotRef.value.selectValue(label)
   }
 
 </script>

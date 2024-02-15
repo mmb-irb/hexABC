@@ -27,8 +27,31 @@ export default function mouseObserver() {
 
 	}
 
+	const checkAtomHover = (stage, updateFunction) => {
+
+		let sele = null
+		let label = null
+		stage.signals.hovered.add( function(pickingProxy){ 
+
+			if (pickingProxy && pickingProxy.atom) {
+				sele = `${pickingProxy.atom.resno}.${pickingProxy.atom.atomname}`
+				label = `${pickingProxy.atom.atomname} (${pickingProxy.atom.resno}${pickingProxy.atom.resname.match(/[GTAC]/)[0]})`
+			}
+
+			if (!pickingProxy) {
+				sele = null
+				label = null
+			}
+
+			updateFunction(sele, label)
+
+		})
+
+	}
+
 	return {
-		checkMouseSignals
+		checkMouseSignals,
+		checkAtomHover
 	}
 
 }

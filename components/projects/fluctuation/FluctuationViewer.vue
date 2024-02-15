@@ -13,15 +13,18 @@
 	import mouseObserver from '@/modules/ngl/mouseObserver'
 
 	const { createStage } = useStage()
-	const { checkMouseSignals } = mouseObserver()
+	const { checkMouseSignals, checkAtomHover } = mouseObserver()
 
 	const { id } = defineProps(['id'])
+
+	const emit = defineEmits(['hoverViewer']);
 
 	const legend = ref(false)
 	const legendText = ref('')
 
 	let stage = null
 	let mainR = null
+	let atomR = null
 	onMounted(async () => {
 
 		stage = createStage("viewport")
@@ -41,7 +44,14 @@
 			legend.value = s
 		}
 
+		const atomHover = (sele, label) => {
+			stage.compList[0].removeRepresentation(atomR)
+			if(sele) atomR = stage.compList[0].addRepresentation("spacefill", { sele, opacity: .5 })
+			emit('hoverViewer', label);
+		}
+
 		checkMouseSignals(stage, updateLegend)
+		checkAtomHover(stage, atomHover)
 
 		window.addEventListener("resize", () => stage.viewer.handleResize())
 
