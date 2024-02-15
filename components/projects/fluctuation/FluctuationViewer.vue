@@ -21,6 +21,7 @@
 	const legendText = ref('')
 
 	let stage = null
+	let mainR = null
 	onMounted(async () => {
 
 		stage = createStage("viewport")
@@ -31,9 +32,7 @@
 
 		stage.loadFile(blob, { defaultRepresentation: false, ext: 'pdb'})
 			.then(async function (component) {
-				/*component.addRepresentation("cartoon");
-				component.addRepresentation("base");*/
-				component.addRepresentation("ball+stick", { sele: "nucleic" });
+				mainR = component.addRepresentation("ball+stick", { sele: "nucleic", radius:.1 });
 				component.autoView('nucleic');
 			})
 		
@@ -49,24 +48,34 @@
 	})
 
 	const addRepresentation = (type, props) => {
-		console.log(type, props)
+		mainR = stage.compList[0].addRepresentation("licorice", { sele: "nucleic", radius:.1, color: '#cccccc' });
 		const r = stage.compList[0].addRepresentation( type, props)
 		return r
 	}
 
+	const initRepresentation = () => {
+		mainR = stage.compList[0].addRepresentation("ball+stick", { sele: "nucleic", radius:.1 });
+	}
+
+	const autoview = (sele, duration) => {
+		stage.compList[0].autoView(sele, duration)
+	}
+
 	const removeRepresentation = (r) => {
-		//console.log(r)
+		stage.compList[0].removeRepresentation(mainR)
 		stage.compList[0].removeRepresentation(r)
 	}
 
 	defineExpose({
 		addRepresentation,
-		removeRepresentation
+		initRepresentation,
+		autoview,
+		removeRepresentation,
 	});
 
 </script>
 
 <style scoped>
-	#viewport { width: 100%; height: 400px; }
+	#viewport { width: 100%; height: 470px; }
 </style>
     

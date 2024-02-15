@@ -28,7 +28,7 @@
 
 <script setup>
 
-  import Plotly from 'plotly.js-dist-min';
+  //import Plotly from 'plotly.js-dist-min';
 
   const { id } = defineProps(['id'])
   const config = useRuntimeConfig()
@@ -81,7 +81,9 @@
   const myChartOnReady = async (plotlyHTMLElement) => {
 
     plotlyHTMLElement.on?.('plotly_hover', (e) => {
-      emit('hoverPlot', e.points[0].x.split(' (')[0])
+      const a = e.points[0].x.split(' (')[0]
+      const r = e.points[0].x.split(' (')[1].match(/\d+/)[0]
+      emit('hoverPlot', a, r)
     })
 
     plotlyHTMLElement.on?.('plotly_unhover', (e) => {

@@ -66,16 +66,19 @@
     flcTableRef.value.updateData(mean, stdev)
   }
 
-  const atomR = ref(null)
-  const handleHoverPlot = (atom) => {
-    //console.log(atom)
-    // NOT WORKING
-    flcViewerRef.value.removeRepresentation(atomR.value)
-    // TODO: ADD NUCLEOTIDE FOR HOVERED ATOM
-    if(atom)
-      atomR.value = flcViewerRef.value.addRepresentation("spacefill", { sele: `.${atom}` })
-    //else
-      //flcViewerRef.value.removeRepresentation(atomR.value)
+  let atomR = null
+  let nuclR = null
+  const handleHoverPlot = (atom, residue) => {
+    flcViewerRef.value.removeRepresentation(atomR)
+    flcViewerRef.value.removeRepresentation(nuclR)
+    if(atom) {
+      atomR = flcViewerRef.value.addRepresentation("spacefill", { sele: `${residue}.${atom}`, opacity: .5 })
+      nuclR = flcViewerRef.value.addRepresentation("licorice", { sele: `${residue}`, radius:.4 })
+      flcViewerRef.value.autoview(residue, 300)
+    } else {
+      flcViewerRef.value.initRepresentation()
+      flcViewerRef.value.autoview('nucleic', 300)
+    }
   }
 
 </script>

@@ -3,13 +3,13 @@ export default defineNuxtPlugin(() => {
 		provide: {
 			fluctuation: {
 				ytitle: 'Fluctuation (Å)',
-				xtitle: 'Atom',
+				xtitle: 'Atoms',
         atoms: [
           { atom: 'C', color: '#aaaaaa' },
-          { atom: 'H', color: '#eeeeee' },
+          { atom: 'H', color: '#f1f1f1' },
           { atom: 'N', color: '#0000cc' },
           { atom: 'O', color: '#ff0000' },
-          { atom: 'P', color: '#ff8709' },
+          { atom: 'P', color: '#ffb03b' },
         ],
 				plot: {
           data: (xdata, ydata, color) => [{
@@ -25,22 +25,22 @@ export default defineNuxtPlugin(() => {
                 width: 1
               } 
             },
-            hovertemplate: `%{y:.2f}Å<extra></extra>`,
+            hovertemplate: `%{x}<br>%{y:.2f}Å<extra></extra>`,
           }],
           layout: (xtit, ytit) => {
             return {
               title: null,
               showlegend: false,
-              hovermode: "x",
+              hovermode: "closest",
               hoverlabel: { bgcolor: "#f9f9f9" },
               xaxis: {
                 tickformat: "d",
-                //showticklabels: false,
+                showticklabels: false,
                 showgrid: false,
                 title: {
                   text: xtit,
-                  standoff: 10
-                }
+                  standoff: 500
+                },
               },
               yaxis: {
                 title: {
@@ -51,7 +51,7 @@ export default defineNuxtPlugin(() => {
               margin: {
                 l: 40,
                 r: 0,
-                b: 80,
+                b: 10,
                 t: 0,
                 pad: 0
               }
