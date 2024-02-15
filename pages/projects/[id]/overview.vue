@@ -151,6 +151,14 @@
               <v-col lg="3" md="4" sm="6" xs="12">
                 <AnalysisButton 
                   :id="id"
+                  :image="rmsdImg"
+                  slug="rmsd-residue"
+                  title="RMSd per residue"
+                />
+              </v-col>
+              <v-col lg="3" md="4" sm="6" xs="12">
+                <AnalysisButton 
+                  :id="id"
                   :image="pairwiseImg"
                   slug="rmsd-pairwise"
                   title="RMSd pairwise"

@@ -45,17 +45,17 @@
   let labels, flucts
   onMounted(async () => {
 
-    let datap
+    let data
     const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/fluctuation`)
     if(dataAn.status.value === 'error')  throw createError({ statusCode: dataAn.error.value.statusCode, message: dataAn.error.value.statusMessage, fatal: true }) 
-    datap = ref(dataAn.data.value)
+    data = ref(dataAn.data.value)
 
-    emit('updateTable', datap.value.average, datap.value.stdev);
+    emit('updateTable', data.value.average, data.value.stdev);
 
     // get data from REST API
-    flucts = datap.value.fluctuation
-    labels = datap.value.atoms.map((item) => (item.label))
-    const atoms = datap.value.atoms
+    flucts = data.value.fluctuation
+    labels = data.value.atoms.map((item) => (item.label))
+    const atoms = data.value.atoms
 
     const traces = []
     $fluctuation.atoms.forEach((item, index) => {

@@ -55,6 +55,7 @@
 
 <script setup>
 
+  import { useDisplay } from 'vuetify'
   import DragSelect from 'dragselect'
 
   const props = defineProps(['strands', 'ends', 'type', 'hover'])
@@ -64,6 +65,16 @@
 	const ends2 = !props.ends ? ['', ''] : props.ends.ends2
   const type = ref(props.type ? props.type : 'common')
   const hover = ref(props.hover ? props.hover : false)
+
+  const display = ref(useDisplay())
+
+  const resizeType = () => {
+    if(display.value.mdAndDown) type.value = 'compact'
+    else type.value = 'common'
+  }
+
+  resizeType()
+  window.addEventListener("resize", () => resizeType())
 
   const emit = defineEmits(['dsEnd', 'dsStart', 'dsUpdate', 'nuclMouseOver', 'nuclMouseOut']);
 

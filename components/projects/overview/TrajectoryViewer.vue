@@ -15,13 +15,17 @@
 	const { createStage } = useStage()
 	const { checkMouseSignals } = mouseObserver()
 
-	const { id } = defineProps(['id'])
+	const { id, height } = defineProps(['id', 'height'])
 
 	const legend = ref(false)
 	const legendText = ref('')
 
 	let stage = null
 	onMounted(async () => {
+
+		if(height) {
+			document.getElementById('viewport').style.height = `${height}px`
+		}
 
 		stage = createStage("viewport")
 		stage.setParameters({ backgroundColor: '#dedede' });
