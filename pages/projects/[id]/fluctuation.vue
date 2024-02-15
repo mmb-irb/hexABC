@@ -82,8 +82,8 @@
     }
   }
 
-  const handleHoverViewer = async (label) => {
-    flcPlotRef.value.selectValue(label)
+  const handleHoverViewer = async (label, element) => {
+    flcPlotRef.value.selectValue(label, element)
   }
 
 </script>

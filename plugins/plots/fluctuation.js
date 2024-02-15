@@ -5,19 +5,20 @@ export default defineNuxtPlugin(() => {
 				ytitle: 'Fluctuation (Å)',
 				xtitle: 'Atoms',
         atoms: [
-          { atom: 'C', color: '#aaaaaa' },
-          { atom: 'H', color: '#f1f1f1' },
-          { atom: 'N', color: '#0000cc' },
-          { atom: 'O', color: '#ff0000' },
-          { atom: 'P', color: '#ffb03b' },
+          { atom: 'C', name: 'Carbon', color: '#aaaaaa' },
+          { atom: 'H', name: 'Hydrogen', color: '#f1f1f1' },
+          { atom: 'N', name: 'Nitrogen', color: '#0000cc' },
+          { atom: 'O', name: 'Oxygen', color: '#ff0000' },
+          { atom: 'P', name: 'Phosphorus', color: '#ffb03b' },
         ],
 				plot: {
-          data: (xdata, ydata, color) => [{
+          data: (xdata, ydata, name, color) => {
+            return {
             x: xdata,
             y: ydata,
             type: 'scatter',
             mode: 'markers',
-            name: 'Linear Plot',
+            name: name,
             marker: { 
               color: color,
               line: {
@@ -26,11 +27,13 @@ export default defineNuxtPlugin(() => {
               } 
             },
             hovertemplate: `%{x}<br>%{y:.2f}Å<extra></extra>`,
-          }],
+          }
+          },
           layout: (xtit, ytit) => {
             return {
               title: null,
-              showlegend: false,
+              showlegend: true,
+              legend: {orientation: "h"},
               autosize: true,
               hovermode: "closest",
               hoverlabel: { bgcolor: "#f9f9f9" },
@@ -40,7 +43,7 @@ export default defineNuxtPlugin(() => {
                 showgrid: false,
                 title: {
                   text: xtit,
-                  standoff: 500
+                  standoff: 390
                 },
               },
               yaxis: {
@@ -52,7 +55,7 @@ export default defineNuxtPlugin(() => {
               margin: {
                 l: 40,
                 r: 0,
-                b: 10,
+                b: 0,
                 t: 0,
                 pad: 0
               }

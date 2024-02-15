@@ -44,10 +44,10 @@
 			legend.value = s
 		}
 
-		const atomHover = (sele, label) => {
+		const atomHover = (sele, label, element) => {
 			stage.compList[0].removeRepresentation(atomR)
 			if(sele) atomR = stage.compList[0].addRepresentation("spacefill", { sele, opacity: .5 })
-			emit('hoverViewer', label);
+			emit('hoverViewer', label, element);
 		}
 
 		checkMouseSignals(stage, updateLegend)

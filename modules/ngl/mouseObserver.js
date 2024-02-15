@@ -31,19 +31,22 @@ export default function mouseObserver() {
 
 		let sele = null
 		let label = null
+		let element = null
 		stage.signals.hovered.add( function(pickingProxy){ 
 
 			if (pickingProxy && pickingProxy.atom) {
 				sele = `${pickingProxy.atom.resno}.${pickingProxy.atom.atomname}`
 				label = `${pickingProxy.atom.atomname} (${pickingProxy.atom.resno}${pickingProxy.atom.resname.match(/[GTAC]/)[0]})`
+				element = pickingProxy.atom.element
 			}
 
 			if (!pickingProxy) {
 				sele = null
 				label = null
+				element = null
 			}
 
-			updateFunction(sele, label)
+			updateFunction(sele, label, element)
 
 		})
 

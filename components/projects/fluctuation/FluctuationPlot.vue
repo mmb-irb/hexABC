@@ -42,7 +42,7 @@
   })
   let plotLayout = {}
   let plotConfig = {}
-  let xd, yd
+  let labels, flucts
   onMounted(async () => {
 
     let datap
@@ -53,22 +53,31 @@
     emit('updateTable', datap.value.average, datap.value.stdev);
 
     // get data from REST API
-    yd = datap.value.fluctuation
-    xd = datap.value.atoms.map((item) => (item.label))
-    //console.log(xd, yd)
-    const colors = [];
+    flucts = datap.value.fluctuation
+    labels = datap.value.atoms.map((item) => (item.label))
+    const atoms = datap.value.atoms
 
-    // assign unique color to each atom
-    datap.value.atoms.forEach(item => {
-      colors.push($fluctuation.atoms.find((i) => (i.atom === item.atom)).color);
+    const traces = []
+    $fluctuation.atoms.forEach((item, index) => {
+      const yd = []
+      atoms.forEach((itm, idx) => {
+        if(itm.atom === item.atom) {
+          yd.push(flucts[idx])
+        } else {
+          yd.push(null)
+        }
+      });
+      traces.push($fluctuation.plot.data(labels, yd, item.name, item.color))
     });
 
-    plotData.val = $fluctuation.plot.data(xd, yd, colors)
+    //console.log(traces)
+
+    plotData.val = traces
     plotLayout = $fluctuation.plot.layout($fluctuation.xtitle, $fluctuation.ytitle)
     plotConfig = $fluctuation.plot.config
 
     Plotly.newPlot('plotContainer', plotData.val, plotLayout, plotConfig);   
-    
+
     var myPlot = document.getElementById('plotContainer')
 
     myPlot.on('plotly_hover', function(e){
@@ -83,11 +92,12 @@
 
   })
 
-  const selectValue = (label) => {
-    var idx = xd.indexOf(label)
+  const selectValue = (label, element) => {
+    var idx = labels.indexOf(label)
+    var crv = $fluctuation.atoms.findIndex((i) => (i.atom === element))
     if(idx > -1) {
       Plotly.Fx.hover('plotContainer', [
-        {curveNumber:0, pointNumber:idx }
+        { curveNumber: crv, pointNumber: idx }
       ]);
     } else {
       Plotly.Fx.unhover('plotContainer');
