@@ -27,6 +27,7 @@
                 <SequenceInteractive 
                   :strands="{ strand1: strand1, strand2: strand2 }" 
                   :ends="{ ends1: ends1, ends2: ends2 }" 
+                  type="common"
                   @dsEnd="handleDsEnd" 
                   @dsStart="handleDsStart" 
                 />

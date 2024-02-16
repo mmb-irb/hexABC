@@ -27,7 +27,14 @@
                 {{ item.raw.title }}                  
                 </template>
               <template v-slot:item="{ props, item }">
-                <v-list-item class="item-v-select" v-bind="props" :title="item.raw.title" :value="item.raw.value" :prepend-icon="item.raw.icon"></v-list-item>
+                <v-list-item 
+                  class="item-v-select" 
+                  v-bind="props" 
+                  :title="item.raw.title" 
+                  :value="item.raw.value" 
+                  :prepend-icon="item.raw.icon" 
+                  :disabled="item.raw.value === 'section'"
+                ></v-list-item>
               </template>
             </v-select>
           </v-col>        
@@ -106,11 +113,11 @@
   const modelAnalyses = ref(null)
 
   const selectAnalyses = async () => {
-    console.log(`go to ${item.id} > ${modelAnalyses.value}`)
+    //console.log(`go to ${item.id} > ${modelAnalyses.value}`)
     // *******************
     // *******************
     // TODO WHEN ALL ANALYSES ARE READY
-    // await navigateTo(`/projects/${item.id}/${modelAnalyses.value}`)
+    await navigateTo(`/projects/${item.id}/${modelAnalyses.value}`)
     // *******************
     // *******************
   }

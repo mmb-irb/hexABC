@@ -28,7 +28,7 @@
 
     const { id, type } = defineProps(['id', 'type'])
     const config = useRuntimeConfig()
-    const { $rmsd, $sleep } = useNuxtApp()
+    const { $sasa, $sleep } = useNuxtApp()
 
     const showPlot = computed(() => plotData.val.length > 0)
   
@@ -48,7 +48,7 @@
       }
 
       let data
-      const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/rmsd/residues?res=${residues.join(',')}`)
+      const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/sasa?res=${residues.join(',')}`)
       if(dataAn.status.value === 'error')  throw createError({ statusCode: dataAn.error.value.statusCode, message: dataAn.error.value.statusMessage, fatal: true })
       data = ref(dataAn.data.value)
 
@@ -56,12 +56,12 @@
       data.value.rmsd.forEach((item, index) => {
         const xd = Array.from({length: item.length}, (_, i) => i * data.value.step)
         const yd = item
-        traces.push($rmsd.plots.residues.data(xd, yd, nucleotides[index]))
+        traces.push($sasa.plot.data(xd, yd, nucleotides[index]))
       });
 
       plotData.val = traces
-      plotLayout = $rmsd.plots.residues.layout($rmsd.residues.xtitle, $rmsd.residues.ytitle)
-      plotConfig = $rmsd.plots.residues.config
+      plotLayout = $sasa.plot.layout($sasa.xtitle, $sasa.ytitle)
+      plotConfig = $sasa.plot.config
 
     }
 

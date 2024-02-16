@@ -69,8 +69,10 @@
   const display = ref(useDisplay())
 
   const resizeType = () => {
-    if(display.value.mdAndDown) type.value = 'compact'
-    else type.value = 'common'
+    if(!props.ends) {
+      if(display.value.mdAndDown) type.value = 'compact'
+      else type.value = 'common'
+    }
   }
 
   if(!props.type) resizeType()

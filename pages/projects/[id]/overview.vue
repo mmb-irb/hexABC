@@ -33,13 +33,13 @@
           <template v-slot:text>
 
             <v-row class="mt-3"> 
-              <v-col lg="7" md="6" sm="12" cols="12">
+              <v-col lg="8" md="6" sm="12" cols="12">
 
                 <p>Using the below <strong>interactive sequence</strong>, users can select the desired <strong>nucleotides</strong> (single or grouped) in order to <strong>view</strong> them in the <strong>3D visualization</strong> at right. Selection can be performed either <strong>clicking and dragging</strong> over a <strong>group of nucleotides</strong> or <strong>clicking</strong> them individually while <strong>pressing shift / ⇧</strong> key at the same time for <strong>multiple selection</strong>.</p>
 
                 <SequenceInteractive 
                   :strands="{ strand1: strand1, strand2: strand2 }" 
-                  type="compact"
+                  type="common"
                   :hover="true"
                   @dsEnd="handleDsEnd" 
                   @dsStart="handleDsStart" 
@@ -50,7 +50,7 @@
 
                 <p>TODO: SELECTOR WITH HEXAMERS LIST</p>
               </v-col>
-              <v-col lg="5" md="6" sm="12" cols="12" >
+              <v-col lg="4" md="6" sm="12" cols="12" >
                 <TrajectoryViewer :id="id" ref="trjViewerRef" />
               </v-col>
             </v-row>
@@ -180,6 +180,14 @@
                   title="Fluctuation"
                 />
               </v-col>
+              <v-col lg="3" md="4" sm="6" xs="12">
+                <AnalysisButton 
+                  :id="id"
+                  :image="sasaImg"
+                  slug="sasa"
+                  title="Solvent Accessible Surface"
+                />
+              </v-col>
             </v-row>
 
           </template>
@@ -202,6 +210,7 @@
   import distImg from '/img/projects/analyses/distance/distance.png'
   import fluctImg from '/img/projects/analyses/fluctuation/fluctuation.png'
   import resImg from '/img/projects/analyses/rmsd/residues.png'
+  import sasaImg from '/img/projects/analyses/sasa/sasa.png'
 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
 
