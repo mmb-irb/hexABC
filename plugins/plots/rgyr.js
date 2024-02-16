@@ -3,7 +3,7 @@ export default defineNuxtPlugin(() => {
 		provide: {
 			rgyr: {
 				ytitle: 'Rgyr (Å)',
-				xtitle: 'Time (ns)',
+				xtitle: 'Frames',
 				title: 'Rgyr',
 				plot: {
 					data: (xdata, ydata, tracetit) => {

@@ -21,7 +21,8 @@
 
             <p><strong>RMSd per residue</strong> is a metric used to measure the <strong>average deviation</strong> or difference between the <strong>positions</strong> of corresponding atoms in two structures, typically a <strong>reference</strong> structure and a <strong>target</strong> structure.</p>
             
-            
+            <p>Using the below <strong>interactive sequence</strong>, users can select the desired <strong>nucleotides</strong> (single or grouped) in order to <strong>view</strong> them in the <strong>3D visualization</strong> at right. Selection can be performed either <strong>clicking and dragging</strong> over a <strong>group of nucleotides</strong> or <strong>clicking</strong> them individually while <strong>pressing shift / ⇧</strong> key at the same time for <strong>multiple selection</strong>.</p>
+
             <v-row class="mt-3"> 
               <v-col lg="8" md="7" sm="12" cols="12">
                 <SequenceInteractive 
@@ -33,7 +34,7 @@
                   @nuclMouseOver="handleNuclMouseOver" 
                   @nuclMouseOut="handleNuclMouseOut" 
                 />
-                <ResiduesPlot :id="id" />
+                <ResiduesPlot :id="id" ref="resPlotRef" />
               </v-col>
               <v-col lg="4" md="5" sm="12" cols="12" >
                 <TrajectoryViewer :id="id" :height="600" ref="trjViewerRef" />
@@ -75,8 +76,9 @@
   const { strand1, strand2 } = getSequenceSettings(sequence)
 
   const trjViewerRef = ref(null)
+  const resPlotRef = ref(null)
 
-  /* HANDLE MAGIC SEQUENCE INTERACTION WITH NGL */
+  /* HANDLE MAGIC SEQUENCE INTERACTION WITH NGL AND PLOT */
 
   const selecting = ref(false)
 
@@ -86,9 +88,11 @@
   }
 
   const handleDsUpdate = (items) => {
+    // get residues list
     const residues = items.map((item) => item.id.split('-')[1] )
 
     if(items.length > 0) {
+      // update viewer
       trjViewerRef.value.removeRepresentation(selectBP);
       selectBP = trjViewerRef.value.addRepresentation("ball+stick", { sele: residues.join(' '), radius: .2 })
     }
@@ -96,11 +100,18 @@
 
   const handleDsEnd = (items) => {
 
-    if(items.length === 0) trjViewerRef.value.removeRepresentation(selectBP);
-    else {
-      const residues = items.map((item) => item.id.split('-')[1] )
+    if(items.length === 0) {
+      trjViewerRef.value.removeRepresentation(selectBP);
+      resPlotRef.value.updatePlot([])
+    } else {
+      // get residues list
+      const residues = items.map((item) => item.id.split('-')[1])
+      const nucleotides = items.map((item) => `${item.id.split('-')[1]}${item.id.split('-')[0]}`)
+      // update viewer
       trjViewerRef.value.removeRepresentation(selectBP);
       selectBP = trjViewerRef.value.addRepresentation("ball+stick", { sele: residues.join(' '), radius: .2 })
+      // load traces plot
+      resPlotRef.value.updatePlot(residues, nucleotides)
     }
 
     selecting.value = false

@@ -151,7 +151,7 @@
               <v-col lg="3" md="4" sm="6" xs="12">
                 <AnalysisButton 
                   :id="id"
-                  :image="rmsdImg"
+                  :image="resImg"
                   slug="rmsd-residue"
                   title="RMSd per residue"
                 />
@@ -201,6 +201,7 @@
   import rgyrImg from '/img/projects/analyses/rmsd/rgyr.png'
   import distImg from '/img/projects/analyses/distance/distance.png'
   import fluctImg from '/img/projects/analyses/fluctuation/fluctuation.png'
+  import resImg from '/img/projects/analyses/rmsd/residues.png'
 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
 

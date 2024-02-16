@@ -1,26 +1,34 @@
 <template>
     <div id="container-plot" class="mt-6">
   
-      <v-progress-circular
-        :size="70"
-        :width="7"
-        color="red-darken-4"
-        indeterminate
-        id="loader-plot"
-        v-if="loading"
-      ></v-progress-circular>
-  
-      <div style="width:100%; " v-else>
-        <v-row > 
-          <v-col cols="12">
-            <nuxt-plotly 
-              :data="plotData.val"
-              :layout="plotLayout"
-              :config="plotConfig"
-              @on-ready="myChartOnReady"
-            ></nuxt-plotly>
-          </v-col>
-        </v-row>
+      <div v-if="showPlot">
+
+        <v-progress-circular
+          :size="70"
+          :width="7"
+          color="red-darken-4"
+          indeterminate
+          id="loader-plot"
+          v-if="loading"
+        ></v-progress-circular>
+    
+        <div style="width:100%; " v-else>
+          <v-row > 
+            <v-col cols="12">
+              <nuxt-plotly 
+                :data="plotData.val"
+                :layout="plotLayout"
+                :config="plotConfig"
+                @on-ready="myChartOnReady"
+              ></nuxt-plotly>
+            </v-col>
+          </v-row>
+        </div>
+
+      </div>
+
+      <div style="height: 100%;" class="d-flex align-center justify-center" v-else>
+        Please select one or more nucleotides above for visualizing their RMSd
       </div>
     
     </div>
@@ -32,16 +40,18 @@
     const config = useRuntimeConfig()
     const { $rmsd, $sleep } = useNuxtApp()
     
-    const loading = ref(true)
+    const loading = ref(false)
+    //const showPlot = ref(false)
+    const showPlot = computed(() => plotData.val.length > 0)
   
     /*let data
 		const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/rmsd/residues`)
 		if(dataAn.status.value === 'error')  throw createError({ statusCode: dataAn.error.value.statusCode, message: dataAn.error.value.statusMessage, fatal: true })
 		data = ref(dataAn.data.value)*/
   
-    setTimeout(() => {
+    /*setTimeout(() => {
       loading.value = false
-    }, 500);
+    }, 500);*/
   
     let plotData = reactive({
       val: []
@@ -49,8 +59,6 @@
     let plotLayout = {}
     let plotConfig = {}
     onMounted(async () => {
-  
-      // CHECK IF NO DATA AND SHOW MESSAGE INSTEAD OF EMPTY PLOT (SEE showPlot)
 
       // get data from REST API
       /*const yd = data.value.rmsd
@@ -90,6 +98,37 @@
 				clearTimeout(debounceTimeout)
 			})
     }
+
+    const updatePlot = async (residues, nucleotides = []) => {
+
+      if(residues.length === 0) {
+        plotData.val = []
+        plotLayout = {}
+        plotConfig = {}
+        return
+      }
+
+      let data
+      const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/rmsd/residues?res=${residues.join(',')}`)
+      if(dataAn.status.value === 'error')  throw createError({ statusCode: dataAn.error.value.statusCode, message: dataAn.error.value.statusMessage, fatal: true })
+      data = ref(dataAn.data.value)
+
+      const traces = []
+      data.value.rmsd.forEach((item, index) => {
+        const xd = Array.from({length: item.length}, (_, i) => i * data.value.step)
+        const yd = item
+        traces.push($rmsd.plots.residues.data(xd, yd, nucleotides[index]))
+      });
+
+      plotData.val = traces
+      plotLayout = $rmsd.plots.residues.layout($rmsd.residues.xtitle, $rmsd.residues.ytitle)
+      plotConfig = $rmsd.plots.residues.config
+
+    }
+
+    defineExpose({
+      updatePlot
+    })
   
   </script>
 

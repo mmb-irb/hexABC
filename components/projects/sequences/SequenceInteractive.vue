@@ -73,7 +73,7 @@
     else type.value = 'common'
   }
 
-  resizeType()
+  if(!props.type) resizeType()
   window.addEventListener("resize", () => resizeType())
 
   const emit = defineEmits(['dsEnd', 'dsStart', 'dsUpdate', 'nuclMouseOver', 'nuclMouseOut']);

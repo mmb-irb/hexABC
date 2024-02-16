@@ -23,7 +23,8 @@ export default defineEventHandler(async (event) => {
 
   // if res is defined, filter the response
   if(res) {
-    r = r[res]
+    const residues = res.split(',').map(Number)
+    r = residues.map(index => r[index - 1]);
   }
 
   // if res is an invalid value, return the whole response

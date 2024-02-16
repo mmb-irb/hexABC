@@ -93,7 +93,7 @@ export default defineNuxtConfig({
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/fluctuation$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rgyr$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(firstframe|average|pairwise)$/',
-        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(residues)(\\?res=\\d+)?$/',
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(residues)(\\?res=([0-9]+,)*[0-9]+)?$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/time\/(rise|roll|shift|slide|tilt|twist)(\\?bp=\\d+\_[A-Z]+)?$/'
       ]
     }

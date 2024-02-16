@@ -35,8 +35,6 @@
 
 		stage.loadFile(blob, { defaultRepresentation: false, ext: 'pdb'})
 			.then(async function (component) {
-				/*component.addRepresentation("cartoon");
-				component.addRepresentation("base");*/
 				component.addRepresentation("licorice", { sele: "nucleic", color: '#ccc' });
 				component.autoView('nucleic');
 			})
