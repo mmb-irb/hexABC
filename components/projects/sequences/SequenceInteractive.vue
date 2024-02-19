@@ -69,19 +69,21 @@
   const display = ref(useDisplay())
 
   const resizeType = () => {
-    if(!props.ends) {
+    if(props.ends === undefined && type.value == 'common') {
+      console.log('resizeType')
       if(display.value.mdAndDown) type.value = 'compact'
       else type.value = 'common'
     }
   }
 
-  if(!props.type) resizeType()
+  /*if(!props.type)*/ resizeType()
   window.addEventListener("resize", () => resizeType())
 
   const emit = defineEmits(['dsEnd', 'dsStart', 'dsUpdate', 'nuclMouseOver', 'nuclMouseOut']);
 
+  let ds
   onMounted(async () => {
-    const ds = new DragSelect({
+    ds = new DragSelect({
       selectables: document.getElementsByClassName("nucleotide"),
       area: document.getElementById("container-strands-sheet"),
       draggability: false,
@@ -109,6 +111,20 @@
   const handleNuclMouseOut = (e) => {
     if(hover.value) emit('nuclMouseOut', e.target.id)
   }
+
+  const selectDynamic = (items) => {
+    const itemsToSelect = items.map((item) => document.querySelector(`#${item}`));
+    ds.addSelection(itemsToSelect);
+  }
+
+  const clearSelection = () => {
+    ds.clearSelection();
+  }
+
+  defineExpose({
+    selectDynamic,
+    clearSelection
+  });
 
 </script>
 

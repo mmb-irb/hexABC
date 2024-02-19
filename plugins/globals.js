@@ -23,19 +23,19 @@ export default defineNuxtPlugin(() => {
             thumbnail: (api, id) => `${api}/current/projects/${id}/files/screenshot.jpg`,
             projects: {
               analyses: [
-                { id: 'section', name: 'Helical Parameters', icon: null},
-                { id: 'curves-average', name: 'Average Results', icon: 'mdi-chart-bell-curve'},
-                { id: 'curves-time', name: 'Results by Time', icon: 'mdi-timer-outline'},
-                { id: 'section', name: 'Interactions', icon: null},
-                { id: 'hbonds', name: 'Hydrogen bonds', icon: 'mdi-format-line-weight mdi-rotate-90'},
-                { id: 'dist-res-average', name: 'Distance per residue', icon: 'mdi-arrow-expand-horizontal'},
-                { id: 'section', name: 'Quality Control', icon: null},
-                { id: 'first-rmsd', name: 'RMSd', icon: 'mdi-waveform'},
-                { id: 'rmsd-residue', name: 'RMSd per residue', icon: 'mdi-chart-areaspline'},
-                { id: 'rmsd-pairwise', name: 'RMSd pairwise', icon: 'mdi-data-matrix'},
-                { id: 'rgyr', name: 'Radius of gyration', icon: 'mdi-axis-y-rotate-clockwise'},
-                { id: 'fluctuation', name: 'Fluctuation', icon: 'mdi-sine-wave'},
-                { id: 'sasa', name: 'Solvent Accessible Surface Area', icon: 'mdi-peanut-outline mdi-rotate-90'},              
+                { id: 'section', name: 'Helical Parameters', icon: null, section: null },
+                { id: 'curves-average', name: 'Average Results', icon: 'mdi-chart-bell-curve', section: 'hps' },
+                { id: 'curves-time', name: 'Results by Time', icon: 'mdi-timer-outline', section: 'hps' },
+                { id: 'section', name: 'Interactions', icon: null, section: null },
+                { id: 'hbonds', name: 'Hydrogen bonds', icon: 'mdi-format-line-weight mdi-rotate-90', section: 'interactions' },
+                { id: 'dist-res-average', name: 'Distance per residue', icon: 'mdi-arrow-expand-horizontal', section: 'interactions' },
+                { id: 'section', name: 'Quality Control', icon: null, section: null },
+                { id: 'first-rmsd', name: 'RMSd', icon: 'mdi-waveform', section: 'qc' },
+                { id: 'rmsd-residue', name: 'RMSd per residue', icon: 'mdi-chart-areaspline', section: 'qc' },
+                { id: 'rmsd-pairwise', name: 'RMSd pairwise', icon: 'mdi-data-matrix', section: 'qc' },
+                { id: 'rgyr', name: 'Radius of gyration', icon: 'mdi-axis-y-rotate-clockwise', section: 'qc' },
+                { id: 'fluctuation', name: 'Fluctuation', icon: 'mdi-sine-wave', section: 'qc' },
+                { id: 'sasa', name: 'Solvent Accessible Surface Area', icon: 'mdi-peanut-outline mdi-rotate-90', section: 'qc' }
               ]
             }
         }

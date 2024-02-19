@@ -46,9 +46,15 @@
                   @dsUpdate="handleDsUpdate" 
                   @nuclMouseOver="handleNuclMouseOver" 
                   @nuclMouseOut="handleNuclMouseOut" 
+                  ref="seqInteractiveRef"
                 />
 
-                <p>TODO: SELECTOR WITH HEXAMERS LIST</p>
+                <HexamersSelector 
+                  :strands="{ strand1: strand1, strand2: strand2 }" 
+                  @selectHexamer="selectHexamer"
+                  ref="hexSelectorRef"
+                />
+
               </v-col>
               <v-col lg="4" md="6" sm="12" cols="12" >
                 <TrajectoryViewer :id="id" ref="trjViewerRef" />
@@ -65,7 +71,49 @@
         <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
 
           <template v-slot:title>
-            <v-icon size="small" icon="mdi-rotate-orbit"></v-icon> &nbsp;HELICAL PARAMETERS
+            <v-icon size="small" icon="mdi-chart-box-multiple-outline"></v-icon> &nbsp;QUALITY CONTROL ANALYSES
+          </template>
+
+          <template v-slot:text>
+
+            <v-row>
+                <v-col cols="12">
+                  <v-select
+                    label="Select Analysis"
+                    v-model="modelAnalyses"
+                    :items="itemsAnal"
+                    variant="outlined"
+                    density="compact"
+                    @update:modelValue="selectAnalyses"
+                  >
+                    <template v-slot:selection="{ item, index }">
+                      {{ item.raw.title }}                  
+                      </template>
+                    <template v-slot:item="{ props, item }">
+                      <v-list-item 
+                        class="item-v-select" 
+                        v-bind="props" 
+                        :title="item.raw.title" 
+                        :value="item.raw.value" 
+                        :prepend-icon="item.raw.icon" 
+                        :disabled="item.raw.value === 'section'"
+                      ></v-list-item>
+                    </template>
+                  </v-select>
+                </v-col>        
+            </v-row>
+
+          </template>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row> 
+      <v-col cols="12">
+        <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
+
+          <template v-slot:title>
+            <v-icon size="small" icon="mdi-rotate-orbit"></v-icon> &nbsp;HELICAL PARAMETERS ANALYSES
           </template>
 
           <template v-slot:text>
@@ -100,7 +148,7 @@
         <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
 
           <template v-slot:title>
-            <v-icon size="small" icon="mdi-dots-grid"></v-icon> &nbsp;INTERACTIONS
+            <v-icon size="small" icon="mdi-dots-grid"></v-icon> &nbsp;INTERACTIONS ANALYSES
           </template>
 
           <template v-slot:text>
@@ -129,72 +177,6 @@
       </v-col>
     </v-row>
 
-    <v-row> 
-      <v-col cols="12">
-        <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
-
-          <template v-slot:title>
-            <v-icon size="small" icon="mdi-chart-box-multiple-outline"></v-icon> &nbsp;QUALITY CONTROL
-          </template>
-
-          <template v-slot:text>
-
-            <v-row> 
-              <v-col lg="3" md="4" sm="6" xs="12">
-                <AnalysisButton 
-                  :id="id"
-                  :image="rmsdImg"
-                  slug="first-rmsd"
-                  title="RMSd"
-                />
-              </v-col>
-              <v-col lg="3" md="4" sm="6" xs="12">
-                <AnalysisButton 
-                  :id="id"
-                  :image="resImg"
-                  slug="rmsd-residue"
-                  title="RMSd per residue"
-                />
-              </v-col>
-              <v-col lg="3" md="4" sm="6" xs="12">
-                <AnalysisButton 
-                  :id="id"
-                  :image="pairwiseImg"
-                  slug="rmsd-pairwise"
-                  title="RMSd pairwise"
-                />
-              </v-col>
-              <v-col lg="3" md="4" sm="6" xs="12">
-                <AnalysisButton 
-                  :id="id"
-                  :image="rgyrImg"
-                  slug="rgyr"
-                  title="Rgyr"
-                />
-              </v-col>
-              <v-col lg="3" md="4" sm="6" xs="12">
-                <AnalysisButton 
-                  :id="id"
-                  :image="fluctImg"
-                  slug="fluctuation"
-                  title="Fluctuation"
-                />
-              </v-col>
-              <v-col lg="3" md="4" sm="6" xs="12">
-                <AnalysisButton 
-                  :id="id"
-                  :image="sasaImg"
-                  slug="sasa"
-                  title="Solvent Accessible Surface"
-                />
-              </v-col>
-            </v-row>
-
-          </template>
-        </v-card>
-      </v-col>
-    </v-row>
-
   </v-container>
 </template>
 
@@ -204,18 +186,13 @@
   import avgImg from '/img/projects/analyses/curves/curves-average.png'
   import timeImg from '/img/projects/analyses/curves/curves-time.png'
   import hbondsImg from '/img/projects/analyses/hbonds/hbonds.png'
-  import rmsdImg from '/img/projects/analyses/rmsd/rmsd.png'
-  import pairwiseImg from '/img/projects/analyses/rmsd/pairwise.png'
-  import rgyrImg from '/img/projects/analyses/rmsd/rgyr.png'
   import distImg from '/img/projects/analyses/distance/distance.png'
-  import fluctImg from '/img/projects/analyses/fluctuation/fluctuation.png'
-  import resImg from '/img/projects/analyses/rmsd/residues.png'
-  import sasaImg from '/img/projects/analyses/sasa/sasa.png'
 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
 
   const { id } = useRoute().params
   const config = useRuntimeConfig()
+  const { $globals } = useNuxtApp()
 
   const { 
     getSequenceSettings
@@ -234,6 +211,16 @@
     ]
   })
 
+  /* QUALITY CONTROL */
+  const analyses = $globals.projects.analyses
+  const itemsAnal = analyses.filter(item => item.section === 'qc').map(item => ({ title: item.name, value: item.id, icon: item.icon }))
+  const modelAnalyses = ref(null)
+
+  const selectAnalyses = async () => {
+    await navigateTo(`/projects/${id}/${modelAnalyses.value}`)
+  }
+
+  /* SEQUENCE */
   const sequence = project.value.metadata.SEQUENCES[0]
   const { strand1, strand2 } = getSequenceSettings(sequence)
 
@@ -242,9 +229,11 @@
   /* HANDLE MAGIC SEQUENCE INTERACTION WITH NGL */
 
   const selecting = ref(false)
+  const seqInteractiveRef = ref(null)
 
   let selectBP = null
   const handleDsStart = () => {
+    hexSelectorRef.value.resetSelector()
     selecting.value = true
   }
 
@@ -281,6 +270,40 @@
     if(!selecting.value) {
       trjViewerRef.value.removeRepresentation(hoverBP)
     }
+  }
+
+  /* HEXAMER SELECTOR */
+
+  const hexSelectorRef = ref(null)
+
+  const selectHexamer = (hexamer1, hexamer2) => {
+
+    // get NGL selection (only residue numbers)
+    const sel1 = `${hexamer1.index}-${hexamer1.index+5}`
+    // get NGL complementary selection (only residue numbers)
+    const sel2 = `${sequence.length*2 - (hexamer1.index+5) + 1}-${sequence.length*2 - (hexamer1.index+5) + 6}`
+
+    // NGL representation
+    trjViewerRef.value.removeRepresentation(selectBP);
+    selectBP = trjViewerRef.value.addRepresentation("ball+stick", { sele: `${sel1} ${sel2}`, radius: .2 });
+
+    // get nucleotides with SequenceInteractive id notation for selected hexamer
+    const nuclsList1 = hexamer1.string.split('')
+    const nucleotides1 = nuclsList1.map((item, index) => {
+      return `${item}-${hexamer1.index + index}-strand${hexamer1.strand}`
+    })
+    // get nucleotides with SequenceInteractive id notation for complementary hexamer
+    const nuclsList2 = hexamer2.string.split('')
+    const nucleotides2 = nuclsList2.map((item, index) => {
+      return `${item}-${hexamer2.index + index}-strand${hexamer2.strand}`
+    })
+
+    // mix both nucleotides arrays
+    const nucleotides = [...nucleotides1, ...nucleotides2];
+
+    seqInteractiveRef.value.clearSelection();
+    seqInteractiveRef.value.selectDynamic(nucleotides);
+
   }
 
 </script>

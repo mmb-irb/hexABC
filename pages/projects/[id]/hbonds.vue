@@ -10,13 +10,13 @@
         <v-card rounded="sm" class="elevation-2 pa-4 h-100" >
 
           <template v-slot:title>
-            <div class="mdi-combined">
+            <!--<div class="mdi-combined">
               <div class="mdi mdi-vector-line mdi-rotate-45 top">
               </div>
               <div class="mdi mdi-vector-line mdi-rotate-45 bottom">
               </div>
-            </div>
-            HYDROGEN BONDS
+            </div>-->
+            <v-icon size="small" icon="mdi-format-line-weight mdi-rotate-90"></v-icon> &nbsp;HYDROGEN BONDS
           </template>
 
           <template v-slot:text>

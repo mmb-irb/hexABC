@@ -448,6 +448,7 @@ export default function useInteractiveSequence() {
         addBordersToNucleotides,
         removeBordersFromNucleotides,
         addBordersToBasePairs,
-        removeBordersFromBasePairs
+        removeBordersFromBasePairs,
+        calculateComplementaryStrand
     }
 }

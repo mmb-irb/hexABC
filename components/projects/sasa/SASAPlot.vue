@@ -18,7 +18,7 @@
       </div>
 
       <div style="height: 100%;" class="d-flex align-center justify-center" v-else>
-        Please select one or more nucleotides above for visualizing their RMSd
+        Please select one or more nucleotides above for visualizing their SASA
       </div>
     
     </div>
@@ -53,7 +53,7 @@
       data = ref(dataAn.data.value)
 
       const traces = []
-      data.value.rmsd.forEach((item, index) => {
+      data.value.sasa.forEach((item, index) => {
         const xd = Array.from({length: item.length}, (_, i) => i * data.value.step)
         const yd = item
         traces.push($sasa.plot.data(xd, yd, nucleotides[index]))

@@ -14,7 +14,7 @@ export default defineNuxtPlugin(() => {
               mode: 'lines',
               name: tracetit,
               //marker: { color: '#d90429' },
-              hovertemplate: `<b>${tracetit}</b> %{y:.2f}Å<extra></extra>`
+              hovertemplate: `<b>${tracetit}</b> %{y:.2f}Å²<extra></extra>`
             }
           },
           layout: (xtit, ytit) => {

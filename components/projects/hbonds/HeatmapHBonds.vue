@@ -167,8 +167,6 @@
   }
 
   /* RANGE SLIDER */
-  /* TODO: START WORKING WITH RANGE SLIDER AND RANGE SELECTOR */
-
   const rangeDisabled = ref(true);
   const range = ref([0, $hbonds.range]);
   const maxTotalRange = 25000;

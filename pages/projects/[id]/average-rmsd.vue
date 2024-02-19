@@ -1,7 +1,7 @@
 <template>
   <v-container>
 
-    <h1>Average RMSd</h1>
+    <h1>RMSd against average structure</h1>
 
     <Breadcrumbs :props="{id: id, text: 'Average RMSd', title: title}" />
 
@@ -12,13 +12,13 @@
           <template v-slot:title>
             <div id="header-container">
               <div>
-                <v-icon size="small" icon="mdi-chart-bell-curve"></v-icon> &nbsp;AVERAGE RMSD
+                <v-icon size="small" icon="mdi-chart-bell-curve"></v-icon> &nbsp;RMSD AGAINST AVERAGE
               </div>
               <v-btn prepend-icon="mdi-waveform"
                 variant="outlined"
                 color="red-accent-4"
                 :to="`/projects/${id}/first-rmsd`"
-                >First frame RMSd</v-btn>
+                >RMSd against First frame </v-btn>
             </div>
           </template>
 
@@ -50,7 +50,7 @@
   const title = project.value.metadata.NAME
 
   useHead({
-    title: `Average RMSd for ${title}`
+    title: `RMSd against average structure ${title}`
   })
 
 </script>

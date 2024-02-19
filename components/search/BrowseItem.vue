@@ -38,7 +38,7 @@
               </template>
             </v-select>
           </v-col>        
-      </v-row>
+        </v-row>
       </div>
     </div>
 
@@ -113,13 +113,7 @@
   const modelAnalyses = ref(null)
 
   const selectAnalyses = async () => {
-    //console.log(`go to ${item.id} > ${modelAnalyses.value}`)
-    // *******************
-    // *******************
-    // TODO WHEN ALL ANALYSES ARE READY
     await navigateTo(`/projects/${item.id}/${modelAnalyses.value}`)
-    // *******************
-    // *******************
   }
 
   /* PREVIEW TRAJECTORY (TODO) */

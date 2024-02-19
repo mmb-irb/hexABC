@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   // handle query params (GET)
   let { res } = getQuery(event);
 
-	// get rmsds data
+	// get sasa data
 	const uri = `${config.public.externalApi}v1/projects/${id}/analyses/sasa`
 	const response = await $fetch(uri)
 							.catch((error) => {
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
 	return {
 		step: response.step,
     means: m,
-		rmsd: r 
+		sasa: r 
 	}
 
  });
