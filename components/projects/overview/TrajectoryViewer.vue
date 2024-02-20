@@ -51,11 +51,13 @@
 	})
 
 	const addRepresentation = (type, props) => {
+		if(!stage.compList[0]) return
 		const r = stage.compList[0].addRepresentation( type, props)
 		return r
 	}
 
 	const removeRepresentation = (r) => {
+		if(!stage.compList[0]) return
 		stage.compList[0].removeRepresentation(r)
 	}
 

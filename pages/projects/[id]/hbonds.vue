@@ -368,12 +368,6 @@
 
 </script>
 
-<style>
-  @media only screen and (max-width: 1280px) {
-    .v-btn--icon.v-btn--density-default { width: 44px;}
-  }
-</style>
-
 <style scoped>
   .v-btn-group { color:#546E7A; }
   .mdi-combined {

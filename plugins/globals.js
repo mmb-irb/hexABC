@@ -35,6 +35,7 @@ export default defineNuxtPlugin(() => {
                 { id: 'rmsd-pairwise', name: 'RMSd pairwise', icon: 'mdi-data-matrix', section: 'qc' },
                 { id: 'rgyr', name: 'Radius of gyration', icon: 'mdi-axis-y-rotate-clockwise', section: 'qc' },
                 { id: 'fluctuation', name: 'Fluctuation', icon: 'mdi-sine-wave', section: 'qc' },
+                { id: 'pca', name: 'Principal Component Analysis', icon: 'mdi-chart-bar', section: 'qc'},
                 { id: 'sasa', name: 'Solvent Accessible Surface Area', icon: 'mdi-peanut-outline mdi-rotate-90', section: 'qc' }
               ]
             }

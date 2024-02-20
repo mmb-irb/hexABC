@@ -10,10 +10,10 @@
 			@update:modelValue="filterByHbonds"
 			variant="outlined"
 		>
-			<v-btn icon="mdi-numeric-0-circle" color="black" ></v-btn>
-			<v-btn icon="mdi-numeric-1-circle" color="light-blue-darken-4"></v-btn>
-			<v-btn icon="mdi-numeric-2-circle" color="green-darken-2"></v-btn>
-			<v-btn icon="mdi-numeric-3-circle" color="amber-lighten-1"></v-btn>
+			<v-btn icon="mdi-numeric-0-circle" color="black" class="btn-filter-bonds"></v-btn>
+			<v-btn icon="mdi-numeric-1-circle" color="light-blue-darken-4" class="btn-filter-bonds"></v-btn>
+			<v-btn icon="mdi-numeric-2-circle" color="green-darken-2" class="btn-filter-bonds"></v-btn>
+			<v-btn icon="mdi-numeric-3-circle" color="amber-lighten-1" class="btn-filter-bonds"></v-btn>
 		</v-btn-toggle>
 		<v-slider
 			v-model="sliderHbonds"
@@ -52,6 +52,12 @@
 	});
 
 </script>
+
+<style>
+  @media only screen and (max-width: 1280px) {
+    .btn-filter-bonds.v-btn--icon.v-btn--density-default { width: 44px;}
+  }
+</style>
 
 <style scoped>
 	#hbonds-percent { font-weight: 600; font-size: .9rem;}

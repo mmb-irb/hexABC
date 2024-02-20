@@ -66,7 +66,8 @@ export default defineNuxtConfig({
     { path: '~/components/projects/fluctuation', extensions: ['vue'] },
     { path: '~/components/projects/distance', extensions: ['vue'] },
     { path: '~/components/projects/sequences', extensions: ['vue'] },
-    { path: '~/components/projects/sasa', extensions: ['vue'] }
+    { path: '~/components/projects/sasa', extensions: ['vue'] },
+    { path: '~/components/projects/pca', extensions: ['vue'] }
   ],
   plugins: [
     // define here all plugins in nested folders
@@ -77,6 +78,7 @@ export default defineNuxtConfig({
     '~/plugins/plots/distres', 
     '~/plugins/plots/fluctuation',
     '~/plugins/plots/sasa',
+    '~/plugins/plots/pca'
   ],
   runtimeConfig: {
     public: {
@@ -94,6 +96,7 @@ export default defineNuxtConfig({
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/dist-res\/(means|stdvs)$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(fluctuation|rgyr)$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(sasa)(\\?res=([0-9]+,)*[0-9]+)?$/',
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(pca)(\\?pc=([0-9]+,[0-9]+))?$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(firstframe|average|pairwise)$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(residues)(\\?res=([0-9]+,)*[0-9]+)?$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/time\/(rise|roll|shift|slide|tilt|twist)(\\?bp=\\d+\_[A-Z]+)?$/'

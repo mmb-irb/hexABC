@@ -1,7 +1,7 @@
 <template>
 	<div class="mt-6">
     <v-autocomplete
-      label="Filter by Hexamers"
+      label="Search sequence hexamers"
       :items="hexamersModel"
       v-model="selectedHexamer"
       @update:modelValue="selectHexamer"
@@ -51,6 +51,7 @@
     // selected hexamer object
     const objHex1 = hexamers.value.find((hex) => hex.string === hexamer)
     // complementary hexamer object
+    // calculate the complementary strand and reverse it
     const objHex2 = hexamers.value.find((hex) => hex.string === calculateComplementaryStrand(hexamer.split('')).join('').split('').reverse().join(''))
     emit('selectHexamer', objHex1, objHex2);
   }

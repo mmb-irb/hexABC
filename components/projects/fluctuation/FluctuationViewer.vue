@@ -58,20 +58,24 @@
 	})
 
 	const addRepresentation = (type, props) => {
+		if(!stage.compList[0]) return
 		mainR = stage.compList[0].addRepresentation("licorice", { sele: "nucleic", radius:.1, color: '#cccccc' });
 		const r = stage.compList[0].addRepresentation( type, props)
 		return r
 	}
 
 	const initRepresentation = () => {
+		if(!stage.compList[0]) return
 		mainR = stage.compList[0].addRepresentation("ball+stick", { sele: "nucleic", radius:.1 });
 	}
 
 	const autoview = (sele, duration) => {
+		if(!stage.compList[0]) return
 		stage.compList[0].autoView(sele, duration)
 	}
 
 	const removeRepresentation = (r) => {
+		if(!stage.compList[0]) return
 		stage.compList[0].removeRepresentation(mainR)
 		stage.compList[0].removeRepresentation(r)
 	}

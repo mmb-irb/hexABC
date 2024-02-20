@@ -61,6 +61,7 @@
 	})
 
 	const addRepresentation = (sele) => {
+		if(!stage.compList[0]) return
 		const r = stage.compList[0].addRepresentation( "ball+stick", { sele: sele, radius: .2 })
 		stage.compList[0].autoView(sele, 500);
 		return r

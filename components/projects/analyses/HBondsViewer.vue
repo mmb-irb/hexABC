@@ -61,6 +61,7 @@
 	})
 
 	const addRepresentationHBonds = (sele) => {
+		if(!stage.compList[0]) return
 		// TO MODIFY FOR REPRESENTING THE HBONDS VIA DISTANCES!!!
 		const r = stage.compList[0].addRepresentation( "ball+stick", { sele: sele, radius: .2 })
 		stage.compList[0].autoView(sele, 500);
