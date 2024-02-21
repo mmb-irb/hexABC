@@ -99,7 +99,8 @@ export default defineNuxtConfig({
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(pca)(\\?pc=([0-9]+,[0-9]+))?$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(firstframe|average|pairwise)$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(residues)(\\?res=([0-9]+,)*[0-9]+)?$/',
-        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/time\/(rise|roll|shift|slide|tilt|twist)(\\?bp=\\d+\_[A-Z]+)?$/'
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/time\/(alpha|beta|gamma|delta|chi|epsilon|theta|inclination|tip|xdisp|ydisp|shear|stretch|stagger|buckle|propeller|opening|rise|roll|shift|slide|tilt|twist|majorgd|majorgw|minorgd|minorgw)(\\?bp=\\d+\_[A-Z]+)?$/',
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/average\/(bibiipopulation|canonicalag|puckering|inclination|tip|xdisp|ydisp|shear|stretch|stagger|buckle|propeller|opening|rise|roll|shift|slide|tilt|twist|majorgd|majorgw|minorgd|minorgw)$/'
       ]
     }
   },
