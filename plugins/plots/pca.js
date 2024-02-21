@@ -69,7 +69,7 @@ export default defineNuxtPlugin(() => {
               }
             },
             config: {
-              scrollZoom: true, 
+              scrollZoom: false, 
               displayModeBar: false, 
               responsive: true 
             }

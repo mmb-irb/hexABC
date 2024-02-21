@@ -5,7 +5,7 @@ export default defineNuxtPlugin(() => {
 				means: {
 					ytitle: 'Crick strand',
 					xtitle: 'Watson strand',
-					title: 'Residues distances average (Å)'
+					title: 'Residues distances average'
 				},
 				stdvs: {
 					ytitle: 'Crick strand',

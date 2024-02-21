@@ -41,6 +41,7 @@
             :layout="plotLayout"
             :config="plotConfig"
             style="width:100%;height:470px;"
+            @on-ready="myChartOnReady"
           ></nuxt-plotly>
         </v-col>
       </v-row>
@@ -51,7 +52,7 @@
       </v-row>
       <v-row class="my-0"> 
         <v-col cols="12" class="d-flex justify-center my-0 pa-0">
-          start <div id="gradient-positions"></div> end
+          start <div id="gradient-positions"><div id="gp-cursor"></div></div> end
         </v-col>
       </v-row>
     </div>
@@ -157,6 +158,19 @@
     plotLayout = $pca.plots.projections.layout(`Principal component ${modelProjection1.value}`, `Principal component ${modelProjection2.value}`)
   }
 
+  const myChartOnReady = (plotlyHTMLElement) => {
+
+    plotlyHTMLElement.on?.('plotly_hover', function(e){
+      document.querySelector('#gp-cursor').style.display = 'block'
+      document.querySelector('#gp-cursor').style.left = `${e.points[0].pointNumber * (document.querySelector('#gradient-positions').clientWidth / data.value.pca[0].length)}px`
+    })
+
+    plotlyHTMLElement.on?.('plotly_unhover', function(e){
+      document.querySelector('#gp-cursor').style.display = 'none'
+    })
+
+  }
+
 </script>
 
 <style scoped>
@@ -176,10 +190,20 @@
     transform: translate(-50%, -50%);
   }
   #gradient-positions {
-    width: 70%;
+    position: relative;
+    width: 600px;
     height: 20px;
     margin:0 1rem;
     background: linear-gradient(90deg, #ffff33 0%, #ff0033 100%);
+  }
+  #gp-cursor {
+    position: absolute;
+    display: none;
+    top: -4px;
+    left: 0;
+    width: 2px;
+    height: 28px;
+    background: #555;
   }
 </style>
   

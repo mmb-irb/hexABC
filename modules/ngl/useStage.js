@@ -18,18 +18,15 @@ export default function useStage() {
       getNGLObject()
     })
 
-
     const createStage = (/*NGL,*/ layer, tooltip = false) => {
+      const mdsrvDatasource = new NGL.MdsrvDatasource( 'https://mmb.irbbarcelona.org/mdsrv/api/' )
+      NGL.DatasourceRegistry.add("file", mdsrvDatasource)
+      //setListingDatasource(mdsrvDatasource)
+      NGL.setTrajectoryDatasource(mdsrvDatasource)
 
-        const mdsrvDatasource = new NGL.MdsrvDatasource( 'https://mmb.irbbarcelona.org/mdsrv/api/' )
-        NGL.DatasourceRegistry.add("file", mdsrvDatasource)
-        //setListingDatasource(mdsrvDatasource)
-        NGL.setTrajectoryDatasource(mdsrvDatasource)
-
-        stage = new NGL.Stage(layer, { tooltip: tooltip/*, cameraType: 'perspective'*/ })
-        //console.log('stage created')
-        return stage 
-        
+      stage = new NGL.Stage(layer, { tooltip: tooltip/*, cameraType: 'perspective'*/ })
+      //console.log('stage created')
+      return stage 
     }
 
     const getStage = function () {
@@ -37,15 +34,25 @@ export default function useStage() {
       return stage
     }
 
+    const createSelection = function (sel) {
+      const s = new NGL.Selection(sel)
+      return s 
+    }
+
+    const createShape = function () {
+      const shape = new NGL.Shape("shape")
+      return shape 
+    }
+
     const createTrajectoryPlayer = function (traj, settings) {
       return new NGL.TrajectoryPlayer( traj, {
-          step: settings.step,
-          timeout:settings.timeout,
-          start: settings.range[0],
-          end: settings.range[1],
-          interpolateType: settings.interpolation,
-          mode: settings.loop ? "loop": "once",
-          direction: settings.bounce ? "bounce": "forward"
+        step: settings.step,
+        timeout:settings.timeout,
+        start: settings.range[0],
+        end: settings.range[1],
+        interpolateType: settings.interpolation,
+        mode: settings.loop ? "loop": "once",
+        direction: settings.bounce ? "bounce": "forward"
       } ) 
   }
   
@@ -54,6 +61,8 @@ export default function useStage() {
         selection, 
         createStage,
         getStage,
+        createSelection,
+        createShape,
         createTrajectoryPlayer
     }
   

@@ -25,7 +25,7 @@
 
   <PlotDialog v-model="dialog" ref="plotDialogRef">
     <template #viewer>
-      <CommonViewer :id="id" ref="commonViewerRef" />
+      <DistResidueViewer :id="id" ref="distResViewerRef" />
     </template>
   </PlotDialog>
 
@@ -72,7 +72,7 @@
   })
 
   const dialog = ref(false)
-  const commonViewerRef = ref(null)
+  const distResViewerRef = ref(null)
   const plotDialogRef = ref(null);
 
   const myChartOnReady = (plotlyHTMLElement) => {
@@ -85,7 +85,7 @@
         if(!dclick) {
           dialog.value = true
           // set dialog title
-          var title = `${$distres[type].title} :: Nucleotides ${e.points[0].x}-${e.points[0].y}`
+          var title = `${$distres[type].title} :: Nucleotides ${e.points[0].x}-${e.points[0].y} (${e.points[0].z.toFixed(2)}Å)`
           plotDialogRef.value.updateTitle(title)
           var ns = [e.points[0].x, e.points[0].y];
           // get residue numbers for selected nucleotides
@@ -93,11 +93,11 @@
           // trick for avoiding problems on loading the viewer
           await $sleep(500)
           try {
-            commonViewerRef.value.addRepresentation(residues.join(' '))
+            distResViewerRef.value.addRepresentation(residues.join(' '), residues)
           } catch (error) {
             //console.log('Error adding representation:', error)
             await $sleep(500)
-            commonViewerRef.value.addRepresentation(residues.join(' '))
+            distResViewerRef.value.addRepresentation(residues.join(' '), residues)
           }
         }
         clearTimeout(debounceTimeout)
