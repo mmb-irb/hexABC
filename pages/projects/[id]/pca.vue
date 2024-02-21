@@ -38,7 +38,6 @@
 
   const { id } = useRoute().params
   const config = useRuntimeConfig()
-  const { $sleep } = useNuxtApp()
 
   const datap = await useFetch(`${config.public.apiBase}/projects/${id}`)
   if(datap.status.value === 'error')  throw createError({ statusCode: datap.error.value.statusCode, message: datap.error.value.statusMessage, fatal: true })
@@ -49,18 +48,6 @@
   useHead({
     title: `PCA for ${title}`
   })
-
-  onMounted(async () => {
-    
-    // color structure by average SASA
-    /*let averages
-    const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/sasa`)
-    if(dataAn.status.value === 'error')  throw createError({ statusCode: dataAn.error.value.statusCode, message: dataAn.error.value.statusMessage, fatal: true })
-    averages = dataAn.data.value.means*/
-    
-
-  })
-
 
 </script>
 

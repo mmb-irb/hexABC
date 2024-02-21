@@ -1,15 +1,26 @@
 
 <template>
 
-  <p>Select for visualizing the <strong>PCA projections</strong> in pairs of two. Currently visualizing <strong>Principal Component {{ prj1 }}</strong> and <strong>Principal Component {{ prj2 }}</strong>.</p>
+  <p>Select for visualizing the <strong>PCA projections</strong> in pairs of two. Currently visualizing <strong>Principal Component {{ modelProjection1 }}</strong> vs <strong>Principal Component {{ modelProjection2 }}</strong>.</p>
 
-  <v-autocomplete
-    label="Select projection"
-    v-model="modelProjection"
-    :items="combinations"
-    @update:modelValue="changeProjection"
-    class="mt-6"
-  ></v-autocomplete>
+  <v-row>
+    <v-col lg="6" md="6" sm="6" cols="12">
+      <v-select
+        label="Select X axis projection"
+        v-model="modelProjection1"
+        :items="pclist1"
+        @update:modelValue="changeProjection"
+      ></v-select>
+    </v-col>
+    <v-col lg="6" md="6" sm="6" cols="12">
+      <v-select
+        label="Select Y axis projection"
+        v-model="modelProjection2"
+        :items="pclist2"
+        @update:modelValue="changeProjection"
+      ></v-select>
+    </v-col>
+  </v-row>
 
   <div id="container-plot">
 
@@ -23,7 +34,7 @@
     ></v-progress-circular>
   
     <div style="width:100%; ">
-      <v-row class="mt-6"> 
+      <v-row class="mt-2"> 
         <v-col cols="12">
           <nuxt-plotly 
             :data="plotData.val"
@@ -33,40 +44,66 @@
           ></nuxt-plotly>
         </v-col>
       </v-row>
+      <v-row class="my-0 pa-0"> 
+        <v-col cols="12" class="d-flex justify-center my-0 pa-0">
+          <p>Color gradient represents the position in the dataset:</p>
+        </v-col>
+      </v-row>
+      <v-row class="my-0"> 
+        <v-col cols="12" class="d-flex justify-center my-0 pa-0">
+          start <div id="gradient-positions"></div> end
+        </v-col>
+      </v-row>
     </div>
 
   </div>
+
+  <v-snackbar
+    v-model="snackbar"
+    :timeout="3000"
+    color="yellow-darken-1"
+    elevation="4"
+  >
+    {{ textSnackbar }}
+  </v-snackbar>
 </template>
 
 <script setup>
+
+  import common from '@/modules/common'
 
   const { id } = defineProps(['id'])
   const config = useRuntimeConfig()
   const { $pca, $sleep } = useNuxtApp()
 
+  const { interpolateColor } = common()
+
   const loading = ref(true)
 
-  let prj1 = ref(1)
-  let prj2 = ref(2)
+  let modelProjection1 = ref(1)
+  let modelProjection2 = ref(2)
 
   // get initial data for calculating all the possible projections
   let dataInit
   const dtIn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/pca`)
   if(dtIn.status.value === 'error')  throw createError({ statusCode: dtIn.error.value.statusCode, message: dtIn.error.value.statusMessage, fatal: true })
   dataInit = ref(dtIn.data.value)
-  const combinations = []
+  const pclist1 = []
+  const pclist2 = []
   for (let i = 1; i <= dataInit.value.eigenvalues.length; i++) {
-    for (let j = 1; j <= dataInit.value.eigenvalues.length; j++) {
-      if (i !== j) combinations.push({
-        title: `Principal component ${i} vs Principal component ${j}`,
-        value: `${i},${j}`
-      })
-    }
+    pclist1.push({
+      title: `Principal component ${i}`,
+      value: i
+    })
+    pclist2.push({
+      title: `Principal component ${i}`,
+      value: i
+    })
   }
 
   // get initial data for the plot (1 vs 2)
   let data
-  const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/pca?pc=${prj1.value},${prj2.value}`)
+  const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/pca?pc=${modelProjection1.value},${modelProjection2.value}`)
   if(dataAn.status.value === 'error')  throw createError({ statusCode: dataAn.error.value.statusCode, message: dataAn.error.value.statusMessage, fatal: true })
   data = ref(dataAn.data.value)
 
@@ -80,32 +117,44 @@
   let plotLayout = {}
   let plotConfig = {}
 
+  let colorValues
   onMounted(async () => {
   
     // get data from REST API
     const xd = data.value.pca[0]
     const yd = data.value.pca[1]
+    const positions = Array.from({length: xd.length}, (_, i) => i)
+    const minValue = Math.min(...positions);
+    const maxValue = Math.max(...positions);
+    colorValues = positions.map(value => interpolateColor(value, minValue, maxValue));
 
     // load data & layout for timeseries plot
-    plotData.val = $pca.plots.projections.data(xd, yd, prj1.value, prj2.value)
-    plotLayout = $pca.plots.projections.layout(`Principal component ${prj1.value}`, `Principal component ${prj2.value}`)
+    plotData.val = $pca.plots.projections.data(xd, yd, modelProjection1.value, modelProjection2.value, colorValues)
+    plotLayout = $pca.plots.projections.layout(`Principal component ${modelProjection1.value}`, `Principal component ${modelProjection2.value}`)
     plotConfig = $pca.plots.projections.config
 
   })
 
-  let modelProjection = ref('1,2')
+  const snackbar = ref(false)
+  const textSnackbar = ref('')
   const changeProjection = async (e) => {
-    prj1.value = e.split(',')[0]
-    prj2.value = e.split(',')[1]
+
+    if(modelProjection1.value === modelProjection2.value) {
+      snackbar.value = true
+      textSnackbar.value = 'Please select different Principal Components'
+      return
+    }
+
+    snackbar.value = false
 
     // get selected projection data
-    const d = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/pca?pc=${prj1.value},${prj2.value}`)
+    const d = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/pca?pc=${modelProjection1.value},${modelProjection2.value}`)
     if(d.status.value === 'error')  throw createError({ statusCode: d.error.value.statusCode, message: d.error.value.statusMessage, fatal: true })
     const dt = ref(d.data.value)
 
     // update plot data & layout
-    plotData.val = $pca.plots.projections.data(dt.value.pca[0], dt.value.pca[1], prj1.value, prj2.value)
-    plotLayout = $pca.plots.projections.layout(`Principal component ${prj1.value}`, `Principal component ${prj2.value}`)
+    plotData.val = $pca.plots.projections.data(dt.value.pca[0], dt.value.pca[1], modelProjection1.value, modelProjection2.value, colorValues)
+    plotLayout = $pca.plots.projections.layout(`Principal component ${modelProjection1.value}`, `Principal component ${modelProjection2.value}`)
   }
 
 </script>
@@ -125,6 +174,12 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+  #gradient-positions {
+    width: 70%;
+    height: 20px;
+    margin:0 1rem;
+    background: linear-gradient(90deg, #ffff33 0%, #ff0033 100%);
   }
 </style>
   

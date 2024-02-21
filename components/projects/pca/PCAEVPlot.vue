@@ -65,7 +65,7 @@
       sum += item.var
       return sum;
     })
-    const xd = Array.from({length: evyd.length}, (_, i) => i + 1)
+    const xd = Array.from({length: evyd.length}, (_, i) => `PC${i + 1}`)
 
     // load data & layout for timeseries plot
     plotData.val = [$pca.plots.eigenvalues.vardata(xd, varyd), $pca.plots.eigenvalues.evdata(xd, evyd)]

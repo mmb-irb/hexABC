@@ -16,7 +16,7 @@ export default defineNuxtPlugin(() => {
                 type: 'bar',
                 name: 'Eigenvalue',
                 marker: { color: '#d90429' },
-                hovertemplate: `<b>PC%{x}</b> %{y:.2f}`
+                hovertemplate: `<b>%{x}</b> %{y:.2f}`
               }
             },
             vardata: (xdata, ydata) => {
@@ -29,7 +29,7 @@ export default defineNuxtPlugin(() => {
                 marker: { color: '#ff7885' },
                 yaxis: 'y2',
                 fill: 'tonexty',
-                hovertemplate: `<b>PC%{x}</b> %{y:.2f}%`
+                hovertemplate: `<b>%{x}</b> %{y:.2f}%`
               }
             },
             layout: (xtit, ytit, ytit2) => {
@@ -75,13 +75,13 @@ export default defineNuxtPlugin(() => {
             }
           },
           projections: {
-            data: (xdata, ydata, prj1, prj2) => [{
+            data: (xdata, ydata, prj1, prj2, colors) => [{
                 x: xdata,
                 y: ydata,
                 type: 'scatter',
                 mode: 'markers',
                 name: 'projections',
-                marker: { color: '#d90429' },
+                marker: { color: colors },
                 hovertemplate: `<b>PC${prj1}:</b> %{x:.2f} <b>PC${prj2}:</b> %{y:.2f}<extra></extra>`
             }],
             layout: (xtit, ytit) => {
