@@ -6,6 +6,8 @@
   <v-row>
     <v-col lg="6" md="6" sm="6" cols="12">
       <v-select
+        variant="outlined"
+        density="compact"
         label="Select X axis projection"
         v-model="modelProjection1"
         :items="pclist1"
@@ -14,6 +16,8 @@
     </v-col>
     <v-col lg="6" md="6" sm="6" cols="12">
       <v-select
+        variant="outlined"
+        density="compact"
         label="Select Y axis projection"
         v-model="modelProjection2"
         :items="pclist2"

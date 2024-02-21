@@ -96,6 +96,7 @@
     // Map each value to its corresponding color
     const colorValues = averages.map(value => interpolateColor(value, minValue, maxValue));
 
+    await $sleep(50)
     // add new representation for each nucleotide
     colorValues.forEach(async (color, index) => {
       try {
