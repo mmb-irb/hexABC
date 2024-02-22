@@ -17,7 +17,7 @@
       <v-row class="pa-2">
         <CurvesPlot style="z-index:2" type="inclination" :img="inclinationImg">
           <template #plot>
-            <ErrorBarsPlot type="inclination" />
+            <ErrorBarsPlot :id="id" type="inclination" />
           </template>
         </CurvesPlot>
       </v-row>

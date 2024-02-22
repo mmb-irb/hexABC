@@ -1,37 +1,66 @@
 <template>
-  <div style="width:100%; height:470px; background-color:#ccc; display:flex; justify-content: center; align-items: center; position:relative;">
+  <div id="container-plot">
 
-    <v-progress-circular
-      :size="70"
-      :width="7"
-      color="red-darken-4"
-      indeterminate
-      v-if="loading"
-    ></v-progress-circular>
+  <v-progress-circular
+    :size="70"
+    :width="7"
+    color="red-darken-4"
+    indeterminate
+    v-if="loading"
+  ></v-progress-circular>
 
-    <div style="width:100%; " v-else>
-      <!--<h2>{{ id }}</h2>-->
+  <div style="width:100%; " v-else>
+    <v-row v-if="showPlot"> 
+      <v-col cols="12">
+        <nuxt-plotly 
+          :data="plotData.val"
+          :layout="plotLayout"
+          :config="plotConfig"
+          @on-ready="myChartOnReady"
+        ></nuxt-plotly>
+      </v-col>
+    </v-row>
+    <v-row v-else>
+      <v-col style="text-align: center;">no Plot yet</v-col>
+    </v-row>
+  </div>
 
-      <nuxt-plotly 
-        :data="plotData.val"
-        :layout="plotLayout"
-        :config="plotConfig"
-        style="width: 100%; height: 500px; display: block;"
-        @on-ready="myChartOnReady"
-      ></nuxt-plotly>
-    </div>
+  <PlotDialog v-model="dialog" ref="plotDialogRef">
+    <template #viewer>
+      <CommonViewer :id="id" ref="commonViewerRef" />
+    </template>
+  </PlotDialog>
 
-    </div>
+  </div>
 </template>
 
 <script setup>
-  const { type } = defineProps(['type'])
+
+  const { id, type } = defineProps(['id', 'type'])
+  const config = useRuntimeConfig()
+  const { $curves, $sleep } = useNuxtApp()
   
   const loading = ref(true)
 
+  // PROVISIONAL
+  const showPlot = ref(type !== undefined && id !== undefined)
+
+  let data, project, sequence
+  // PROVISIONAL
+  if(showPlot.value) {
+    const dataAn = await useFetch(`${config.public.apiBase}/projects/${id}/analyses/average/${type}`)
+    if(dataAn.status.value === 'error')  throw createError({ statusCode: dataAn.error.value.statusCode, message: dataAn.error.value.statusMessage, fatal: true })
+    data = ref(dataAn.data.value[type])
+
+    const datap = await useFetch(`${config.public.apiBase}/projects/${id}`)
+    if(datap.status.value === 'error')  throw createError({ statusCode: datap.error.value.statusCode, message: datap.error.value.statusMessage, fatal: true })
+    project = ref(datap.data.value)
+    sequence = project.value.metadata.SEQUENCES[0]
+  }
+
   setTimeout(() => {
     loading.value = false
-  }, 1000);
+  }, 500);
 
   let plotData = reactive({
     val: []
@@ -39,89 +68,90 @@
   let plotLayout = {}
   let plotConfig = {}
 
-  //MOCK PLOT WITH 100000 xaxis
-    function generateRandomArray(n) {
-      const result = [];
-      for (let i = 0; i < n; i++) {
-        const randomNumber = Math.floor(Math.random() * 50) + 1; // generates random integers between 1 and 10
-        result.push(randomNumber);
-      }
-      return result;
-    }
+  let labels
   onMounted(async () => {
-    
-    var n = 100
 
-    var trace2 = {
-      x: Array.from({ length: n + 1 }, (_, index) => index),
-      y: generateRandomArray(n),
-      mode: 'lines+markers'
-    };
+    // PROVISIONAL
+    if(showPlot.value) {
+      // get list of labels
+      labels = data.value.map(item => item.label)
+      // get list of indexes
+      const tickvals = Array.from({length: labels.length}, (_, i) => i)
 
-    var trace3 = {
-      x: Array.from({ length: n + 1 }, (_, index) => index),
-      y: generateRandomArray(n),
-      mode: 'lines+markers'
-    };
+      // get y values for each label
+      const yd = data.value.map(item => item.value)
+      const err = data.value.map(item => item.error)
 
-    plotData.val = [ trace2, trace3 ];
-
-    plotConfig = { 
-      scrollZoom: true, 
-      displayModeBar: false, 
-      responsive: true 
+      // load data & layout for stacked plot
+      plotData.val = $curves.plots.error.data(yd, err)
+      plotLayout = $curves.plots.error.layout($curves.descriptions[type].plot.error.xtitle, $curves.descriptions[type].plot.error.ytitle, labels, tickvals)
+      plotConfig = $curves.plots.error.config
     }
-
-    plotLayout = {
-      title: null,
-      showlegend: false,
-      hovermode: "closest",
-      hoverlabel: { bgcolor: "#f9f9f9" },
-      xaxis: {
-        //range: [5, 10],
-        tickformat: "d",
-        title: {
-          text: 'frame number',
-          standoff: 20
-        }
-      },
-      yaxis: {
-        title: {
-          text: 'base pair',
-          standoff: 10
-        }
-      },
-      //width: 800,
-      //height: 380,
-      margin: {
-        l: 0,
-        r: 0,
-        b: 0,
-        t: 0,
-        pad: 0
-      },
-      annotations: {
-        arrowcolor: '#f00000',
-      }
-    }
-
-    /*var data = [ trace2, trace3 ];
-
-    var layout = {};
-
-    Plotly.newPlot('myDiv', data, layout, {showSendToCloud: true});*/
 
   })
 
+  const dialog = ref(false)
+  const commonViewerRef = ref(null)
+  const plotDialogRef = ref(null);
+
+  const getResidueNumbers = (index, tp) => {
+    const residues = tp === 'bp' ? 
+      [index, sequence.length*2 - index + 1] :
+      [index, index + 1, sequence.length*2 - index, sequence.length*2 - index + 1]
+    return residues
+  }
+
   const myChartOnReady = (plotlyHTMLElement) => {
+
+    let debounceTimeout
+    let dclick = false
     plotlyHTMLElement.on?.('plotly_click', (e) => {
-      console.log(e.points[0].x, e.points[0].y, e.points[0].z);
+      debounceTimeout = setTimeout(async () => {
+        if(!dclick) {
+          dialog.value = true
+
+          // get index, label and type
+          const index = e.points[0].x
+          const label = labels[e.points[0].x]
+          const tp = label.length === 2 ? 'bp' : 'bps'
+
+          // get residues indexes
+          const residues = getResidueNumbers(index + 2, tp) // +2 because of the 2-based index in the sequence
+          // set dialog title
+          var title = `${$curves.descriptions[type].title} :: ${index + 2}${label}`
+          plotDialogRef.value.updateTitle(title)
+          // trick for avoiding problems on loading the viewer
+          await $sleep(500)
+          try {
+            commonViewerRef.value.addRepresentation(residues.join(' '))
+          } catch (error) {
+            await $sleep(500)
+            commonViewerRef.value.addRepresentation(residues.join.join(' '))
+          }
+        }
+        clearTimeout(debounceTimeout)
+        dclick = false
+      }, 300)
+
     })
+
+    plotlyHTMLElement.on?.('plotly_doubleclick', (e) => {
+      dclick = true
+      clearTimeout(debounceTimeout)
+    })
+
   }
 
 </script>
 
 <style scoped>
-
+  #container-plot { 
+    width:100%; 
+    height: 470px; 
+    position: relative;
+    display:flex; 
+    justify-content: center; 
+    align-items: center;
+  }
 </style>
   

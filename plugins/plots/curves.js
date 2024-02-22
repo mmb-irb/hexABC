@@ -13,6 +13,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Rise (Å)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Rise (Å)',
+								xtitle: 'Base Pair Step'
 							}
 						}
 					},
@@ -24,6 +28,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Roll (Degrees)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Roll (Degrees)',
+								xtitle: 'Base Pair Step'
 							}
 						}
 					},
@@ -35,6 +43,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Shift (Å)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Shift (Å)',
+								xtitle: 'Base Pair Step'
 							}
 						}
 					},
@@ -46,6 +58,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Slide (Å)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Slide (Å)',
+								xtitle: 'Base Pair Step'
 							}
 						}
 					},
@@ -57,6 +73,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Tilt (Degrees)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Tilt (Degrees)',
+								xtitle: 'Base Pair Step'
 							}
 						}
 					},
@@ -68,6 +88,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Twist (Degrees)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Twist (Degrees)',
+								xtitle: 'Base Pair Step'
 							}
 						}
 					},
@@ -156,6 +180,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Inclination (Degrees)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Inclination (Degrees)',
+								xtitle: 'Base Pair'
 							}
 						}
 					},
@@ -167,6 +195,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Tip (Degrees)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Tip (Degrees)',
+								xtitle: 'Base Pair'
 							}
 						}
 					},
@@ -178,6 +210,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'X-Displacement (Degrees)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'X-Displacement (Degrees)',
+								xtitle: 'Base Pair'
 							}
 						}
 					},
@@ -189,6 +225,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Y-Displacement (Degrees)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Y-Displacement (Degrees)',
+								xtitle: 'Base Pair'
 							}
 						}
 					},
@@ -200,6 +240,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Shear (Å)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Shear (Å)',
+								xtitle: 'Base Pair'
 							}
 						}
 					},
@@ -211,6 +255,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Stretch (Å)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Stretch (Å)',
+								xtitle: 'Base Pair'
 							}
 						}
 					},
@@ -222,6 +270,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Stagger (Å)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Stagger (Å)',
+								xtitle: 'Base Pair'
 							}
 						}
 					},
@@ -233,6 +285,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Buckle (Degrees)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Buckle (Degrees)',
+								xtitle: 'Base Pair'
 							}
 						}
 					},
@@ -244,6 +300,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Propeller (Degrees)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Propeller (Degrees)',
+								xtitle: 'Base Pair'
 							}
 						}
 					},
@@ -255,6 +315,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Opening (Degrees)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Opening (Degrees)',
+								xtitle: 'Base Pair'
 							}
 						}
 					},
@@ -266,6 +330,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Major Groove Depth (Å)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Major Groove Depth (Å)',
+								xtitle: 'Base Pair Step'
 							}
 						}
 					},
@@ -277,6 +345,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Major Groove Width (Å)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Major Groove Width (Å)',
+								xtitle: 'Base Pair Step'
 							}
 						}
 					},
@@ -288,6 +360,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Minor Groove Depth (Å)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Minor Groove Depth(Å)',
+								xtitle: 'Base Pair Step'
 							}
 						}
 					},
@@ -299,6 +375,10 @@ export default defineNuxtPlugin(() => {
 								histogram: 'Density',
 								ytitle: 'Minor Groove Width (Å)',
 								xtitle: 'Time (snapshots)'
+							},
+							error: {
+								ytitle: 'Minor Groove Width (Å)',
+								xtitle: 'Base Pair Step'
 							}
 						}
 					},
@@ -351,13 +431,13 @@ export default defineNuxtPlugin(() => {
 									tickformat: "d",
 									title: {
 										text: xtit,
-										standoff: 200
+										//standoff: 200
 									}
 								},
 								yaxis: {
 									title: {
 										text: ytit,
-										standoff: 1000
+										//standoff: 1000
 									}
 								},
 								margin: {
@@ -417,7 +497,8 @@ export default defineNuxtPlugin(() => {
 								y: ydata,
 								type: 'bar',
 								name: title,
-								marker: { color: color }
+								marker: { color: color },
+								hovertemplate: `%{y:.3f}`,
 							}
 						},
 						layout: (xtit, ytit) => {
@@ -431,13 +512,13 @@ export default defineNuxtPlugin(() => {
 									tickformat: "d",
 									title: {
 										text: xtit,
-										standoff: 200
+										//standoff: 200
 									}
 								},
 								yaxis: {
 									title: {
 										text: ytit,
-										standoff: 1000
+										//standoff: 1000
 									}
 								},
 								margin: {
@@ -451,6 +532,58 @@ export default defineNuxtPlugin(() => {
 						},
 						config: {
 							scrollZoom: false, 
+							displayModeBar: false, 
+							responsive: true 
+						}
+					},
+					error: {
+						data: (ydata, error) => [{
+							y: ydata,
+							error_y: {
+								type: 'data',
+								array: error,
+								visible: true,
+								color: '#f57d7d',
+							},
+							type: 'scatter',
+							name: '',
+							marker: { color: '#d90429', size: 10 },
+							hovertemplate: `%{y:.2f}Å ± %{error_y.array:.2f}Å<extra></extra>`,
+						}],
+						layout: (xtit, ytit, ticktext, tickvals) => {
+							return {
+								title: null,
+								showlegend: false,
+              	//legend: {orientation: "h"},
+								hovermode: "x",
+								barmode: "relative",
+								xaxis: {
+									tickformat: "f",
+									zeroline: false,
+									ticktext: ticktext,
+									tickvals: tickvals,
+									title: {
+										text: xtit,
+										//standoff: 200
+									}
+								},
+								yaxis: {
+									title: {
+										text: ytit,
+										//standoff: 1000
+									}
+								},
+								margin: {
+									l: 50,
+									r: 0,
+									b: 52,
+									t: 0,
+									pad: 0
+								}
+							}
+						},
+						config: {
+							scrollZoom: true, 
 							displayModeBar: false, 
 							responsive: true 
 						}
