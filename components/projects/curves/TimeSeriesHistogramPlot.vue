@@ -125,11 +125,6 @@
 
   const myChartOnReady = (plotlyHTMLElement) => {
 
-    // create double click logic
-    /*plotlyHTMLElement.on?.('plotly_click', (e) => {
-      console.log(e.points[0].x, e.points[0].y, nucl);
-    })*/
-
     let debounceTimeout
     let dclick = false
     plotlyHTMLElement.on?.('plotly_click', (e) => {

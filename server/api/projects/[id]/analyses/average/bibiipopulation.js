@@ -25,16 +25,26 @@ export default defineEventHandler(async (event) => {
     }
   })();
 
+  // TODO: CATCH ERROR IN CASE PROJECT ID IS NOT FOUND
+
+  // resort the data to have both strnads in the correct order
+  const splitIndex = resp.findIndex(item => item.nucleotide === "-");
+  const beforeDash = resp.slice(0, splitIndex);
+  // reverse second strand
+  const afterDash = resp.slice(splitIndex + 1).reverse();
+  const sortedData = [...beforeDash, resp[splitIndex], ...afterDash];
+
   // mapping the nucleotide to the format expected by the front end
-  const r = resp.map(item => {
-    // Extracting the letter and number parts
-    const match = item.nucleotide.match(/([CGTA])(\d+)'?-?(\d*)|^([ACGT]+)-?(\d*)$/);
-  
-    // Creating the modified object
+  const r = sortedData.map((item, index) => {
+    const match = item.nucleotide.match(/[GTAC]/);
+
     return {
-      "nucleotide": match ? (match[3] || match[5]) + (match[1] || match[4]) : item.nucleotide,
-      "BI": item.BI,
-      "BII": item.BII
+      nucleotide: match ? `${index < splitIndex + 1 ? index + 1 : index}${match[0]}` : "",
+      labels: [ "BI", "BII" ],
+      values: [
+        item.nucleotide !== "-" ? item.BI : null,
+        item.nucleotide !== "-" ? item.BII : null
+      ]
     };
   });
 

@@ -16,7 +16,7 @@
       <v-row class="pa-2">
         <CurvesPlot style="z-index:2" type="bibiipopulation" :img="bibiipopulationImg">
           <template #plot>
-            <StackedHistogramPlot type="bibiipopulation"/>
+            <StackedBarsPlot :id="id" type="bibiipopulation" />
           </template>
         </CurvesPlot>
       </v-row>
@@ -26,7 +26,7 @@
       <v-row class="pa-2">
         <CurvesPlot style="z-index:2" type="canonicalag" :img="canonicalagImg">
           <template #plot>
-            <StackedHistogramPlot type="canonicalag"/>
+            <StackedBarsPlot :id="id" type="canonicalag"/>
           </template>
         </CurvesPlot>
       </v-row>
@@ -36,7 +36,7 @@
       <v-row class="pa-2">
         <CurvesPlot style="z-index:2" type="puckering" :img="puckeringImg">
           <template #plot>
-            <StackedHistogramPlot type="puckering"/>
+            <StackedBarsPlot :id="id" type="puckering"/>
           </template>
         </CurvesPlot>
       </v-row>

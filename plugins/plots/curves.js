@@ -3,6 +3,7 @@ export default defineNuxtPlugin(() => {
 		provide: {
 			curves: {
 				sel_type: ['Nucleotide', 'Base step', 'Base pair', 'Base pair step', 'Tetramer', 'Hexamer'],
+				colors : ['#8d1616', '#e64343', '#f57d7d', '#ffb0b0'],
 				descriptions: {
 					rise: {
 						title: 'Rise',
@@ -303,15 +304,33 @@ export default defineNuxtPlugin(() => {
 					},
 					bibiipopulation: {
 						title: 'BI / BII Population',
-						description: 'BI (B-form) and BII (A-form) refer to different conformations of the sugar ring in the nucleotide backbone.'
+						description: 'BI (B-form) and BII (A-form) refer to different conformations of the sugar ring in the nucleotide backbone.',
+						plot: {
+							stacked: {
+								ytitle: 'BI / BII Population (%)',
+								xtitle: 'Nucleotide Sequence'
+							}
+						}
 					},
 					canonicalag: {
 						title: 'Canonical Alpha-Gamma',
-						description: 'Refers to the torsion angles around the C3\'-O3\' bond in the sugar-phosphate backbone.'
+						description: 'Refers to the torsion angles around the C3\'-O3\' bond in the sugar-phosphate backbone.',
+						plot: {
+							stacked: {
+								ytitle: 'Canonical Alpha-Gamma (%)',
+								xtitle: 'Nucleotide Sequence'
+							}
+						}
 					},
 					puckering: {
 						title: 'Puckering',
-						description: 'Refers to the deformation or distortion of the sugar ring from its ideal planar geometry.'
+						description: 'Refers to the deformation or distortion of the sugar ring from its ideal planar geometry.',
+						plot: {
+							stacked: {
+								ytitle: 'Puckering (%)',
+								xtitle: 'Nucleotide Sequence'
+							}
+						}
 					}
 				},
 				plots: {
@@ -387,6 +406,51 @@ export default defineNuxtPlugin(() => {
 						},
 						config: {
 							scrollZoom: true, 
+							displayModeBar: false, 
+							responsive: true 
+						}
+					},
+					stacked: {
+						data: (xdata, ydata, title, color) => {
+							return {
+								x: xdata,
+								y: ydata,
+								type: 'bar',
+								name: title,
+								marker: { color: color }
+							}
+						},
+						layout: (xtit, ytit) => {
+							return {
+								title: null,
+								showlegend: true,
+              	legend: {orientation: "h"},
+								hovermode: "x",
+								barmode: "relative",
+								xaxis: {
+									tickformat: "d",
+									title: {
+										text: xtit,
+										standoff: 200
+									}
+								},
+								yaxis: {
+									title: {
+										text: ytit,
+										standoff: 1000
+									}
+								},
+								margin: {
+									l: 50,
+									r: 0,
+									b: 52,
+									t: 0,
+									pad: 0
+								}
+							}
+						},
+						config: {
+							scrollZoom: false, 
 							displayModeBar: false, 
 							responsive: true 
 						}
