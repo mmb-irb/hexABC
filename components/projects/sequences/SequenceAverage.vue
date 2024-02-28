@@ -114,7 +114,7 @@
         })
         break;
       case '4':
-        document.querySelectorAll(`.dbond`).forEach(item => item.classList.remove('bond-highlighted'))
+        /*document.querySelectorAll(`.dbond`).forEach(item => item.classList.remove('bond-highlighted'))
         document.querySelectorAll(`.hbond`).forEach(item => item.classList.remove('bond-highlighted'))
         document.querySelectorAll(`.vbond`).forEach(item => item.classList.remove('bond-highlighted'))
         //document.querySelectorAll(`.nucleotide`).forEach(item => item.classList.remove('nucl-highlighted'))
@@ -122,6 +122,14 @@
           //var idx = parseInt(item.attributes.id.value.split('-')[1])
           //if(idx > 1 && idx < strand1.length) item.classList.add('nucl-highlighted')
           item.classList.add('nucl-highlighted')
+        })*/
+        document.querySelectorAll(`.dbond`).forEach(item => item.classList.add('bond-highlighted'))
+        document.querySelectorAll(`.hbond`).forEach(item => item.classList.remove('bond-highlighted'))
+        document.querySelectorAll(`.vbond`).forEach(item => item.classList.remove('bond-highlighted'))
+        document.querySelectorAll(`.nucleotide`).forEach(item => item.classList.remove('nucl-highlighted'))
+        document.querySelectorAll(`.nucleotide`).forEach(item => {
+          var idx = parseInt(item.attributes.id.value.split('-')[1])
+          if(idx > 1 && idx < strand1.length) item.classList.add('nucl-highlighted')
         })
         break;
     }

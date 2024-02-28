@@ -1,4 +1,3 @@
-import { error } from 'console';
 import { readFile } from 'fs/promises';
 
 // this end point gives the list of projects paginated
