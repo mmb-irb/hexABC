@@ -29,7 +29,7 @@ Build the application for development server (webdev3).
 npm run build:staging
 ```
 
-Copy the **.output** folder to the server.
+Copy the **.output_hexABC** folder to the server.
 
 ### Production
 
@@ -40,7 +40,7 @@ Build the application for production server.
 npm run build:production
 ```
 
-Copy the **.output** folder to the server.
+Copy the **.output_hexABC** folder to the server.
 
 ## Configuration for apache server (development)
 
@@ -53,7 +53,7 @@ Copy the **.output** folder to the server.
 </Location>
 ```
 
-Note that port can be 3000 or any other declared in the **ecosystem.config.js** file (see step 4)
+Note that port can be 3000 or any other declared in the **ecosystem.hexABC.config.js** file (see step 4)
 
 2. Enable proxy and proxy_http modules and restart apache:
 
@@ -67,7 +67,7 @@ sudo /etc/init.d/apache2 restart
 
 `sudo npm install pm2 -g`
 
-4. Create **ecosystem.config.js** file in the same folder where the **.output** folfer has been copied:
+4. Create **ecosystem.hexABC.config.js** file in the same folder where the **.output_hexABC** folfer has been copied:
 
 ```javascript
 module.exports = {
@@ -80,7 +80,7 @@ module.exports = {
       env: {
 	    NODE_ENV: 'staging'
       },
-      script: './.output/server/index.mjs'
+      script: './.output_hexABC/server/index.mjs'
     }
   ]
 }
@@ -88,7 +88,7 @@ module.exports = {
 
 4. Launch server (from the folder where it's installed):
 
-`pm2 start ecosystem.config.js --name hexABC`
+`pm2 start ecosystem.hexABC.config.js --name hexABC`
 
 5. Check that the server is up and running:
 
