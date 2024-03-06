@@ -62,8 +62,9 @@ export default function useHeatmapUtils() {
     }, []);
   }
 
-  const downSamplingAxis = (numframes, factor) => {
-    return Array.from({length: numframes}, (_, i) => i * factor)
+  const downSamplingAxis = (numframes, factor, init) => {
+    const initValue = init || 0
+    return Array.from({length: numframes}, (_, i) => i * factor + initValue)
   }
 
   const getPlotlyForImage = (plotData, plotLayout) => {

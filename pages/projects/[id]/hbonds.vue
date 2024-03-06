@@ -133,7 +133,7 @@
     const phbonds = getParsedHBonds(d.data.value.hbonds)
     const nbs = phbonds.h
     const bs = phbonds.b
-    const xvls = downSamplingAxis(nfs, ds)
+    const xvls = downSamplingAxis(nfs, ds, from)
 
     return { nfs: nfs, dfs: ds, hbonds: nbs, bs: bs, xvals: xvls, rhbonds: d.data.value.hbonds }
   }
