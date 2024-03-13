@@ -102,7 +102,7 @@
   </script>
   
 	<style>
-		#tbl-rmsd .v-table__wrapper table { table-layout: fixed; } 
+		/*#tbl-rmsd .v-table__wrapper table { table-layout: fixed; } */
 	</style>
 
   <style scoped>
