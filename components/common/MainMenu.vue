@@ -35,7 +35,7 @@
               </v-menu>
             </v-btn>
 
-            <v-btn prepend-icon="mdi-chart-box" rounded="0" color="primary" class="common-menu">
+            <v-btn prepend-icon="mdi-chart-box" rounded="0" color="primary" @click="toggleMenu('/results')" to="/results"  class="common-menu">
               Results
             </v-btn>
 
@@ -84,7 +84,7 @@
                   </v-list-item>
                 </v-list-group>
 
-                <v-list-item prepend-icon="mdi-chart-box" title="Results" to="" @click="menu_resp = false"></v-list-item>
+                <v-list-item prepend-icon="mdi-chart-box" title="Results" to="/results" @click="menu_resp = false; toggleMenu('/results')"></v-list-item>
 
                 <v-list-item prepend-icon="mdi-cloud-braces" title="REST API" to="/rest" @click="menu_resp = false; toggleMenu('/rest')"></v-list-item>
 

@@ -67,7 +67,8 @@ export default defineNuxtConfig({
     { path: '~/components/projects/distance', extensions: ['vue'] },
     { path: '~/components/projects/sequences', extensions: ['vue'] },
     { path: '~/components/projects/sasa', extensions: ['vue'] },
-    { path: '~/components/projects/pca', extensions: ['vue'] }
+    { path: '~/components/projects/pca', extensions: ['vue'] },
+    { path: '~/components/results', extensions: ['vue'] }
   ],
   plugins: [
     // define here all plugins in nested folders
@@ -78,7 +79,8 @@ export default defineNuxtConfig({
     '~/plugins/plots/distres', 
     '~/plugins/plots/fluctuation',
     '~/plugins/plots/sasa',
-    '~/plugins/plots/pca'
+    '~/plugins/plots/pca',
+    '~/plugins/results/shift'
   ],
   runtimeConfig: {
     public: {
@@ -100,7 +102,9 @@ export default defineNuxtConfig({
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(firstframe|average|pairwise)$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(residues)(\\?res=([0-9]+,)*[0-9]+)?$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/time\/(alpha|beta|gamma|delta|chi|epsilon|theta|inclination|tip|xdisp|ydisp|shear|stretch|stagger|buckle|propeller|opening|rise|roll|shift|slide|tilt|twist|majorgd|majorgw|minorgd|minorgw)(\\?bp=\\d+\_[A-Z]+)?$/',
-        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/average\/(bibiipopulation|canonicalag|puckering|inclination|tip|xdisp|ydisp|shear|stretch|stagger|buckle|propeller|opening|rise|roll|shift|slide|tilt|twist|majorgd|majorgw|minorgd|minorgw)$/'
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/average\/(bibiipopulation|canonicalag|puckering|inclination|tip|xdisp|ydisp|shear|stretch|stagger|buckle|propeller|opening|rise|roll|shift|slide|tilt|twist|majorgd|majorgw|minorgd|minorgw)$/',
+
+        '/api/results/shift', 
       ]
     }
   },
