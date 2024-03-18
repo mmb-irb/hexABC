@@ -17,12 +17,12 @@ export default defineNuxtPlugin(() => {
           [1, 'ff0000'] // Value 5 (not unimodal, > -0.02±0.35)
         ],
         legendZ: [
-          'unimodal, -0.02 ± 0.35',
-          'unimodal, < -0.02 - 0.35',
-          'unimodal, > -0.02 + 0.35',
-          'not unimodal, -0.02 ± 0.35',
-          'not unimodal, < -0.02 - 0.35',
-          'not unimodal, > -0.02 + 0.35'
+          'unimodal<br>mean = -0.02 ± 0.35',
+          'unimodal<br>mean < -0.02 - 0.35',
+          'unimodal<br>mean > -0.02 + 0.35',
+          'not unimodal<br>mean = -0.02 ± 0.35',
+          'not unimodal<br>mean < -0.02 - 0.35',
+          'not unimodal<br>mean > -0.02 + 0.35'
         ],
         data: (xdata, ydata, zdata, cscale, legend) => [{
           x: xdata,
@@ -46,7 +46,7 @@ export default defineNuxtPlugin(() => {
             side: 'bottom',
             showgrid: false,
             zeroline:false,
-            showticklabels: false
+            showticklabels: true
           },
           yaxis: {
             autosize: false,
@@ -56,7 +56,7 @@ export default defineNuxtPlugin(() => {
           margin: {
             l: 45,
             r: 2,
-            b: 2,
+            b: 45,
             t: 2,
             pad: 4
           },

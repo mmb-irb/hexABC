@@ -52,6 +52,12 @@
 
 <script setup>
 
+import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
+
+  const { 
+    calculateComplementaryStrand
+  } = useInteractiveSequence()
+
   const config = useRuntimeConfig()
   const { $shift, $sleep } = useNuxtApp()
   
@@ -96,11 +102,11 @@
             break;
           case 4: 
             text = '🔷';
-            textColor = '#ff0000';
+            textColor = '#0000ff';
             break;
           case 5: 
             text = '🔷';
-            textColor = '#ff0000';
+            textColor = '#0000ff';
             break;
         }
 
@@ -123,7 +129,6 @@
   })
 
   const dialog = ref(false)
-  const commonViewerRef = ref(null)
   const plotDialogRef = ref(null);
 
   const myChartOnReady = (plotlyHTMLElement) => {
@@ -137,8 +142,9 @@
       var z = e.points[0].z;
 
       var hex = y.replace('....', x)
+      var comphex = calculateComplementaryStrand(hex.split(''))
 
-      e.points[0].fullData.hovertemplate = `<b>${hex}</b>` +
+      e.points[0].fullData.hovertemplate = `<b>${hex} / ${comphex.join('')}</b>` +
                   `<br><b>${legendZ[z]}</b>` +
 									`<extra></extra>`
     })
