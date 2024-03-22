@@ -34,7 +34,7 @@
 		trajectorySetFrame,
 		pauseTrajectory,
 		playTrajectory,
-    } = useTrajectories()
+  } = useTrajectories()
 
 	const props = defineProps({
     trjMeta: Object,
@@ -65,6 +65,13 @@
 	const isSeeking = ref(false)
 	const playing = ref(true)
 	const userProgress = ref(0)
+
+	onBeforeUnmount(() => {
+		updatingProgressAuto.value = false
+		playing.value = false
+		isSeeking.value = false
+		userProgress.value = 0
+	})
 
 	const onMouseDown = (event) => {
 		updatingProgressAuto.value = false

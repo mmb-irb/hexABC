@@ -27,7 +27,7 @@
 
   <PlotDialog v-model="dialog" ref="plotDialogRef">
     <template #viewer>
-      <CommonViewer :id="id" ref="commonViewerRef" />
+      <TrajectoryViewer :id="id" ref="trjViewerRef" />
     </template>
   </PlotDialog>
 
@@ -36,10 +36,14 @@
 
 <script setup>
 
+  import useStage from '@/modules/ngl/useStage'
+
   const { id, type } = defineProps(['id', 'type'])
   const config = useRuntimeConfig()
-  const { $curves, $sleep } = useNuxtApp()
+  const { $curves, $sleep, $waitFor } = useNuxtApp()
   
+  const { getStage } = useStage()
+
   const loading = ref(true)
 
   // PROVISIONAL
@@ -91,7 +95,7 @@
   })
 
   const dialog = ref(false)
-  const commonViewerRef = ref(null)
+  const trjViewerRef = ref(null)
   const plotDialogRef = ref(null);
 
   const getResidueNumbers = (index, tp) => {
@@ -123,10 +127,10 @@
           // trick for avoiding problems on loading the viewer
           await $sleep(500)
           try {
-            commonViewerRef.value.addRepresentation(residues.join(' '))
+            trjViewerRef.value.addRepresentation("ball+stick", { sele: residues.join(' '), radius: .2 }, true)
           } catch (error) {
             await $sleep(500)
-            commonViewerRef.value.addRepresentation(residues.join.join(' '))
+            trjViewerRef.value.addRepresentation("ball+stick", { sele: residues.join(' '), radius: .2 }, true)
           }
         }
         clearTimeout(debounceTimeout)

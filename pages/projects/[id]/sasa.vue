@@ -54,15 +54,17 @@
 <script setup>
 
   import useInteractiveSequence from '@/modules/analysis/useInteractiveSequence'
+  import useStage from '@/modules/ngl/useStage'
   import common from '@/modules/common'
 
   const { id } = useRoute().params
   const config = useRuntimeConfig()
-  const { $sleep } = useNuxtApp()
+  const { $sleep, $waitFor } = useNuxtApp()
 
   const { 
     getSequenceSettings
   } = useInteractiveSequence()
+  const { getStage } = useStage()
   const { interpolateColor } = common()
 
   const datap = await useFetch(`${config.public.apiBase}/projects/${id}`)
@@ -96,7 +98,8 @@
     // Map each value to its corresponding color
     const colorValues = averages.map(value => interpolateColor(value, minValue, maxValue));
 
-    await $sleep(50)
+    await $waitFor(() => getStage().compList[0] !== undefined )
+
     // add new representation for each nucleotide
     colorValues.forEach(async (color, index) => {
       try {

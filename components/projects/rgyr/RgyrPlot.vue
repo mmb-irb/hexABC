@@ -59,7 +59,7 @@
 
   <PlotDialog v-model="dialog" ref="plotDialogRef">
     <template #viewer>
-      <CommonViewer :id="id" ref="commonViewerRef" />
+      <FrameViewer :id="id" :frame="selectedFrame" ref="frameViewerRef" />
     </template>
   </PlotDialog>
 
@@ -120,8 +120,9 @@
   })
 
   const dialog = ref(false)
-  const commonViewerRef = ref(null)
+  const frameViewerRef = ref(null)
   const plotDialogRef = ref(null)
+  const selectedFrame = ref(null)
 
   const myChartOnReady = (plotlyHTMLElement) => {
 
@@ -132,6 +133,7 @@
       debounceTimeout = setTimeout(async () => {
         if(!dclick) {
           dialog.value = true
+          selectedFrame.value = e.points[0].x
           // set dialog title
           var title = `${$rgyr.title} :: Frame ${e.points[0].x}`
           plotDialogRef.value.updateTitle(title)

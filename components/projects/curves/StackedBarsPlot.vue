@@ -24,7 +24,7 @@
 
   <PlotDialog v-model="dialog" ref="plotDialogRef">
     <template #viewer>
-      <CommonViewer :id="id" ref="commonViewerRef" />
+      <TrajectoryViewer :id="id" ref="trjViewerRef" />
     </template>
   </PlotDialog>
 
@@ -79,7 +79,7 @@
   })
 
   const dialog = ref(false)
-  const commonViewerRef = ref(null)
+  const trjViewerRef = ref(null)
   const plotDialogRef = ref(null);
 
   const myChartOnReady = (plotlyHTMLElement) => {
@@ -98,10 +98,10 @@
           // trick for avoiding problems on loading the viewer
           await $sleep(500)
           try {
-            commonViewerRef.value.addRepresentation(residue)
+            trjViewerRef.value.addRepresentation("ball+stick", { sele: residue, radius: .2 }, true)
           } catch (error) {
             await $sleep(500)
-            commonViewerRef.value.addRepresentation(residue)
+            trjViewerRef.value.addRepresentation("ball+stick", { sele: residue, radius: .2 }, true)
           }
         }
         clearTimeout(debounceTimeout)

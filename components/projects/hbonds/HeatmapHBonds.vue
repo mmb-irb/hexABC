@@ -57,7 +57,7 @@
 
   <PlotDialog v-model="dialog" ref="plotDialogRef">
     <template #viewer>
-      <HBondsViewer :id="id" ref="hBondsViewerRef" />
+      <FrameViewer :id="id" :frame="selectedFrame" ref="hBondsViewerRef" />
     </template>
   </PlotDialog>
 
@@ -87,7 +87,8 @@
 
   const dialog = ref(false)
   const hBondsViewerRef = ref(null)
-  const plotDialogRef = ref(null);
+  const plotDialogRef = ref(null)
+  const selectedFrame = ref(null)
 
   const myChartOnReady = async (plotlyHTMLElement) => {
     if(!imageCreated.value) {
@@ -135,6 +136,7 @@
         if(!dclick) {
           //console.log(e.points[0].x, e.points[0].y, e.points[0].z);
           dialog.value = true
+          selectedFrame.value = e.points[0].x
           // set dialog title
           var ns = e.points[0].y.replace(/([A-Za-z])(\d+)/g, '$1 - $2');
           var title = `Hydrogen Bonds :: Frame ${e.points[0].x} :: BP ${ns}`
@@ -144,11 +146,13 @@
           // trick for avoiding problems on loading the viewer
           await $sleep(500)
           try {
-            hBondsViewerRef.value.addRepresentationHBonds(residues.join(' '))
+            hBondsViewerRef.value.addRepresentation("ball+stick", { sele: residues.join(' '), radius: .2 }, true)
+            //hBondsViewerRef.value.addRepresentationHBonds(residues.join(' '))
           } catch (error) {
             //console.log('Error adding representation:', error)
             await $sleep(500)
-            hBondsViewerRef.value.addRepresentationHBonds(residues.join(' '))
+            hBondsViewerRef.value.addRepresentation("ball+stick", { sele: residues.join(' '), radius: .2 }, true)
+            //hBondsViewerRef.value.addRepresentationHBonds(residues.join(' '))
           }
         }
         clearTimeout(debounceTimeout)

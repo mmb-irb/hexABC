@@ -222,9 +222,84 @@ export default function useTrajectories() {
 
   }
 
+  const loadFrame = async (url, atoms, component) => {
+
+    const response = await fetch(url)
+    
+    const totalBytes = response.headers.get('content-length')
+
+    const reader = response.body.getReader()
+    //let chunks = []
+    let totalLength = 0
+    let payload = new Uint8Array(0)
+
+    const trajectoryPayloads = []
+
+    let totalPayload, totalFrames
+
+    let done, value
+    // Read the stream until it's done
+    while (!done && !stopTraj.value) {
+
+      ({ done, value } = await reader.read())
+
+      // Break when the stream is done
+      if (done) {
+        break
+      }
+
+      //chunks.push(value);
+      totalLength += value.length;
+
+      //console.log(totalLength / totalBytes * 100)
+      percentLoaded.value = totalLength / totalBytes * 100
+
+      // Append the new data to the payload
+      payload = appendBuffer(payload, value)
+
+      // Add the main data to the array of payloads
+      // Substract data from not completed frames
+      const bytesPerFrame = atoms * BYTES_PER_ATOM
+      const fitLength =
+        Math.floor(payload.byteLength / bytesPerFrame) * bytesPerFrame
+      const fitPayload = payload.slice(0, fitLength)
+      trajectoryPayloads.push(fitPayload)
+
+      // Join all payloads into a single trajectory
+      if (trajectoryPayloads.length === 1)
+        totalPayload = trajectoryPayloads[0]
+      else
+        totalPayload = trajectoryPayloads.reduce((cb, nb) =>
+          appendBuffer(cb, nb),
+        )
+
+      // calculate frames loaded
+      totalFrames = payload.byteLength / bytesPerFrame;     
+
+    }
+
+    // clean buffer
+    payload = new Uint8Array(0);
+
+    component.setVisibility(true)
+
+    const traj = initNGLTrajectory(totalPayload, atoms, totalFrames)
+    const t = component.addTrajectory(traj)
+
+    //console.log(component.trajList)
+
+    component.trajList[0].setFrame(0)
+
+    console.log('frame loaded!')
+
+  }
+
   
   const initLoadingTrajectory = () => {
     stopTraj.value = false
+    currentFrame.value = 0
+    currentTrajectory.value = null
+    percentLoaded.value = 0
   }
 
   const stopLoadingTrajectory =  () => {
@@ -257,6 +332,7 @@ export default function useTrajectories() {
     initLoadingTrajectory,
     stopLoadingTrajectory,
     loadTrajectory,
+    loadFrame,
     getCurrentFrame,
     getPercentLoaded,
     pauseTrajectory,

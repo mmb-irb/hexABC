@@ -34,7 +34,7 @@
 
   <PlotDialog v-model="dialog" ref="plotDialogRef">
     <template #viewer>
-      <CommonViewer :id="id" ref="commonViewerRef" />
+      <FrameViewer :id="id" :frame="selectedFrame" ref="frameViewerRef" />
     </template>
   </PlotDialog>
 
@@ -96,7 +96,7 @@
   })
 
   const dialog = ref(false)
-  const commonViewerRef = ref(null)
+  const frameViewerRef = ref(null)
   const plotDialogRef = ref(null);
 
   const getTypeofSelection = (nucl) => {
@@ -123,6 +123,8 @@
     return tp
   }
 
+  const selectedFrame = ref(null)
+
   const myChartOnReady = (plotlyHTMLElement) => {
 
     let debounceTimeout
@@ -135,6 +137,7 @@
           // set dialog title
           var ns = nucl.map(item => item.split('-').reverse().join('')).join('-')
           var tp = getTypeofSelection(nucl)
+          selectedFrame.value = e.points[0].x
           var title = `${$curves.descriptions[type].title} :: Frame ${e.points[0].x} :: ${tp} ${ns}`
           plotDialogRef.value.updateTitle(title)
           // get residue numbers for selected nucleotides
@@ -142,11 +145,13 @@
           // trick for avoiding problems on loading the viewer
           await $sleep(500)
           try {
-            commonViewerRef.value.addRepresentation(residues.join(' '))
+            //frameViewerRef.value.addRepresentation(residues.join(' '))
+            frameViewerRef.value.addRepresentation("ball+stick", { sele: residues.join(' '), radius: .2 }, true)
           } catch (error) {
             //console.log('Error adding representation:', error)
             await $sleep(500)
-            commonViewerRef.value.addRepresentation(residues.join(' '))
+            //frameViewerRef.value.addRepresentation(residues.join(' '))
+            frameViewerRef.value.addRepresentation("ball+stick", { sele: residues.join(' '), radius: .2 }, true)
           }
         }
         clearTimeout(debounceTimeout)

@@ -10,7 +10,6 @@
 		</div>
 		<div id="viewport"></div>
 		<LegendViewer v-model="legendText" position="tr" v-if="legend" />
-		<TrajectoryPlayer position="b" :trjMeta="trjMeta" :step="step" v-if="trjMeta" />
 	</div>
 </template>
 
@@ -26,19 +25,17 @@
 
 	const { createStage } = useStage()
 	const { 
-		loadTrajectory,
-		initLoadingTrajectory,
-		stopLoadingTrajectory
+		loadFrame
     } = useTrajectories()
 	const { checkMouseSignals } = mouseObserver()
 
-	const { id, height } = defineProps(['id', 'height'])
+	const { id, frame, height } = defineProps(['id', 'frame', 'height'])
 
 	const loading = ref(true)
 	const legend = ref(false)
 	const legendText = ref('')
 	const trjMeta = ref(null)
-	let step = $globals.trajectories.defaultStep
+	//let step = $globals.trajectories.defaultStep
 
 	let stage = null
 	onMounted(async () => {
@@ -47,7 +44,7 @@
 			document.getElementById('viewport').style.height = `${height}px`
 		}
 
-		initLoadingTrajectory()
+		//initLoadingTrajectory()
 
 		stage = createStage("viewport")
 		stage.setParameters({ backgroundColor: '#dedede' });
@@ -71,11 +68,11 @@
 					loading.value = false
 				}, 50)
 
-				// load trajectory
+				// load frame
 				const numAtoms = trjMeta.value.metadata.atoms
-				const numFrames = Math.ceil(trjMeta.value.metadata.frames / step)
-				const totalFrames = trjMeta.value.metadata.frames
-				await loadTrajectory(`${config.public.externalApi}current/projects/${id}/files/trajectory?frames=1:${totalFrames}:${step}`, numAtoms, numFrames, component)
+				//const numFrames = Math.ceil(trjMeta.value.metadata.frames / step)
+				//const totalFrames = trjMeta.value.metadata.frames
+				await loadFrame(`${config.public.externalApi}current/projects/${id}/files/trajectory?frames=${frame}`, numAtoms, component)
 			})
 		
 		const updateLegend = (v, s) => {
@@ -89,9 +86,9 @@
 
 	})
 
-	onBeforeUnmount (() => {
+	/*onBeforeUnmount (() => {
 		stopLoadingTrajectory()
-  })
+  })*/
 
 	const addRepresentation = (type, props, av = false) => {
 		if(!stage.compList[0]) return
@@ -114,6 +111,6 @@
 
 <style scoped>
 	#loader-viewer { position: absolute; top: 0; left: 0; background: #dedede; width: 100%; height: 450px; z-index: 1;}
-	#viewport { width: 100%; height: 400px; background-color: #dedede; }
+	#viewport { width: 100%; height: 450px; background-color: #dedede; }
 </style>
     
