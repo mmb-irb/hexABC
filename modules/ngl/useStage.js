@@ -19,10 +19,10 @@ export default function useStage() {
     })
 
     const createStage = (/*NGL,*/ layer, tooltip = false) => {
-      const mdsrvDatasource = new NGL.MdsrvDatasource( 'https://mmb.irbbarcelona.org/mdsrv/api/' )
+      /*const mdsrvDatasource = new NGL.MdsrvDatasource( 'https://mmb.irbbarcelona.org/mdsrv/api/' )
       NGL.DatasourceRegistry.add("file", mdsrvDatasource)
       //setListingDatasource(mdsrvDatasource)
-      NGL.setTrajectoryDatasource(mdsrvDatasource)
+      NGL.setTrajectoryDatasource(mdsrvDatasource)*/
 
       stage = new NGL.Stage(layer, { tooltip: tooltip/*, cameraType: 'perspective'*/ })
       //console.log('stage created')
@@ -44,7 +44,7 @@ export default function useStage() {
       return shape 
     }
 
-    const createTrajectoryPlayer = function (traj, settings) {
+    /*const createTrajectoryPlayer = function (traj, settings) {
       return new NGL.TrajectoryPlayer( traj, {
         step: settings.step,
         timeout:settings.timeout,
@@ -54,7 +54,7 @@ export default function useStage() {
         mode: settings.loop ? "loop": "once",
         direction: settings.bounce ? "bounce": "forward"
       } ) 
-  }
+  }*/
   
     return { 
         stage, 
@@ -63,7 +63,7 @@ export default function useStage() {
         getStage,
         createSelection,
         createShape,
-        createTrajectoryPlayer
+        //createTrajectoryPlayer
     }
   
   }
