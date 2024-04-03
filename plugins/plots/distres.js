@@ -15,7 +15,19 @@ export default defineNuxtPlugin(() => {
 				plot: {
           data:  (xdata, ydata, zdata, colorbartit) => [{
             type: 'heatmap',
-            colorscale: 'Hot',
+            //colorscale: 'Hot',
+            colorscale: [
+              [0, "#fef4ef"],
+              [0.25, "#fcbca2"],
+              [0.5, "#fb6a4a"],
+              [0.75, "#ca181c"],
+              [1, "#69000e"]
+              /*[0, "#69000e"],
+              [0.25, "#ca181c"],
+              [0.5, "#fb6a4a"],
+              [0.75, "#fcbca2"],
+              [1, "#fef4ef"]*/
+            ],
             x: xdata,
             y: ydata,
             z: zdata,

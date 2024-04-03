@@ -99,7 +99,7 @@
             dialog.value = true
             selectedFrame.value = e.points[0].x
             // set dialog title
-            var title = `${$rmsd[type].title} :: Frame ${e.points[0].x}`
+            var title = `${$rmsd[type].title}`
             plotDialogRef.value.updateTitle(title)
           }
           clearTimeout(debounceTimeout)

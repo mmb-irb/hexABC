@@ -34,11 +34,13 @@
 		trajectorySetFrame,
 		pauseTrajectory,
 		playTrajectory,
+		removeTrajectory
   } = useTrajectories()
 
 	const props = defineProps({
     trjMeta: Object,
 		step: Number,
+		loop: Boolean,
 		position: { type: String, default: 'b' }
   })
 
@@ -55,6 +57,7 @@
 	})
 	const percentLoaded = computed(() => getPercentLoaded())
 	const trjIsRunning = computed(() => {
+			if(playing.value && props.loop) return true
       if(getCurrentFrame() === totalFrames && playing.value) {
         playing.value = false
         return false
@@ -71,6 +74,8 @@
 		playing.value = false
 		isSeeking.value = false
 		userProgress.value = 0
+		pauseTrajectory()
+		//removeTrajectory()
 	})
 
 	const onMouseDown = (event) => {
@@ -133,7 +138,7 @@
 
 </script>
 
-<style>
+<style scoped>
 	.player {
 		position: absolute;
 		top: 0;

@@ -13,7 +13,7 @@ const percentLoaded = ref(0)
 
 export default function useTrajectories() {
 
-  const { $globals } = useNuxtApp()
+  const { $globals, $waitFor } = useNuxtApp()
 
   const getNGLObject = () => {
     const { $NGL } = useNuxtApp()
@@ -107,7 +107,7 @@ export default function useTrajectories() {
 
   }
 
-  const loadTrajectory = async (url, atoms, trajectoryFinalExpectedFrames, component) => {
+  const loadTrajectory = async (url, atoms, trajectoryFinalExpectedFrames, component, params = { loop: false, bounce: false }) => {
 
     const response = await fetch(url)
     
@@ -194,12 +194,13 @@ export default function useTrajectories() {
         // Set animation player parameters
         nglPlayer.setParameters({
           end: lastFrameIndex,
-          mode: completedTrajectory ? 'once' : 'loop',
+          mode: completedTrajectory && !params.loop ? 'once' : 'loop',
           timeout: $globals.trajectories.defaultTimeout,
           interpolateStep: 100 / framesLoaded, // This must be set every time
+          direction: params.bounce ? 'bounce': 'forward'
         });
 
-        // start player once we heve some coordinates and they are not all 0
+        // start player once we have some coordinates and they are not all 0
         if(!playerisPlaying && coords.length > 0 && !coords[0].every(value => value === 0)) {
           component.setVisibility(true)
           nglPlayer.play()
@@ -239,7 +240,7 @@ export default function useTrajectories() {
 
     let done, value
     // Read the stream until it's done
-    while (!done && !stopTraj.value) {
+    while (!done /*&& !stopTraj.value*/) {
 
       ({ done, value } = await reader.read())
 
@@ -274,7 +275,7 @@ export default function useTrajectories() {
         )
 
       // calculate frames loaded
-      totalFrames = payload.byteLength / bytesPerFrame;     
+      totalFrames = payload.byteLength / bytesPerFrame;
 
     }
 
@@ -283,14 +284,20 @@ export default function useTrajectories() {
 
     component.setVisibility(true)
 
+    if(component.trajList.length > 0) component.trajList.pop()
+
     const traj = initNGLTrajectory(totalPayload, atoms, totalFrames)
+    //console.log(totalPayload, atoms, totalFrames, traj.coordinates.length)
     const t = component.addTrajectory(traj)
 
-    //console.log(component.trajList)
+    //await $waitFor(() => component.trajList[0].trajectory.frames.length > 0)
+
+    //console.log(component.trajList[0].trajectory.frames.length)
 
     component.trajList[0].setFrame(0)
 
     console.log('frame loaded!')
+
 
   }
 
@@ -328,6 +335,10 @@ export default function useTrajectories() {
     currentTrajectory.value.trajectory.player.play()
   }
 
+  const removeTrajectory = () => {
+    currentTrajectory.value.trajectory.dispose()
+  }
+
   return { 
     initLoadingTrajectory,
     stopLoadingTrajectory,
@@ -337,7 +348,8 @@ export default function useTrajectories() {
     getPercentLoaded,
     pauseTrajectory,
     trajectorySetFrame,
-    playTrajectory
+    playTrajectory,
+    removeTrajectory
   }
 
 }

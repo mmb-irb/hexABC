@@ -25,7 +25,7 @@
 
   <PlotDialog v-model="dialog" ref="plotDialogRef">
     <template #viewer>
-      <DistResidueViewer :id="id" ref="distResViewerRef" />
+      <TrajectoryViewer :id="id" ref="distResViewerRef" />
     </template>
   </PlotDialog>
 
@@ -93,11 +93,11 @@
           // trick for avoiding problems on loading the viewer
           await $sleep(500)
           try {
-            distResViewerRef.value.addRepresentation(residues.join(' '), residues)
+            distResViewerRef.value.addRepresentationDistRes(residues.join(' '), residues)
           } catch (error) {
             //console.log('Error adding representation:', error)
             await $sleep(500)
-            distResViewerRef.value.addRepresentation(residues.join(' '), residues)
+            distResViewerRef.value.addRepresentationDistRes(residues.join(' '), residues)
           }
         }
         clearTimeout(debounceTimeout)

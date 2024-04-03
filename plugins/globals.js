@@ -41,6 +41,7 @@ export default defineNuxtPlugin(() => {
           },
           trajectories: {
             defaultStep: 10000,
+            pcaStep: 1,
             defaultTimeout: 200,
           }
         }

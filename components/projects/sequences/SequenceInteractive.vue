@@ -70,7 +70,7 @@
 
   const resizeType = () => {
     if(props.ends === undefined && type.value == 'common') {
-      console.log('resizeType')
+      //console.log('resizeType')
       if(display.value.mdAndDown) type.value = 'compact'
       else type.value = 'common'
     }

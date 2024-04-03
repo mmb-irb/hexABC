@@ -10,7 +10,7 @@
 		</div>
 		<div id="viewport"></div>
 		<LegendViewer v-model="legendText" position="tr" v-if="legend" />
-		<FramePlayer position="b" :trjMeta="trjMeta" :frame="frameToLoad" @updateFrame="handleUpdateFrame" v-if="trjMeta" />
+		<!--<FramePlayer position="b" :trjMeta="trjMeta" :frame="frameToLoad" @updateFrame="handleUpdateFrame" v-if="trjMeta" />-->
 	</div>
 </template>
 
@@ -18,21 +18,20 @@
 	
 	const config = useRuntimeConfig()
 
-	import common from '@/modules/common'
 	import useStage from '@/modules/ngl/useStage'
 	import useTrajectories from '@/modules/ngl/useTrajectories'
 	import mouseObserver from '@/modules/ngl/mouseObserver'
 
-	const { calculateDistances } = common()
 	const { createStage } = useStage()
 	const { 
 		loadFrame
     } = useTrajectories()
-	const { checkMouseSignals } = mouseObserver()
+	const { checkMouseSignalsDouble } = mouseObserver()
 
-	const { id, frame, height } = defineProps(['id', 'frame', 'height'])
+	const { id, frame0, frame1, height } = defineProps(['id', 'frame0', 'frame1', 'height'])
 	
-	const frameToLoad = frame < 1 ? ref(1) : ref(frame)
+	const frame0ToLoad = frame0 < 1 ? ref(1) : ref(frame0)
+	const frame1ToLoad = frame1 < 1 ? ref(1) : ref(frame1)
 
 	const loading = ref(true)
 	const legend = ref(false)
@@ -56,7 +55,7 @@
 		const topology = await useFetch(`${config.public.apiBase}/projects/${id}/structure`)
 		const blob = new Blob([topology.data.value], { type: "text/plain" });
 
-		stage.loadFile(blob, { defaultRepresentation: false, ext: 'pdb'})
+		stage.loadFile(blob, { defaultRepresentation: false, ext: 'pdb', name: 'str0'})
 			.then(async function (component) {
 				// custom representation
 				component.setVisibility(false)
@@ -67,19 +66,34 @@
 					stage.viewer.handleResize()
 				}, 50)
 
-				// load frame
+				// load frame0
 				const numAtoms = trjMeta.value.metadata.atoms
-				await loadFrame(`${config.public.externalApi}current/projects/${id}/files/trajectory?frames=${frameToLoad.value}`, numAtoms, component)
+				await loadFrame(`${config.public.externalApi}current/projects/${id}/files/trajectory?frames=${frame0ToLoad.value}`, numAtoms, component)
 
-				loading.value = false
+				//loading.value = false
+		}).then(() => {
+			stage.loadFile(blob, { defaultRepresentation: false, ext: 'pdb', name: 'str1'})
+				.then(async function (component) {
+					// custom representation
+					component.setVisibility(false)
+					component.addRepresentation("licorice", { sele: "nucleic", color: '#f00' });
+					component.autoView('nucleic');
+
+					// load frame1
+					const numAtoms = trjMeta.value.metadata.atoms
+					await loadFrame(`${config.public.externalApi}current/projects/${id}/files/trajectory?frames=${frame1ToLoad.value}`, numAtoms, component)
+
+					loading.value = false
 			})
-		
+		})
+
 		const updateLegend = (v, s) => {
+			//console.log(v, s)
 			legendText.value = v
 			legend.value = s
 		}
 
-		checkMouseSignals(stage, updateLegend)
+		checkMouseSignalsDouble(stage, updateLegend)
 
 		window.addEventListener("resize", () => stage.viewer.handleResize())
 
@@ -92,29 +106,28 @@
 		return r
 	}
 
-	const addDistancesHBonds = (nucs, bonds) => {
-		if(!stage.compList[0] || bonds === 0) return
-		calculateDistances(stage.compList[0], nucs)
-	}
-
 	const removeRepresentation = (r) => {
 		if(!stage.compList[0]) return
 		stage.compList[0].removeRepresentation(r)
 	}
 
-	const handleUpdateFrame	= async (f) => {
+	/*const handleUpdateFrame	= async (f) => {
 		//loading.value = true
 		await loadFrame(`${config.public.externalApi}current/projects/${id}/files/trajectory?frames=${f}`, trjMeta.value.metadata.atoms, stage.compList[0])
 		//loading.value = false
-	}
+	}*/
 
 	defineExpose({
 		addRepresentation,
-		addDistancesHBonds,
 		removeRepresentation
 	});
 
 </script>
+
+<style>
+	span.str0 { color: #999; }
+	span.str1 { color: #d00; }
+</style>
 
 <style scoped>
 	#loader-viewer { position: absolute; top: 0; left: 0; background: #dedede; width: 100%; height: 450px; z-index: 1;}

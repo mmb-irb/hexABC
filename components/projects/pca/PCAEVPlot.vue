@@ -26,7 +26,7 @@
   
     <PlotDialog v-model="dialog" ref="plotDialogRef">
       <template #viewer>
-        <CommonViewer :id="id" ref="commonViewerRef" />
+        <PCAViewer :id="id" :selPCA="selPCA" ref="pcaViewerRef" />
       </template>
     </PlotDialog>
 
@@ -75,8 +75,9 @@
   })
 
   const dialog = ref(false)
-  const commonViewerRef = ref(null)
+  const pcaViewerRef = ref(null)
   const plotDialogRef = ref(null)
+  const selPCA = ref(null)
 
   const myChartOnReady = (plotlyHTMLElement) => {
 
@@ -90,6 +91,15 @@
           // set dialog title
           var title = `Principal Component ${e.points[0].x}`
           plotDialogRef.value.updateTitle(title)
+          selPCA.value = e.points[0].x.replace(/\D/g, '');
+          /*await $sleep(500)
+          try {
+            pcaViewerRef.value.addRepresentation("ball+stick", { sele: '*', radius: .2 }, true)
+          } catch (error) {
+            await $sleep(500)
+            pcaViewerRef.value.addRepresentation("ball+stick", { sele: '*', radius: .2 }, true)
+          }*/
+
         }
         clearTimeout(debounceTimeout)
         dclick = false

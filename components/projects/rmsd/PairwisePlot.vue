@@ -25,8 +25,7 @@
   
     <PlotDialog v-model="dialog" ref="plotDialogRef">
       <template #viewer>
-        <!-- TODO: modify by DoubleFrameViewer (it should show both frames) -->
-        <CommonViewer :id="id" ref="commonViewerRef" />
+        <DoubleFrameViewer :id="id" :frame0="frame0" :frame1="frame1" ref="dFrameViewerRef" />
       </template>
     </PlotDialog>
   
@@ -71,8 +70,10 @@
     })
   
     const dialog = ref(false)
-    const commonViewerRef = ref(null)
-    const plotDialogRef = ref(null);
+    const dFrameViewerRef = ref(null)
+    const plotDialogRef = ref(null)
+    const frame0 = ref(null)
+    const frame1 = ref(null)
   
     const myChartOnReady = (plotlyHTMLElement) => {
   
@@ -84,7 +85,9 @@
           if(!dclick) {
             dialog.value = true
             // set dialog title
-            var title = `${$rmsd.pairwise.title} :: Frames ${e.points[0].x}-${e.points[0].y}`
+            var title = `${$rmsd.pairwise.title} :: Frames <span class="frm0">${e.points[0].x}</span> - <span class="frm1">${e.points[0].y}</span>`
+            frame0.value = e.points[0].x
+            frame1.value = e.points[0].y
             plotDialogRef.value.updateTitle(title)
           }
           clearTimeout(debounceTimeout)

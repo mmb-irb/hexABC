@@ -139,20 +139,22 @@
           selectedFrame.value = e.points[0].x
           // set dialog title
           var ns = e.points[0].y.replace(/([A-Za-z])(\d+)/g, '$1 - $2');
-          var title = `Hydrogen Bonds :: Frame ${e.points[0].x} :: BP ${ns}`
+          var title = `Hydrogen Bonds :: BP ${ns}`
           plotDialogRef.value.updateTitle(title)
           // get residue numbers for selected nucleotides
           var residues = e.points[0].y.match(/\d+/g).map(Number)
+          var nucleotides = e.points[0].y.match(/[A-Za-z]+/g)
+          var nucs = nucleotides.map((x, i) => ({rname: x, rnum: residues[i]}) );
           // trick for avoiding problems on loading the viewer
           await $sleep(500)
           try {
             hBondsViewerRef.value.addRepresentation("ball+stick", { sele: residues.join(' '), radius: .2 }, true)
-            //hBondsViewerRef.value.addRepresentationHBonds(residues.join(' '))
+            hBondsViewerRef.value.addDistancesHBonds(nucs, e.points[0].z)
           } catch (error) {
             //console.log('Error adding representation:', error)
             await $sleep(500)
             hBondsViewerRef.value.addRepresentation("ball+stick", { sele: residues.join(' '), radius: .2 }, true)
-            //hBondsViewerRef.value.addRepresentationHBonds(residues.join(' '))
+            hBondsViewerRef.value.addDistancesHBonds(nucs, e.points[0].z)
           }
         }
         clearTimeout(debounceTimeout)

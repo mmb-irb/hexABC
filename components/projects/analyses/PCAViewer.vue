@@ -10,7 +10,7 @@
 		</div>
 		<div id="viewport"></div>
 		<LegendViewer v-model="legendText" position="tr" v-if="legend" />
-		<TrajectoryPlayer position="b" :trjMeta="trjMeta" :step="step" :loop="false" v-if="trjMeta" />
+		<TrajectoryPlayer position="b" :trjMeta="trjMeta" :step="step" :loop="true" v-if="trjMeta" />
 	</div>
 </template>
 
@@ -18,29 +18,28 @@
 	
 	const config = useRuntimeConfig()
 
-	import common from '@/modules/common'
 	import useStage from '@/modules/ngl/useStage'
 	import useTrajectories from '@/modules/ngl/useTrajectories'
 	import mouseObserver from '@/modules/ngl/mouseObserver'
 
 	const { $globals } = useNuxtApp()
 
-	const { findClosestAtom } = common()
-	const { createStage, createSelection } = useStage()
+	const { createStage } = useStage()
 	const { 
 		loadTrajectory,
 		initLoadingTrajectory,
 		stopLoadingTrajectory
-  } = useTrajectories()
+    } = useTrajectories()
 	const { checkMouseSignals } = mouseObserver()
 
-	const { id, height } = defineProps(['id', 'height'])
+	const { id, height, selPCA } = defineProps(['id', 'height', 'selPCA'])
+	const pca = ref(selPCA.padStart(2, '0'))
 
 	const loading = ref(true)
 	const legend = ref(false)
 	const legendText = ref('')
 	const trjMeta = ref(null)
-	let step = $globals.trajectories.defaultStep
+	let step = $globals.trajectories.pcaStep
 
 	let stage = null
 	onMounted(async () => {
@@ -55,7 +54,7 @@
 		stage.setParameters({ backgroundColor: '#dedede' });
 
 		// get trajectory metadata
-		trjMeta.value = await $fetch(`${config.public.externalApi}current/projects/${id}/filenotes/trajectory.bin`)
+		trjMeta.value = await $fetch(`${config.public.externalApi}current/projects/${id}/filenotes/pca_trajectory_${pca.value}.bin`)
 
 		// get topology structure
 		const topology = await useFetch(`${config.public.apiBase}/projects/${id}/structure`)
@@ -65,7 +64,7 @@
 			.then(async function (component) {
 				// custom representation
 				component.setVisibility(false)
-				component.addRepresentation("licorice", { sele: "nucleic", color: '#ccc' });
+				component.addRepresentation("spacefill", { sele: "*", colorScheme: 'chainid' });
 				component.autoView('nucleic');
 
 				setTimeout(async () => {
@@ -77,7 +76,8 @@
 				const numAtoms = trjMeta.value.metadata.atoms
 				const numFrames = Math.ceil(trjMeta.value.metadata.frames / step)
 				const totalFrames = trjMeta.value.metadata.frames
-				await loadTrajectory(`${config.public.externalApi}current/projects/${id}/files/trajectory?frames=1:${totalFrames}:${step}`, numAtoms, numFrames, component)
+				const params = { loop: true, bounce: true }
+				await loadTrajectory(`${config.public.externalApi}current/projects/${id}/files/pca_trajectory_${pca.value}.bin?frames=1:${totalFrames}:${step}`, numAtoms, numFrames, component, params)
 			})
 		
 		const updateLegend = (v, s) => {
@@ -95,46 +95,10 @@
 		stopLoadingTrajectory()
   })
 
-	// standard representation
 	const addRepresentation = (type, props, av = false) => {
 		if(!stage.compList[0]) return
 		const r = stage.compList[0].addRepresentation( type, props)
 		if(av) stage.compList[0].autoView(props.sele, 500);
-		return r
-	}
-
-	// distance per residue representation
-	const addRepresentationDistRes = (sele, residues) => {
-		if(!stage.compList[0]) return
-
-    // add representations
-		const r = stage.compList[0].addRepresentation( "ball+stick", { sele: sele, radius: .2 })
-    stage.compList[0].addRepresentation( "surface", { sele: sele, surfaceType: 'ms', side: 'front', color: 'white', opacity: 0.3 })
-		stage.compList[0].autoView(sele, 500);
-
-    // get residues center
-    const start = stage.compList[0].structure.getView(createSelection(residues[0])).center
-    const end = stage.compList[0].structure.getView(createSelection(residues[1])).center
-
-    // find "center" atoms for each residue
-    var closestAtom1 = findClosestAtom(stage.compList[0], start);
-    var closestAtom2 = findClosestAtom(stage.compList[0], end);
-
-    // add distance representation
-    stage.compList[0].addRepresentation("distance", {
-      atomPair: [[closestAtom1, closestAtom2]],
-      labelSize: 0,
-      color: "#8d1616"
-    });
-
-    // other way: create shape from residue to residue
-    /*const shape = createShape()
-    shape.addCylinder(start, end, [.8,0,0], 0.2)
-    console.log(shape)
-
-    const shapeComp = stage.addComponentFromObject( shape );
-    shapeComp.addRepresentation( "buffer" );*/
-
 		return r
 	}
 
@@ -145,7 +109,6 @@
 
 	defineExpose({
 		addRepresentation,
-		addRepresentationDistRes,
 		removeRepresentation
 	});
 

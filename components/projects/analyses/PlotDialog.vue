@@ -4,9 +4,7 @@
     width="700px"
   >
     <v-card>
-      <v-card-title>
-        {{ title }}
-      </v-card-title>
+      <v-card-title v-html="title"></v-card-title>
       <v-card-text>
         <slot name="viewer"></slot>
       </v-card-text>
@@ -59,6 +57,7 @@
 
 </script>
 
-<style scoped>
-
+<style>
+  span.frm1 { background: #f00; color: #fff; padding: 3px 7px; border-radius: 4px; }
+  span.frm0 { background: #ccc; color: #555; padding: 3px 7px; border-radius: 4px; }
 </style>
