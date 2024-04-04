@@ -24,7 +24,7 @@
     "tags": [
         {
             "name": "Projects",
-            "description": "Information about all the analyses performed for each of the DNA 20 mer"
+            "description": "General information for each of the DNA 20 mer projects"
         }
     ],
     "paths": {
@@ -119,6 +119,170 @@
                 },
                 "deprecated": false
             }
+        },
+        "\/projects\/{id}\/topology": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Get topology info",
+                "description": "Gets all the topology information for a single project corresponding to the given identifier",
+                "operationId": "getTopology",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Project identifier, it must be a FAIR identifier (i.e. MCV1900002)",
+                        "required": true,
+                        "type": "string",
+                        "default": "MCV1900002"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/Topology"
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/StatusError"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/{id}\/structure": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Get structure",
+                "description": "Gets the PDB file structure for a single project corresponding to the given identifier",
+                "operationId": "getStructure",
+                "produces": [
+                    "chemical/x-pdb"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Project identifier, it must be a FAIR identifier (i.e. MCV1900002)",
+                        "required": true,
+                        "type": "string",
+                        "default": "MCV1900002"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "string",
+                            "format": "binary"
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/StatusError"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/{id}\/trajectory": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Get trajectory",
+                "description": "Gets the trajectory file for a single project corresponding to the given identifier",
+                "operationId": "getTrajectory",
+                "produces": [
+                    "application\/octet-stream"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Project identifier, it must be a FAIR identifier (i.e. MCV1900002)",
+                        "required": true,
+                        "type": "string",
+                        "default": "MCV1900002"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "string",
+                            "format": "binary"
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/StatusError"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/sequence": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Search by sequence",
+                "description": "Gets a paginated list of summaries of all the projects matching with a given sequence",
+                "operationId": "searchBySequence",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Project identifier, it must be a FAIR identifier (i.e. MCV1900002)",
+                        "required": true,
+                        "type": "string",
+                        "default": "MCV1900002"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "properties": {
+                                "total": {
+                                    "description": "Total number of projects in the database",
+                                    "type": "number"
+                                },
+                                "projects": {
+                                    "description": "List of projects",
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#\/definitions\/ShortProject"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
         }
     },
     "definitions": {
@@ -127,7 +291,7 @@
                 "id",
                 "accession",
                 "name",
-                "unit",
+                "sequences",
                 "analyses"
             ],
             "properties": {
@@ -143,9 +307,12 @@
                     "description": "Project description",
                     "type": "string"
                 },
-                "unit": {
-                    "description": "Project unit",
-                    "type": "string"
+                "sequences": {
+                    "type": "array",
+                    "items": {
+                        "description": "Sequence",
+                        "type": "string"
+                    }
                 },
                 "analyses": {
                     "type": "array",
@@ -250,6 +417,100 @@
             "type": "object",
             "xml": {
                 "name": "StatusError"
+            }
+        },
+        "Topology": {
+            "required": [
+                "atom_names",
+                "atom_elements",
+                "atom_charges",
+                "atom_residue_indices",
+                "atom_bonds",
+                "residue_names",
+                "residue_numbers",
+                "residue_chain_indices",
+                "chain_names",
+                "pbc_residues"
+            ],
+            "properties": {
+                "atom_names": {
+                    "type": "array",
+                    "items": {
+                        "description": "atom_names",
+                        "type": "string"
+                    }
+                },
+                "atom_charges": {
+                    "type": "array",
+                    "items": {
+                        "description": "atom_charges",
+                        "type": "number"
+                    }
+                },
+                "atom_residue_indices": {
+                    "type": "array",
+                    "items": {
+                        "description": "atom_residue_indices",
+                        "type": "integer"
+                    }
+                },
+                "atom_bonds": {
+                    "type": "array",
+                    "description": "atom index",
+                    "items": {
+                        "description": "number of bonds",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "residue_names": {
+                    "type": "array",
+                    "items": {
+                        "description": "residue_names",
+                        "type": "string"
+                    }
+                },
+                "residue_numbers": {
+                    "type": "array",
+                    "items": {
+                        "description": "residue_numbers",
+                        "type": "integer"
+                    }
+                },
+                "residue_icodes": {
+                    "type": "array",
+                    "items": {
+                        "description": "residue_icodes",
+                        "type": "string"
+                    }
+                },
+                "residue_chain_indices": {
+                    "type": "array",
+                    "items": {
+                        "description": "residue_chain_indices",
+                        "type": "integer"
+                    }
+                },
+                "chain_names": {
+                    "type": "array",
+                    "items": {
+                        "description": "chain_names",
+                        "type": "string"
+                    }
+                },
+                "pbc_residues": {
+                    "type": "array",
+                    "items": {
+                        "description": "chain_names",
+                        "type": "integer"
+                    }
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "ShortProject"
             }
         }
     }

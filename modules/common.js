@@ -26,7 +26,6 @@ export default function common() {
     );
   }
 
-
   const calculateDistance2 = function (atom1, atom2) {
     const outer = new Vector3(atom1[0], atom1[1], atom1[2])
     const inner = new Vector3(atom2[0], atom2[1], atom2[2])
@@ -80,8 +79,6 @@ export default function common() {
       }
     })
 
-    //console.log(bonds)
-
     const keys = Object.keys(bonds);
     const distances = [];
 
@@ -95,8 +92,6 @@ export default function common() {
         d: distance
       });
     }
-
-    //console.log(distances);
 
     return distances;
 
