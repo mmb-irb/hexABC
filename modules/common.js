@@ -1,3 +1,5 @@
+import { Vector3 } from 'three'
+
 // navigation for settings module
 export default function common() {
 
@@ -8,8 +10,6 @@ export default function common() {
     { id: 'T', atoms: ['O2', 'H3', 'O4'] },
     { id: 'A', atoms: ['H2', 'N1', 'H61'] }
   ]
-
-  //[{rname: 'C', rnum: 2}, {rname: 'G', rnum: 39}]
 
   const interpolateColor = (value, minValue, maxValue) => {
     const red = 255;
@@ -24,6 +24,13 @@ export default function common() {
       Math.pow(position1[1] - position2[1], 2) +
       Math.pow(position1[2] - position2[2], 2)
     );
+  }
+
+
+  const calculateDistance2 = function (atom1, atom2) {
+    const outer = new Vector3(atom1[0], atom1[1], atom1[2])
+    const inner = new Vector3(atom2[0], atom2[1], atom2[2])
+    return parseFloat(outer.distanceTo(inner).toFixed(2))
   }
 
   const findClosestAtom = (structureComponent, position) => {
@@ -51,7 +58,6 @@ export default function common() {
   }
 
   const calculateDistances = (structureComponent, nucs) => {
-    console.log(nucs)
     let bonds = {}
     nucs.forEach((nuc, i) => {
       bonds[nuc.rname] = []
@@ -74,51 +80,15 @@ export default function common() {
       }
     })
 
-    console.log(bonds)
-
-    /*const keys = Object.keys(bonds);
-    const distances = [];
-    for (let i = 0; i < keys.length; i++) {
-      for (let j = i + 1; j < keys.length; j++) {
-        console.log(bonds[keys[i]])
-        for (let index = 0; index < bonds[keys[i]].length; index++) {
-          const atom1 = bonds[keys[i]].pos[index];
-          const atom2 = bonds[keys[j]].pos[index];
-          distances.push(calculateDistance(atom1, atom2));
-        }
-        //console.log(keys[i], keys[j], distances);
-      }
-    }*/
-    /*const distances = [];
-    for (let i = 0; i < bonds.length; i++) {
-      for (let j = i + 1; j < bonds.length; j++) {
-        console.log(bonds[j])
-        for (let index = 0; index < bonds[i].length; index++) {
-          console.log(bonds[i][index])
-          const atom1 = bonds[i][index].pos;
-          const atom2 = bonds[j][index].pos;
-          distances.push(calculateDistance(atom1, atom2));
-        }
-        //console.log(bonds[i].name, bonds[j].name, distances);
-      }
-    }*/
-
-    /*Object.keys(bonds).forEach((key, index) => {
-      for (let i = 0; i < bonds[key].length; i++) {
-        console.log(bonds[key][i].name)      
-      }
-    })*/
+    //console.log(bonds)
 
     const keys = Object.keys(bonds);
     const distances = [];
 
     for (let index = 0; index < bonds[keys[0]].length; index++) {
-      /*const atom1 = bonds[keys[0]][index].pos;
-      const atom2 = bonds[keys[1]][index].pos;
-      distances.push(calculateDistance(atom1, atom2));*/
       const atom1 = bonds[keys[0]][index];
       const atom2 = bonds[keys[1]][index];
-      const distance = calculateDistance(atom1.pos, atom2.pos);
+      const distance = calculateDistance2(atom1.pos, atom2.pos);
       distances.push({
         a1: `${nucs[0].rnum}.${atom1.name}`, 
         a2: `${nucs[1].rnum}.${atom2.name}`, 
@@ -126,13 +96,9 @@ export default function common() {
       });
     }
 
-    console.log(distances);
-
-    /*Object.keys(bonds).forEach((key, index) => {
-      console.log(bonds[key], index)
-    })*/
-
     //console.log(distances);
+
+    return distances;
 
   }
 

@@ -92,9 +92,37 @@
 		return r
 	}
 
+	const drawDistances = (dists, color, label) => {
+		dists.forEach(async (item) => {
+			stage.compList[0].addRepresentation("distance", { atomPair: [[item.a1, item.a2]], /*labelSize: label ? 2 : 0*/ labelSize: 2, labelColor: '#fff', labelBorder: true, labelBorderColor: '#555', labelBorderWidth: .5, color: color });
+		});
+		//console.log(stage.compList[0])
+	}
+
 	const addDistancesHBonds = (nucs, bonds) => {
-		if(!stage.compList[0] || bonds === 0) return
-		calculateDistances(stage.compList[0], nucs)
+		if(!stage.compList[0]) return
+		const distances = calculateDistances(stage.compList[0], nucs)
+		console.log(distances)
+
+		switch(bonds) {
+			case 0:
+				//console.log(bonds);
+				drawDistances(distances, "#f00", false);
+				break;
+			case 1:
+			case 2:
+				//console.log(bonds);
+				distances.sort((a, b) => a.d - b.d);
+				var hbs = distances.slice(0, bonds);
+				drawDistances(hbs, "#fff", true);
+				var nhbs = distances.slice(bonds, 3);
+				drawDistances(nhbs, "#f00", false);
+				break;
+			case 3:
+				//console.log(bonds);
+				drawDistances(distances, "#fff", true);
+				break;
+		}
 	}
 
 	const removeRepresentation = (r) => {
@@ -105,6 +133,8 @@
 	const handleUpdateFrame	= async (f) => {
 		//loading.value = true
 		await loadFrame(`${config.public.externalApi}current/projects/${id}/files/trajectory?frames=${f}`, trjMeta.value.metadata.atoms, stage.compList[0])
+
+		// TODO!!! REDRAW DISTANCES!!!!! NOT SURE HOW TO DO IT (HOW TO GET THE CORRESPONDING HBONDS FOR THE NEW FRAME, MAYBE ASK DANI NEW ENDOPOINT FOR THAT)
 		//loading.value = false
 	}
 
