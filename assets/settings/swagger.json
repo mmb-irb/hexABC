@@ -14,13 +14,6 @@
     "consumes": [
         "application\/json"
     ],
-    "produces": [
-        "application\/json",
-        "text\/plain",
-        "application\/octet-stream",
-        "application\/application\/x-gzip",
-        "application\/zip"
-    ],
     "tags": [
         {
             "name": "Projects",
@@ -92,13 +85,8 @@
                     "application\/json"
                 ],
                 "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Project identifier, it must be a FAIR identifier (i.e. MCV1900002)",
-                        "required": true,
-                        "type": "string",
-                        "default": "MCV1900002"
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
                     }
                 ],
                 "responses": {
@@ -132,13 +120,8 @@
                     "application\/json"
                 ],
                 "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Project identifier, it must be a FAIR identifier (i.e. MCV1900002)",
-                        "required": true,
-                        "type": "string",
-                        "default": "MCV1900002"
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
                     }
                 ],
                 "responses": {
@@ -172,21 +155,20 @@
                     "chemical/x-pdb"
                 ],
                 "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Project identifier, it must be a FAIR identifier (i.e. MCV1900002)",
-                        "required": true,
-                        "type": "string",
-                        "default": "MCV1900002"
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
-                        "schema": {
-                            "type": "string",
-                            "format": "binary"
+                        "content": {
+                            "chemical/x-pdb": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
                         }
                     },
                     "404": {
@@ -209,24 +191,58 @@
                 "description": "Gets the trajectory file for a single project corresponding to the given identifier",
                 "operationId": "getTrajectory",
                 "produces": [
-                    "application\/octet-stream"
+                    "text\/mdcrd",
+                    "application/xtc",
+                    "application/trr"
+
                 ],
                 "parameters": [
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
+                    },
                     {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Project identifier, it must be a FAIR identifier (i.e. MCV1900002)",
-                        "required": true,
+                        "name": "format",
+                        "in": "query",
+                        "description": "Format of the trajectory",
+                        "required": false,
                         "type": "string",
-                        "default": "MCV1900002"
+                        "enum": [
+                            "mdcrd",
+                            "xtc",
+                            "trr"
+                        ]
+                    },
+                    {
+                        "name": "frames",
+                        "in": "query",
+                        "description": "Frames to select from the trajectory",
+                        "required": false,
+                        "type": "string",
+                        "default": "1"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
-                        "schema": {
-                            "type": "string",
-                            "format": "binary"
+                        "content": {
+                            "text/mdcrd": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            },
+                            "application/xtc": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            },
+                            "application/trr": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
                         }
                     },
                     "404": {
@@ -253,12 +269,20 @@
                 ],
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Project identifier, it must be a FAIR identifier (i.e. MCV1900002)",
-                        "required": true,
+                        "name": "seq",
+                        "in": "query",
+                        "description": "Sequence to search in projects",
+                        "required": false,
                         "type": "string",
-                        "default": "MCV1900002"
+                        "default": "GTAC"
+                    },
+                    {
+                        "name": "seqname",
+                        "in": "query",
+                        "description": "String included in the name of project",
+                        "required": false,
+                        "type": "string",
+                        "default": "044"
                     }
                 ],
                 "responses": {
@@ -283,9 +307,75 @@
                 },
                 "deprecated": false
             }
+        },
+        "\/projects\/{id}\/analyses\/rmsd\/{type}": {
+            "get": {
+                "tags": [
+                    "Analyses"
+                ],
+                "summary": "Get trajectory",
+                "description": "Gets the trajectory file for a single project corresponding to the given identifier",
+                "operationId": "getTrajectory",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
+                    },
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "description": "Type of RMSD to calculate. If 'residues' is selected, the 'res' parameter below becomes relevant.",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "average",
+                            "firstframe",
+                            "residues",
+                            "pairwise"
+                        ]
+                    },
+                    {
+                        "name": "res",
+                        "in": "query",
+                        "description": "Number of residue (only used for residues type). If not provided, the RMSD will be calculated for all residues",
+                        "required": false,
+                        "type": "integer",
+                        "default": null
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/RMSDAnalysis"
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/StatusError"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
         }
     },
     "definitions": {
+        "arguments": {
+            "id": {
+                "name": "id",
+                "in": "path",
+                "description": "Project identifier, it must be a FAIR identifier (i.e. abc:A0001)",
+                "required": true,
+                "type": "string",
+                "default": "abc:A0001"
+            }
+        },
         "ShortProject": {
             "required": [
                 "id",
@@ -402,6 +492,38 @@
             "type": "object",
             "xml": {
                 "name": "Project"
+            }
+        },
+        "RMSDAnalysis": {
+            "required": [
+                "step",
+                "rmsd"
+            ],
+            "properties": {
+                "mean": {
+                    "description": "RMSD mean",
+                    "type": "number"
+                },
+                "stdev": {
+                    "description": "RMSD standard deviation",
+                    "type": "number"
+                },
+                "step": {
+                    "description": "RMSD mean",
+                    "type": "integer"
+                },
+                "rmsd": {
+                    "description": "RMSD",
+                    "type": "array",
+                    "items": {
+                        "description": "RMSD value for each frame",
+                        "type": "number"
+                    }
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "RMSDAnalysis"
             }
         },
         "StatusError": {

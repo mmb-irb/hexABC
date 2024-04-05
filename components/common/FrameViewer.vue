@@ -105,18 +105,18 @@
 		console.log(distances)
 
 		switch(bonds) {
-			case 0:
+			/*case 0:
 				//console.log(bonds);
 				drawDistances(distances, "#f00", false);
-				break;
+				break;*/
 			case 1:
 			case 2:
 				//console.log(bonds);
 				distances.sort((a, b) => a.d - b.d);
 				var hbs = distances.slice(0, bonds);
 				drawDistances(hbs, "#fff", true);
-				var nhbs = distances.slice(bonds, 3);
-				drawDistances(nhbs, "#f00", false);
+				//var nhbs = distances.slice(bonds, 3);
+				//drawDistances(nhbs, "#f00", false);
 				break;
 			case 3:
 				//console.log(bonds);

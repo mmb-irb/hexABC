@@ -63,6 +63,8 @@
     const tit = spec.info.title
     const titDOM = document.querySelector('.swagger-ui .info .title').innerHTML
     document.querySelector('.swagger-ui .info .title').innerHTML = titDOM.replace(tit, '')
+    const protocol = document.querySelector('.swagger-ui .base-url').innerHTML.includes('localhost') ? 'http' : 'https'
+    document.querySelector('.swagger-ui .base-url').innerHTML = document.querySelector('.swagger-ui .base-url').innerHTML.replace('[', '').replace(' ]', '').replace('URL: ', `URL: ${protocol}://`)
   })
 
   const downloadSwagger = async() => {
@@ -105,11 +107,12 @@
       .swagger-ui .prop-type { color: var(--palette-4); margin-top: 0.5rem; }
       .swagger-ui .prop-format { margin-top: 0.5rem; }
       .swagger-ui .model .prop { display: flex; }
-      .swagger-ui .base-url { display:none; }
+      .swagger-ui .base-url { font-family: 'Open Sans'!important; font-size:15px!important; margin-bottom: .5rem!important; }
       .swagger-ui .info__license { display:none; }
       .swagger-ui table.model tr.description td { padding-top: .5rem!important; width: auto!important;}
       .swagger-ui table.model tr.description td .markdown p { margin: 0!important;}
       .swagger-ui section.models .model-box { width: 80%; }
       .swagger-ui .model-box { display: inherit;}
+      #model-arguments .model-box { display:none; }
   
   </style>

@@ -16,6 +16,11 @@ export default defineEventHandler(async (event) => {
                   return { message: error.message }
               });
 
+  setResponseHeaders(event, {
+    "Content-Disposition": `attachment; filename=${id}.pdb`,
+    "Content-Type": "chemical/x-pdb; charset=latin1",
+  });
+
   return response
   
 });
