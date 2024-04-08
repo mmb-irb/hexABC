@@ -204,21 +204,23 @@
                         "name": "format",
                         "in": "query",
                         "description": "Format of the trajectory",
-                        "required": false,
+                        "required": true,
                         "type": "string",
                         "enum": [
                             "mdcrd",
                             "xtc",
                             "trr"
-                        ]
+                        ],
+                        "default": "xtc"
                     },
                     {
                         "name": "frames",
                         "in": "query",
-                        "description": "Frames to select from the trajectory",
-                        "required": false,
+                        "description": "Specify a frame range for the returned trajectory. The user can request only specific frames instead of the whole file. It can also be defined as the start:end:step format.",
+                        "required": true,
                         "type": "string",
-                        "default": "1"
+                        "default": "1",
+                        "example": "1 (for a single frame, first in this case), 1:10 (for a range of frames, from 1 to 10) or 10:20:2  (for a range of frames with step, from 1 to 20 every 2)"
                     }
                 ],
                 "responses": {
@@ -313,9 +315,9 @@
                 "tags": [
                     "Analyses"
                 ],
-                "summary": "Get trajectory",
-                "description": "Gets the trajectory file for a single project corresponding to the given identifier",
-                "operationId": "getTrajectory",
+                "summary": "RMSd analyses",
+                "description": "Returns the data for RMSd analyses",
+                "operationId": "getRMSdANalyses",
                 "produces": [
                     "application\/json"
                 ],
@@ -351,6 +353,52 @@
                         "schema": {
                             "type": "object",
                             "$ref": "#\/definitions\/RMSDAnalysis"
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/StatusError"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/{id}\/analyses\/dist-res\/{type}": {
+            "get": {
+                "tags": [
+                    "Analyses"
+                ],
+                "summary": "Distance per residue analyses",
+                "description": "Returns the data for distance per residue analyses",
+                "operationId": "getDistPerResAnalyses",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
+                    },
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "description": "Type of distance per residue analysis (mean or stdev).",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "means",
+                            "stdvs"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#\/definitions\/DistPerResAnalysis"
                         }
                     },
                     "404": {
@@ -524,6 +572,43 @@
             "type": "object",
             "xml": {
                 "name": "RMSDAnalysis"
+            }
+        },
+        "DistPerResAnalysis": {
+            "required": [
+                "strand1",
+                "strand2",
+                "data"
+            ],
+            "properties": {
+                "strand1": {
+                    "description": "List of nucleotides of strand 1",
+                    "type": "array",
+                    "items": {
+                        "description": "Nucleotide name",
+                        "type": "string"
+                    }
+                },
+                "strand2": {
+                    "description": "List of nucleotides of strand 2",
+                    "type": "array",
+                    "items": {
+                        "description": "Nucleotide name",
+                        "type": "string"
+                    }
+                },
+                "data": {
+                    "description": "Distance per residue",
+                    "type": "array",
+                    "items": {
+                        "description": "Distance per residue for each nucleotide",
+                        "type": "number"
+                    }
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "DistPerResAnalysis"
             }
         },
         "StatusError": {

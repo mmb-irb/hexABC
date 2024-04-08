@@ -94,7 +94,7 @@ export default defineNuxtConfig({
         // TODO: FIX REGEX FOR PROJECTS ID WHEN WORKING WITH FAIR ID'S
         '/^\/api\/projects\/?([a-zA-Z0-9\_\.]+)?(\\?[\\w=&]+)?$/', 
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/(topology|structure)$/',
-        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/(trajectory)(\\?.*)?$/',
+        '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/trajectory\\?format=(xtc|mdcrd|trr)&frames=(\\d+((:|%3A)\\d+((:|%3A)\\d+)?)?)$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(hbonds)(\\?.*)?$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/dist-res\/(means|stdvs)$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/(fluctuation|rgyr)$/',
@@ -104,7 +104,6 @@ export default defineNuxtConfig({
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/rmsd\/(residues)(\\?res=([0-9]+,)*[0-9]+)?$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/time\/(alpha|beta|gamma|delta|chi|epsilon|theta|inclination|tip|xdisp|ydisp|shear|stretch|stagger|buckle|propeller|opening|rise|roll|shift|slide|tilt|twist|majorgd|majorgw|minorgd|minorgw)(\\?bp=\\d+\_[A-Z]+)?$/',
         '/^\/api\/projects\/[a-zA-Z0-9\_\.]+\/analyses\/average\/(bibiipopulation|canonicalag|puckering|inclination|tip|xdisp|ydisp|shear|stretch|stagger|buckle|propeller|opening|rise|roll|shift|slide|tilt|twist|majorgd|majorgw|minorgd|minorgw)$/',
-
         '/api/results/shift', 
       ]
     }
