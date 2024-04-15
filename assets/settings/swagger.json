@@ -16,15 +16,22 @@
     ],
     "tags": [
         {
-            "name": "Projects",
-            "description": "General information for each of the DNA 20 mer projects"
+            "name": "Project metadata",
+            "description": "Projects data and metadata"
+        },
+        {
+            "name": "Project files",
+            "description": "Projects dowlnoadable files"
+        },{
+            "name": "Project analyses",
+            "description": "Projects analyses"
         }
     ],
     "paths": {
         "\/projects": {
             "get": {
                 "tags": [
-                    "Projects"
+                    "Project metadata"
                 ],
                 "summary": "Get list of projects",
                 "description": "Gets a paginated list of summaries of all the projects available in the database",
@@ -76,7 +83,7 @@
         "\/projects\/{id}": {
             "get": {
                 "tags": [
-                    "Projects"
+                    "Project metadata"
                 ],
                 "summary": "Get single project",
                 "description": "Gets all the available information for a single project corresponding to the given identifier",
@@ -111,7 +118,7 @@
         "\/projects\/{id}\/topology": {
             "get": {
                 "tags": [
-                    "Projects"
+                    "Project metadata"
                 ],
                 "summary": "Get topology info",
                 "description": "Gets all the topology information for a single project corresponding to the given identifier",
@@ -146,7 +153,7 @@
         "\/projects\/{id}\/structure": {
             "get": {
                 "tags": [
-                    "Projects"
+                    "Project files"
                 ],
                 "summary": "Get structure",
                 "description": "Gets the PDB file structure for a single project corresponding to the given identifier",
@@ -185,7 +192,7 @@
         "\/projects\/{id}\/trajectory": {
             "get": {
                 "tags": [
-                    "Projects"
+                    "Project files"
                 ],
                 "summary": "Get trajectory",
                 "description": "Gets the trajectory file for a single project corresponding to the given identifier",
@@ -261,7 +268,7 @@
         "\/projects\/sequence": {
             "get": {
                 "tags": [
-                    "Projects"
+                    "Project metadata"
                 ],
                 "summary": "Search by sequence",
                 "description": "Gets a paginated list of summaries of all the projects matching with a given sequence",
@@ -313,7 +320,7 @@
         "\/projects\/{id}\/analyses\/rmsd\/{type}": {
             "get": {
                 "tags": [
-                    "Analyses"
+                    "Project analyses"
                 ],
                 "summary": "RMSd analyses",
                 "description": "Returns the data for RMSd analyses",
@@ -369,7 +376,7 @@
         "\/projects\/{id}\/analyses\/dist-res\/{type}": {
             "get": {
                 "tags": [
-                    "Analyses"
+                    "Project analyses"
                 ],
                 "summary": "Distance per residue analyses",
                 "description": "Returns the data for distance per residue analyses",
