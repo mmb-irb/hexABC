@@ -42,11 +42,15 @@ export default defineEventHandler(async (event) => {
 
 	// get hbonds data
 	const uri = `${config.public.externalApi}v1/projects/${id}/files/NAhbonds.bin?parse&frames=${from}:${to}:${factor}`
-	const respdata = await $fetch(uri)
-							.catch((error) => {
-									setResponseStatus(event, error.status)
-									return { message: error.message }
-							});
+  const error = 0
+
+  let respdata;
+  try {
+      respdata = await $fetch(uri);
+  } catch (error) {
+      setResponseStatus(event, error.status);
+      return { message: error.message }
+  }
 
   // convert blob to text
   const rtext = await respdata.text()

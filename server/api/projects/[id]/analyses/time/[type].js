@@ -15,6 +15,8 @@ export default defineEventHandler(async (event) => {
 
     let resp = []
 
+    // REDO EVERYTHING!!! NOT ONLY BY bp, BUT BY bps AND nucl!!!!! CHANGE QUERY PARAM AND SO ON
+
     // Read the JSON file (PROVISIONAL)
     await (async () => {
       try {

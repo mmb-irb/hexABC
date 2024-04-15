@@ -50,7 +50,7 @@
 		stage.setParameters({ backgroundColor: '#dedede' });
 
 		// get trajectory metadata
-		trjMeta.value = await $fetch(`${config.public.externalApi}current/projects/${id}/filenotes/trajectory.bin`)
+		trjMeta.value = await $fetch(`${config.public.apiBase}/projects/${id}/filenotes/trajectory.bin`)
 
 		// get topology structure
 		const topology = await useFetch(`${config.public.apiBase}/projects/${id}/structure`)

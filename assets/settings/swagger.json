@@ -1,6 +1,6 @@
 
 {
-    "swagger": "2.0",
+    "openapi": "3.0.2",
     "info": {
         "title": "hexABC REST API",
         "license": {
@@ -9,8 +9,6 @@
         "version": "",
         "description": "In this section there is the documentation for all the available public end points of the hexABC REST API. Click on each end point and its documentation will be expanded."
     },
-    "host": "",
-    "basePath": "\/api",
     "consumes": [
         "application\/json"
     ],
@@ -59,18 +57,22 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
-                        "schema": {
-                            "properties": {
-                                "total": {
-                                    "description": "Total number of projects in the database",
-                                    "type": "number"
-                                },
-                                "projects": {
-                                    "description": "List of projects",
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#\/definitions\/ShortProject"
+                        "description": "Total projects and paginated array of projects",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "total": {
+                                            "description": "Total number of projects in the database",
+                                            "type": "integer"
+                                        },
+                                        "projects": {
+                                            "description": "List of projects",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#\/components/schemas\/ShortProject"
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -98,17 +100,25 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#\/definitions\/Project"
+                        "description": "Single project metadata",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/Project"
+                                }
+                            }
                         }
                     },
                     "404": {
                         "description": "Resource Not Found",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#\/definitions\/StatusError"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
                         }
                     }
                 },
@@ -133,17 +143,143 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#\/definitions\/Topology"
+                        "description": "Single project topology info",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/Topology"
+                                }
+                            }
                         }
                     },
                     "404": {
                         "description": "Resource Not Found",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#\/definitions\/StatusError"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/{id}\/filenotes\/{file}": {
+            "get": {
+                "tags": [
+                    "Project metadata"
+                ],
+                "summary": "Get file metadata",
+                "description": "Gets metadata for a single project corresponding to the given file name",
+                "operationId": "getFilenotes",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
+                    },
+                    {
+                        "name": "file",
+                        "in": "path",
+                        "description": "File name",
+                        "required": true,
+                        "type": "string",
+                        "example": "trajectory.bin"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Single project topology info",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/Filenotes"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/sequence": {
+            "get": {
+                "tags": [
+                    "Project metadata"
+                ],
+                "summary": "Search by sequence",
+                "description": "Gets a paginated list of summaries of all the projects matching with a given sequence",
+                "operationId": "searchBySequence",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "seq",
+                        "in": "query",
+                        "description": "Sequence to search in projects",
+                        "required": false,
+                        "type": "string",
+                        "example": "GTAC"
+                    },
+                    {
+                        "name": "seqname",
+                        "in": "query",
+                        "description": "String included in the name of project",
+                        "required": false,
+                        "type": "string",
+                        "example": "044"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "total": {
+                                            "description": "Total number of projects in the database",
+                                            "type": "integer"
+                                        },
+                                        "projects": {
+                                            "description": "List of projects",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#\/components/schemas\/ShortProject"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
                         }
                     }
                 },
@@ -180,9 +316,13 @@
                     },
                     "404": {
                         "description": "Resource Not Found",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#\/definitions\/StatusError"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
                         }
                     }
                 },
@@ -212,12 +352,14 @@
                         "in": "query",
                         "description": "Format of the trajectory",
                         "required": true,
-                        "type": "string",
-                        "enum": [
-                            "mdcrd",
-                            "xtc",
-                            "trr"
-                        ],
+                        "schema":{ 
+                            "type": "string",
+                            "enum": [
+                                "mdcrd",
+                                "xtc",
+                                "trr"
+                            ]
+                        },
                         "default": "xtc"
                     },
                     {
@@ -226,8 +368,20 @@
                         "description": "Specify a frame range for the returned trajectory. The user can request only specific frames instead of the whole file. It can also be defined as the start:end:step format.",
                         "required": true,
                         "type": "string",
-                        "default": "1",
-                        "example": "1 (for a single frame, first in this case), 1:10 (for a range of frames, from 1 to 10) or 10:20:2  (for a range of frames with step, from 1 to 20 every 2)"
+                        "examples": {
+                            "Single frame": {
+                                "summary": "Single frame, first in this case",
+                                "value": "1"
+                            },
+                            "Range of frames": {
+                                "summary": "Range of frames, from 1 to 10",
+                                "value": "1:10"
+                            },
+                            "Range of frames with step": {
+                                "summary": "Range of frames with step, from 10 to 20 every 2",
+                                "value": "10:20:2"
+                            }
+                        }
                     }
                 ],
                 "responses": {
@@ -256,59 +410,11 @@
                     },
                     "404": {
                         "description": "Resource Not Found",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#\/definitions\/StatusError"
-                        }
-                    }
-                },
-                "deprecated": false
-            }
-        },
-        "\/projects\/sequence": {
-            "get": {
-                "tags": [
-                    "Project metadata"
-                ],
-                "summary": "Search by sequence",
-                "description": "Gets a paginated list of summaries of all the projects matching with a given sequence",
-                "operationId": "searchBySequence",
-                "produces": [
-                    "application\/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "seq",
-                        "in": "query",
-                        "description": "Sequence to search in projects",
-                        "required": false,
-                        "type": "string",
-                        "default": "GTAC"
-                    },
-                    {
-                        "name": "seqname",
-                        "in": "query",
-                        "description": "String included in the name of project",
-                        "required": false,
-                        "type": "string",
-                        "default": "044"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "schema": {
-                            "properties": {
-                                "total": {
-                                    "description": "Total number of projects in the database",
-                                    "type": "number"
-                                },
-                                "projects": {
-                                    "description": "List of projects",
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#\/definitions\/ShortProject"
-                                    }
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
                                 }
                             }
                         }
@@ -317,14 +423,14 @@
                 "deprecated": false
             }
         },
-        "\/projects\/{id}\/analyses\/rmsd\/{type}": {
+        "\/projects\/{id}\/analyses\/average\/{type}": {
             "get": {
                 "tags": [
                     "Project analyses"
                 ],
-                "summary": "RMSd analyses",
-                "description": "Returns the data for RMSd analyses",
-                "operationId": "getRMSdANalyses",
+                "summary": "Average analyses",
+                "description": "Returns the data for average analyses",
+                "operationId": "getAverageAnalyses",
                 "produces": [
                     "application\/json"
                 ],
@@ -335,38 +441,74 @@
                     {
                         "name": "type",
                         "in": "path",
-                        "description": "Type of RMSD to calculate. If 'residues' is selected, the 'res' parameter below becomes relevant.",
+                        "description": "Type of average to get.",
                         "required": true,
-                        "type": "string",
-                        "enum": [
-                            "average",
-                            "firstframe",
-                            "residues",
-                            "pairwise"
-                        ]
-                    },
-                    {
-                        "name": "res",
-                        "in": "query",
-                        "description": "Number of residue (only used for residues type). If not provided, the RMSD will be calculated for all residues",
-                        "required": false,
-                        "type": "integer",
-                        "default": null
+                        "schema":{ 
+                            "type": "string",
+                            "enum": [
+                                "bibiipopulation",
+                                "canonicalag",
+                                "puckering",
+                                "inclination",
+                                "tip",
+                                "xdisp",
+                                "ydisp",
+                                "shear",
+                                "stretch",
+                                "stagger",
+                                "buckle",
+                                "propeller",
+                                "opening",
+                                "rise",
+                                "roll",
+                                "shift",
+                                "slide",
+                                "tilt",
+                                "twist",
+                                "majorgd",
+                                "majorgw",
+                                "minorgd",
+                                "minorgw"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#\/definitions\/RMSDAnalysis"
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "oneOf": [
+                                            {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#\/components/schemas\/Average1Analysis"
+                                                }
+                                            },
+                                            {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#\/components/schemas\/Average2Analysis"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
                         }
                     },
                     "404": {
                         "description": "Resource Not Found",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#\/definitions\/StatusError"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
                         }
                     }
                 },
@@ -393,26 +535,469 @@
                         "in": "path",
                         "description": "Type of distance per residue analysis (mean or stdev).",
                         "required": true,
-                        "type": "string",
-                        "enum": [
-                            "means",
-                            "stdvs"
-                        ]
+                        "schema":{ 
+                            "type": "string",
+                            "enum": [
+                                "means",
+                                "stdvs"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#\/definitions\/DistPerResAnalysis"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/DistPerResAnalysis"
+                                }
+                            }
                         }
                     },
                     "404": {
                         "description": "Resource Not Found",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#\/definitions\/StatusError"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/{id}\/analyses\/fluctuation": {
+            "get": {
+                "tags": [
+                    "Project analyses"
+                ],
+                "summary": "Fluctuation analysis",
+                "description": "Returns the data for fluctuation analysis",
+                "operationId": "getFluctuationAnalyses",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/FluctuationAnalysis"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/{id}\/analyses\/hbonds": {
+            "get": {
+                "tags": [
+                    "Project analyses"
+                ],
+                "summary": "HBonds analysis",
+                "description": "Returns the data for hbonds analysis",
+                "operationId": "getHBondsAnalyses",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "In case of selection of range, first frame",
+                        "required": false, 
+                        "type": "integer",
+                        "default": null
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "In case of selection of range, last frame",
+                        "required": false, 
+                        "type": "integer",
+                        "default": null
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/HBondsAnalysis"
+                                }
+                            }
+                        }
+                    },
+                    "50x": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/{id}\/analyses\/pca": {
+            "get": {
+                "tags": [
+                    "Project analyses"
+                ],
+                "summary": "PCA analysis",
+                "description": "Returns the data for PCA analysis",
+                "operationId": "getPCAAnalyses",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
+                    },
+                    {
+                        "name": "pc",
+                        "in": "query",
+                        "description": "The two principal components (seprated by a comma) from which to retrieve the data, leave blank for getting global PCA.",
+                        "required": false,
+                        "type": "string",
+                        "default": null,
+                        "examples": {
+                            "global": {
+                                "summary": "Global PCA",
+                                "value": null
+                            },
+                            "pcs": {
+                                "summary": "PC 1 vs PC 2",
+                                "value": "1,2"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "PCA analysis",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "oneOf": [
+                                            {
+                                                "type": "object",
+                                                "$ref": "#\/components/schemas\/PCA1Analysis"
+                                            },
+                                            {
+                                                "type": "object",
+                                                "$ref": "#\/components/schemas\/PCA2Analysis"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/{id}\/analyses\/rgyr": {
+            "get": {
+                "tags": [
+                    "Project analyses"
+                ],
+                "summary": "Rgyr analysis",
+                "description": "Returns the data for rgyr analysis",
+                "operationId": "getRgyrAnalyses",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rgyr analysis",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/RgyrAnalysis"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/{id}\/analyses\/rmsd\/{type}": {
+            "get": {
+                "tags": [
+                    "Project analyses"
+                ],
+                "summary": "RMSd analyses",
+                "description": "Returns the data for RMSd analyses",
+                "operationId": "getRMSdAnalyses",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
+                    },
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "description": "Type of RMSD to calculate. If 'residues' is selected, the 'res' parameter below becomes relevant.",
+                        "required": true,
+                        "schema":{ 
+                            "type": "string",
+                            "enum": [
+                                "average",
+                                "firstframe",
+                                "residues",
+                                "pairwise"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "res",
+                        "in": "query",
+                        "description": "Number of residue (only used for residues type). If not provided, the RMSD will be calculated for all residues",
+                        "required": false,
+                        "type": "integer",
+                        "default": null
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/RMSDAnalysis"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/{id}\/analyses\/sasa": {
+            "get": {
+                "tags": [
+                    "Project analyses"
+                ],
+                "summary": "SASA analysis",
+                "description": "Returns the data for Solvent Accessible Surface Area analysis",
+                "operationId": "getSASAAnalyses",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
+                    },
+                    {
+                        "name": "res",
+                        "in": "query",
+                        "description": "List of residues (separated by commas) from which to retrieve the data, leave blank for getting global SASA.",
+                        "required": false,
+                        "type": "string",
+                        "default": null,
+                        "examples": {
+                            "global": {
+                                "summary": "Global SASA",
+                                "value": null
+                            },
+                            "sasa": {
+                                "summary": "SASA for residues 1, 15 and 17",
+                                "value": "1,15,17"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "SASA analysis",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/SASAAnalysis"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "\/projects\/{id}\/analyses\/time\/{type}": {
+            "get": {
+                "tags": [
+                    "Project analyses"
+                ],
+                "summary": "Time analyses (TO FINISH ENDPOINT)",
+                "description": "Returns the data for time analyses",
+                "operationId": "getTimeAnalyses",
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    { 
+                        "$ref": "#/definitions/arguments/id" 
+                    },
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "description": "Type of time to get.",
+                        "required": true,
+                        "schema":{ 
+                            "type": "string",
+                            "enum": [
+                                "alpha",
+                                "beta",
+                                "gamma",
+                                "delta",
+                                "chi",
+                                "epsilon",
+                                "theta",
+                                "inclination",
+                                "tip",
+                                "xdisp",
+                                "ydisp",
+                                "shear",
+                                "stretch",
+                                "stagger",
+                                "buckle",
+                                "propeller",
+                                "opening",
+                                "rise",
+                                "roll",
+                                "shift",
+                                "slide",
+                                "tilt",
+                                "twist",
+                                "majorgd",
+                                "majorgw",
+                                "minorgd",
+                                "minorgw"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "bp",
+                        "in": "query",
+                        "description": "TO REDO: IT CAN'T BE bp, BUT bps & nucl AS WELL",
+                        "required": true,
+                        "type": "string",
+                        "default": null
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/TimeAnalysis"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#\/components/schemas\/StatusError"
+                                }
+                            }
                         }
                     }
                 },
@@ -430,301 +1015,699 @@
                 "type": "string",
                 "default": "abc:A0001"
             }
-        },
-        "ShortProject": {
-            "required": [
-                "id",
-                "accession",
-                "name",
-                "sequences",
-                "analyses"
-            ],
-            "properties": {
-                "id": {
-                    "description": "identifier",
-                    "type": "string"
-                },
-                "accession": {
-                    "description": "hexABC FAIR identifier for this project",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "Project description",
-                    "type": "string"
-                },
-                "sequences": {
-                    "type": "array",
-                    "items": {
-                        "description": "Sequence",
+        }
+    },
+    "components": {
+        "schemas": {
+            "ShortProject": {
+                "required": [
+                    "id",
+                    "accession",
+                    "name",
+                    "sequences",
+                    "analyses"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "identifier",
                         "type": "string"
-                    }
-                },
-                "analyses": {
-                    "type": "array",
-                    "items": {
-                        "description": "Analysis",
+                    },
+                    "accession": {
+                        "description": "hexABC FAIR identifier for this project",
                         "type": "string"
-                    }
-                }
-            },
-            "type": "object",
-            "xml": {
-                "name": "ShortProject"
-            }
-        },
-        "Project": {
-            "required": [
-                "accession",
-                "published",
-                "metadata",
-                "chains",
-                "mdref",
-                "mds",
-                "files",
-                "mdNumber",
-                "analyses",
-                "identifier"
-            ],
-            "properties": {
-                "accession": {
-                    "description": "hexABC FAIR identifier for this project",
-                    "type": "string"
-                },
-                "published": {
-                    "description": "published",
-                    "type": "string"
-                },
-                "metadata": {
-                    "description": "metadata",
-                    "type": "object"
-                },
-                "chains": {
-                    "description": "chains",
-                    "type": "array",
-                    "items": {
-                        "description": "chains",
+                    },
+                    "name": {
+                        "description": "Project description",
                         "type": "string"
-                    }
-                },
-                "mdref": {
-                    "description": "mdref",
-                    "type": "number",
-                    "format": "integer"
-                },
-                "mds": {
-                    "description": "mds",
-                    "type": "array",
-                    "items": {
-                        "description": "mds",
-                        "type": "string"
-                    }
-                },
-                "files": {
-                    "description": "files",
-                    "type": "array",
-                    "items": {
-                        "description": "files",
-                        "type": "string"
-                    }
-                },
-                "mdNumber": {
-                    "description": "mdNumber",
-                    "type": "number",
-                    "format": "integer"
-                },
-                "analyses": {
-                    "type": "array",
-                    "items": {
-                        "description": "Analysis",
-                        "type": "string"
-                    }
-                },
-                "identifier": {
-                    "description": "identifier",
-                    "type": "string"
-                }
-            },
-            "type": "object",
-            "xml": {
-                "name": "Project"
-            }
-        },
-        "RMSDAnalysis": {
-            "required": [
-                "step",
-                "rmsd"
-            ],
-            "properties": {
-                "mean": {
-                    "description": "RMSD mean",
-                    "type": "number"
-                },
-                "stdev": {
-                    "description": "RMSD standard deviation",
-                    "type": "number"
-                },
-                "step": {
-                    "description": "RMSD mean",
-                    "type": "integer"
-                },
-                "rmsd": {
-                    "description": "RMSD",
-                    "type": "array",
-                    "items": {
-                        "description": "RMSD value for each frame",
-                        "type": "number"
-                    }
-                }
-            },
-            "type": "object",
-            "xml": {
-                "name": "RMSDAnalysis"
-            }
-        },
-        "DistPerResAnalysis": {
-            "required": [
-                "strand1",
-                "strand2",
-                "data"
-            ],
-            "properties": {
-                "strand1": {
-                    "description": "List of nucleotides of strand 1",
-                    "type": "array",
-                    "items": {
-                        "description": "Nucleotide name",
-                        "type": "string"
-                    }
-                },
-                "strand2": {
-                    "description": "List of nucleotides of strand 2",
-                    "type": "array",
-                    "items": {
-                        "description": "Nucleotide name",
-                        "type": "string"
-                    }
-                },
-                "data": {
-                    "description": "Distance per residue",
-                    "type": "array",
-                    "items": {
-                        "description": "Distance per residue for each nucleotide",
-                        "type": "number"
-                    }
-                }
-            },
-            "type": "object",
-            "xml": {
-                "name": "DistPerResAnalysis"
-            }
-        },
-        "StatusError": {
-            "required": [
-                "message"
-            ],
-            "properties": {
-                "message": {
-                    "description": "Response of the REST API server",
-                    "type": "string"
-                }
-            },
-            "type": "object",
-            "xml": {
-                "name": "StatusError"
-            }
-        },
-        "Topology": {
-            "required": [
-                "atom_names",
-                "atom_elements",
-                "atom_charges",
-                "atom_residue_indices",
-                "atom_bonds",
-                "residue_names",
-                "residue_numbers",
-                "residue_chain_indices",
-                "chain_names",
-                "pbc_residues"
-            ],
-            "properties": {
-                "atom_names": {
-                    "type": "array",
-                    "items": {
-                        "description": "atom_names",
-                        "type": "string"
-                    }
-                },
-                "atom_charges": {
-                    "type": "array",
-                    "items": {
-                        "description": "atom_charges",
-                        "type": "number"
-                    }
-                },
-                "atom_residue_indices": {
-                    "type": "array",
-                    "items": {
-                        "description": "atom_residue_indices",
-                        "type": "integer"
-                    }
-                },
-                "atom_bonds": {
-                    "type": "array",
-                    "description": "atom index",
-                    "items": {
-                        "description": "number of bonds",
+                    },
+                    "sequences": {
                         "type": "array",
                         "items": {
+                            "description": "Sequence",
+                            "type": "string"
+                        }
+                    },
+                    "analyses": {
+                        "type": "array",
+                        "items": {
+                            "description": "Analysis",
+                            "type": "string"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "ShortProject"
+                }
+            },
+            "Project": {
+                "required": [
+                    "accession",
+                    "published",
+                    "metadata",
+                    "chains",
+                    "mdref",
+                    "mds",
+                    "files",
+                    "mdNumber",
+                    "analyses",
+                    "identifier"
+                ],
+                "properties": {
+                    "accession": {
+                        "description": "hexABC FAIR identifier for this project",
+                        "type": "string"
+                    },
+                    "published": {
+                        "description": "published",
+                        "type": "string"
+                    },
+                    "metadata": {
+                        "description": "metadata",
+                        "type": "object"
+                    },
+                    "chains": {
+                        "description": "chains",
+                        "type": "array",
+                        "items": {
+                            "description": "chains",
+                            "type": "string"
+                        }
+                    },
+                    "mdref": {
+                        "description": "mdref",
+                        "type": "integer"
+                    },
+                    "mds": {
+                        "description": "mds",
+                        "type": "array",
+                        "items": {
+                            "description": "mds",
+                            "type": "string"
+                        }
+                    },
+                    "files": {
+                        "description": "files",
+                        "type": "array",
+                        "items": {
+                            "description": "files",
+                            "type": "string"
+                        }
+                    },
+                    "mdNumber": {
+                        "description": "mdNumber",
+                        "type": "integer"
+                    },
+                    "analyses": {
+                        "type": "array",
+                        "items": {
+                            "description": "Analysis",
+                            "type": "string"
+                        }
+                    },
+                    "identifier": {
+                        "description": "identifier",
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Project"
+                }
+            },
+            "RMSDAnalysis": {
+                "required": [
+                    "step",
+                    "rmsd"
+                ],
+                "properties": {
+                    "mean": {
+                        "description": "RMSD mean",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "stdev": {
+                        "description": "RMSD standard deviation",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "step": {
+                        "description": "RMSD mean",
+                        "type": "integer"
+                    },
+                    "rmsd": {
+                        "description": "RMSD",
+                        "type": "array",
+                        "items": {
+                            "description": "RMSD value for each frame",
+                            "type": "number",
+                            "format": "float"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "RMSDAnalysis"
+                }
+            },
+            "DistPerResAnalysis": {
+                "required": [
+                    "strand1",
+                    "strand2",
+                    "data"
+                ],
+                "properties": {
+                    "strand1": {
+                        "description": "List of nucleotides of strand 1",
+                        "type": "array",
+                        "items": {
+                            "description": "Nucleotide name",
+                            "type": "string"
+                        }
+                    },
+                    "strand2": {
+                        "description": "List of nucleotides of strand 2",
+                        "type": "array",
+                        "items": {
+                            "description": "Nucleotide name",
+                            "type": "string"
+                        }
+                    },
+                    "data": {
+                        "description": "Distance per residue",
+                        "type": "array",
+                        "items": {
+                            "description": "Array of nucleotides",
+                            "type": "array",
+                            "items": {
+                                "description": "Distance per residue for each nucleotide",
+                                "type": "number",
+                                "format": "float"
+                            }
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "DistPerResAnalysis"
+                }
+            },
+            "StatusError": {
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "description": "Response of the REST API server",
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "StatusError"
+                }
+            },
+            "Topology": {
+                "required": [
+                    "atom_names",
+                    "atom_elements",
+                    "atom_charges",
+                    "atom_residue_indices",
+                    "atom_bonds",
+                    "residue_names",
+                    "residue_numbers",
+                    "residue_chain_indices",
+                    "chain_names",
+                    "pbc_residues"
+                ],
+                "properties": {
+                    "atom_names": {
+                        "type": "array",
+                        "items": {
+                            "description": "atom_names",
+                            "type": "string"
+                        }
+                    },
+                    "atom_charges": {
+                        "type": "array",
+                        "items": {
+                            "description": "atom_charges",
+                            "type": "number",
+                            "format": "float"
+                        }
+                    },
+                    "atom_residue_indices": {
+                        "type": "array",
+                        "items": {
+                            "description": "atom_residue_indices",
+                            "type": "integer"
+                        }
+                    },
+                    "atom_bonds": {
+                        "type": "array",
+                        "description": "atom index",
+                        "items": {
+                            "description": "number of bonds",
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "residue_names": {
+                        "type": "array",
+                        "items": {
+                            "description": "residue_names",
+                            "type": "string"
+                        }
+                    },
+                    "residue_numbers": {
+                        "type": "array",
+                        "items": {
+                            "description": "residue_numbers",
+                            "type": "integer"
+                        }
+                    },
+                    "residue_icodes": {
+                        "type": "array",
+                        "items": {
+                            "description": "residue_icodes",
+                            "type": "string"
+                        }
+                    },
+                    "residue_chain_indices": {
+                        "type": "array",
+                        "items": {
+                            "description": "residue_chain_indices",
+                            "type": "integer"
+                        }
+                    },
+                    "chain_names": {
+                        "type": "array",
+                        "items": {
+                            "description": "chain_names",
+                            "type": "string"
+                        }
+                    },
+                    "pbc_residues": {
+                        "type": "array",
+                        "items": {
+                            "description": "chain_names",
                             "type": "integer"
                         }
                     }
                 },
-                "residue_names": {
-                    "type": "array",
-                    "items": {
-                        "description": "residue_names",
-                        "type": "string"
-                    }
-                },
-                "residue_numbers": {
-                    "type": "array",
-                    "items": {
-                        "description": "residue_numbers",
-                        "type": "integer"
-                    }
-                },
-                "residue_icodes": {
-                    "type": "array",
-                    "items": {
-                        "description": "residue_icodes",
-                        "type": "string"
-                    }
-                },
-                "residue_chain_indices": {
-                    "type": "array",
-                    "items": {
-                        "description": "residue_chain_indices",
-                        "type": "integer"
-                    }
-                },
-                "chain_names": {
-                    "type": "array",
-                    "items": {
-                        "description": "chain_names",
-                        "type": "string"
-                    }
-                },
-                "pbc_residues": {
-                    "type": "array",
-                    "items": {
-                        "description": "chain_names",
-                        "type": "integer"
-                    }
+                "type": "object",
+                "xml": {
+                    "name": "ShortProject"
                 }
             },
-            "type": "object",
-            "xml": {
-                "name": "ShortProject"
+            "Average1Analysis": {
+                "required": [
+                    "nucleotide",
+                    "labels",
+                    "values"
+                ],
+                "properties": {
+                    "nucleotide": {
+                        "description": "Nucleotide",
+                        "type": "string"
+                    },
+                    "labels": {
+                        "description": "Array of labels",
+                        "type": "array",
+                        "items": {
+                            "description": "Labels",
+                            "type": "string"
+                        }
+                    },
+                    "values": {
+                        "description": "Array of values",
+                        "type": "array",
+                        "items": {
+                            "description": "Values",
+                            "type": "number",
+                            "format": "float"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Average1Analysis"
+                }
+            },
+            "Average2Analysis": {
+                "required": [
+                    "label",
+                    "value",
+                    "error"
+                ],
+                "properties": {
+                    "label": {
+                        "description": "Nucleotide",
+                        "type": "string"
+                    },
+                    "value": {
+                        "description": "Value",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "error": {
+                        "description": "+/- error",
+                        "type": "number",
+                        "format": "float"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Average2Analysis"
+                }
+            },
+            "Filenotes": {
+                "required": [
+                    "length",
+                    "chunkSize",
+                    "uploadDate",
+                    "filename",
+                    "contentType",
+                    "metadata",
+                    "internalId"
+                ],
+                "properties": {
+                    "length": {
+                        "description": "length",
+                        "type": "integer"
+                    },
+                    "chunkSize": {
+                        "description": "chunkSize",
+                        "type": "integer"
+                    },
+                    "uploadDate": {
+                        "description": "uploadDate",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "filename": {
+                        "description": "filename",
+                        "type": "string"
+                    },
+                    "contentType": {
+                        "description": "contentType",
+                        "type": "string"
+                    },
+                    "metadata": {
+                        "description": "metadata",
+                        "type": "object",
+                        "properties": {
+                            "project": {
+                                "description": "project",
+                                "type": "string"
+                            },
+                            "md": {
+                                "description": "md",
+                                "type": "integer"
+                            },
+                            "frames": {
+                                "description": "frames",
+                                "type": "integer"
+                            },
+                            "atoms": {
+                                "description": "atoms",
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "internalId": {
+                        "description": "internalId",
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Average2Analysis"
+                }
+            },
+            "TimeAnalysis": {
+                "type": "object",
+                "additionalProperties": {
+                    "description": "Dynamic property",
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                },
+                "example": { "alpha": [1.0, 1.2] }
+                ,
+                "xml": {
+                    "name": "TimeAnalysis"
+                }
+            },
+            "FluctuationAnalysis": {
+                "required": [
+                    "average",
+                    "stdev",
+                    "atoms",
+                    "fluctuation"
+                ],
+                "properties": {
+                    "average": {
+                        "description": "average",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "stdev": {
+                        "description": "stdev",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "atoms": {
+                        "description": "array of atoms",
+                        "type": "array",
+                        "items": {
+                            "description": "atom",
+                            "type": "object",
+                            "properties": {
+                                "atom": {
+                                    "description": "atom element",
+                                    "type": "string"
+                                },
+                                "label": {
+                                    "description": "whole atom label",
+                                    "type": "string"
+                                }
+                            
+                            }
+                        }
+                    },
+                    "fluctuation": {
+                        "description": "array of fluctuations",
+                        "type": "array",
+                        "items": {
+                            "description": "fluctuation",
+                            "type": "number",
+                            "format": "float"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "FluctuationAnalysis"
+                }
+            },
+            "HBondsAnalysis": {
+                "required": [
+                    "frames",
+                    "factor",
+                    "hbonds"
+                ],
+                "properties": {
+                    "frames": {
+                        "description": "frames",
+                        "type": "integer"
+                    },
+                    "factor": {
+                        "description": "factor",
+                        "type": "integer"
+                    },
+                    "hbonds": {
+                        "description": "array of base pairs",
+                        "type": "array",
+                        "items": {
+                            "description": "bp hbonds",
+                            "type": "object",
+                            "properties": {
+                                "bp": {
+                                    "description": "base pair",
+                                    "type": "string"
+                                },
+                                "hbonds": {
+                                    "description": "hbonds for this base pair",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                }
+                            
+                            }
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "FluctuationAnalysis"
+                }
+            },
+            "PCA1Analysis": {
+                "required": [
+                    "eigenvalues"
+                ],
+                "properties": {
+                    "eigenvalues": {
+                        "description": "array of eigen values",
+                        "type": "array",
+                        "items": {
+                            "description": "eigen value",
+                            "type": "object",
+                            "properties": {
+                                "ev": {
+                                    "description": "eigen value",
+                                    "type": "number",
+                                    "format": "float"
+                                },
+                                "var": {
+                                    "description": "variance",
+                                    "type": "number",
+                                    "format": "float"
+                                }
+                            
+                            }
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "PCA1Analysis"
+                }
+            },
+            "PCA2Analysis": {
+                "required": [
+                    "pca"
+                ],
+                "properties": {
+                    "pca": {
+                        "description": "array of PCA",
+                        "type": "array",
+                        "items": {
+                            "description": "PCA values",
+                            "type": "array",
+                            "items": {
+                                "description": "PCA value",
+                                "type": "number",
+                                "format": "float"
+                            }
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "PCA1Analysis"
+                }
+            },
+            "RgyrAnalysis": {
+                "required": [
+                    "step",
+                    "data"
+                ],
+                "properties": {
+                    "step": {
+                        "description": "step",
+                        "type": "integer"
+                    },
+                    "data": {
+                        "description": "rgyr data",
+                        "type": "object",
+                        "properties": {
+                            "rgyr": {
+                                "type": "object",
+                                "properties": {
+                                    "average": {
+                                        "description": "average",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "stdev": {
+                                        "description": "stdev",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "min": {
+                                        "description": "min",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "max": {
+                                        "description": "max",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "data": {
+                                        "description": "data",
+                                        "type": "array",
+                                        "items": {
+                                            "description": "Rgyr per frame",
+                                            "type": "number",
+                                            "format": "float"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "PCA1Analysis"
+                }
+            },
+            "SASAAnalysis": {
+                "required": [
+                    "step",
+                    "means",
+                    "sasa"
+                ],
+                "properties": {
+                    "step": {
+                        "description": "step",
+                        "type": "integer"
+                    },
+                    "means": {
+                        "description": "means",
+                        "type": "array",
+                        "items": {
+                            "description": "mean",
+                            "type": "number",
+                            "format": "float"
+                        }
+                    },
+                    "sasa": {
+                        "description": "array of residues",
+                        "type": "array",
+                        "items": {
+                            "description": "array of sasa values per residue",
+                            "type": "array",
+                            "items": {
+                                "description": "sasa value",
+                                "type": "number",
+                                "format": "float"
+                            }
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "SASAAnalysis"
+                }
             }
         }
     }

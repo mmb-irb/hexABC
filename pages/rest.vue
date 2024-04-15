@@ -22,7 +22,7 @@
             <v-btn
               prepend-icon="mdi-tray-arrow-down"
               color="red-lighten-1"
-              class="mb-5 ms-5"
+              class="my-5 ms-5"
               @click="downloadSwagger" 
               >
                   Download swagger.json file
@@ -51,9 +51,9 @@
     const pjson = await import('../package.json')
     const spec = JSON.parse(JSON.stringify(await import('@/assets/settings/swagger.json')))
 
-    spec.host = config.public.apiHost
+    spec.servers = [{ url: `${config.public.protocol}://${config.public.apiHost}${config.public.apiBase}` }]
     spec.info.version = pjson.version
-    
+
     SwaggerUI({
         spec: spec,
         dom_id: '#swagger'
@@ -63,14 +63,17 @@
     const tit = spec.info.title
     const titDOM = document.querySelector('.swagger-ui .info .title').innerHTML
     document.querySelector('.swagger-ui .info .title').innerHTML = titDOM.replace(tit, '')
-    const protocol = document.querySelector('.swagger-ui .base-url').innerHTML.includes('localhost') ? 'http' : 'https'
-    document.querySelector('.swagger-ui .base-url').innerHTML = document.querySelector('.swagger-ui .base-url').innerHTML.replace('[', '').replace(' ]', '').replace('URL: ', `URL: ${protocol}://`)
+
+    // Schemas initially collapsed
+    const schemas = document.querySelectorAll('button.models-control')
+    schemas[0].click()
+
   })
 
   const downloadSwagger = async() => {
     const swagger = JSON.parse(JSON.stringify(await import('@/assets/settings/swagger.json')))
     const pjson = await import('../package.json')
-    swagger.default.host = config.public.apiHost
+    swagger.servers = [{ url: `${config.public.protocol}://${config.public.apiHost}${config.public.apiBase}` }]
     swagger.default.info.version = pjson.version
     const blob = new Blob([JSON.stringify(swagger, null, 2)], {type : 'application/json'});
 
@@ -94,7 +97,8 @@
       .swagger-ui .info { margin: 20px 0 0; }
       .swagger-ui .info .title small.version-stamp { background: var(--swagger-method); }
       .swagger-ui .info .title small { background: var(--palette-4); }
-      .swagger-ui .info .description .markdown p { display:none; }
+      .swagger-ui .info .description { display:none; }
+      .swagger-ui .scheme-container { display:none; }
       .swagger-ui .model-example .model-box { width: 80%; }
       .swagger-ui .model .prop { justify-content: space-between; }
       .swagger-ui .model .prop .markdown p { margin-top:.5rem; }
@@ -102,6 +106,7 @@
       .swagger-ui .opblock.opblock-get .opblock-summary-method { background: var(--swagger-method); }
       .swagger-ui .opblock.opblock-get { background: var(--swagger-bg); border-color: var(--palette-4); }
       .swagger-ui .opblock.opblock-get .opblock-summary { border-color: var(--palette-4); }
+      .swagger-ui .opblock.opblock-get .tab-header .tab-item.active h4 span:after { background: var(--palette-4); }
       .swagger-ui .btn.execute { background-color: var(--palette-4); border-color: var(--palette-4); }
       .swagger-ui table.model tr.property-row.required td:first-child { padding-top: .5rem!important; }
       .swagger-ui .prop-type { color: var(--palette-4); margin-top: 0.5rem; }
@@ -114,5 +119,4 @@
       .swagger-ui section.models .model-box { width: 80%; }
       .swagger-ui .model-box { display: inherit;}
       #model-arguments .model-box { display:none; }
-  
   </style>

@@ -7,6 +7,11 @@ export default defineEventHandler(async (event) => {
     // handle query params (GET)
     let { limit, page, seq, seqname } = getQuery(event);
 
+    if (!seq && !seqname) {
+        setResponseStatus(event, 404)
+        return { message: 'No seq or seqname provided' }
+    }
+
     if(!limit) limit = 10;
     if(!page) page = 1;
 
