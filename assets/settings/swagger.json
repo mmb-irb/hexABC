@@ -1010,10 +1010,10 @@
             "id": {
                 "name": "id",
                 "in": "path",
-                "description": "Project identifier, it must be a FAIR identifier (i.e. abc:A0001)",
+                "description": "Project identifier, in format seq&lt;number&gt;.&lt;replica&gt; (i.e. seq001.1)",
                 "required": true,
                 "type": "string",
-                "default": "abc:A0001"
+                "default": "seq001.1"
             }
         }
     },
