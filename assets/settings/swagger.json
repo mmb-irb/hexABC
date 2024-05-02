@@ -2,12 +2,12 @@
 {
     "openapi": "3.0.2",
     "info": {
-        "title": "hexABC REST API",
+        "title": "",
         "license": {
             "name": "MIT License"
         },
         "version": "",
-        "description": "In this section there is the documentation for all the available public end points of the hexABC REST API. Click on each end point and its documentation will be expanded."
+        "description": ""
     },
     "consumes": [
         "application\/json"
@@ -19,7 +19,7 @@
         },
         {
             "name": "Project files",
-            "description": "Projects dowlnoadable files"
+            "description": "Projects downloadable files"
         },{
             "name": "Project analyses",
             "description": "Projects analyses"

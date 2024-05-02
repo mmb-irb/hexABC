@@ -13,7 +13,7 @@
 
           <template v-slot:text>
 
-            <p>In this section there is the documentation for all the available public end points of the hexABC REST API. Click on each end point and its documentation will be expanded.</p>
+            <p id="rest-desc">In this section there is the documentation for all the available public end points of the {{ $globals.shortName }} REST API. Click on each end point and its documentation will be expanded.</p>
 
             <v-divider></v-divider>
 
@@ -38,6 +38,7 @@
 
   const { $globals } = useNuxtApp()
   const config = useRuntimeConfig()
+  const nuxtApp = useNuxtApp()
 
   useHead({
     title: `REST API` 
@@ -51,7 +52,7 @@
     const pjson = await import('../package.json')
     const spec = JSON.parse(JSON.stringify(await import('@/assets/settings/swagger.json')))
 
-    spec.servers = [{ url: `${config.public.protocol}://${config.public.apiHost}${config.public.apiBase}` }]
+    spec.servers = [{ url: `${window.location.origin}${nuxtApp.$config.app.baseURL.replace(/\/$/, "")}${config.public.apiBase}` }]
     spec.info.version = pjson.version
 
     SwaggerUI({
@@ -73,8 +74,10 @@
   const downloadSwagger = async() => {
     const swagger = JSON.parse(JSON.stringify(await import('@/assets/settings/swagger.json')))
     const pjson = await import('../package.json')
-    swagger.servers = [{ url: `${config.public.protocol}://${config.public.apiHost}${config.public.apiBase}` }]
+    swagger.servers = [{ url: `${window.location.origin}${nuxtApp.$config.app.baseURL.replace(/\/$/, "")}${config.public.apiBase}` }]
     swagger.default.info.version = pjson.version
+    swagger.default.info.title = `${$globals.shortName} REST API`
+    swagger.default.info.description = document.querySelector('#rest-desc').innerHTML
     const blob = new Blob([JSON.stringify(swagger, null, 2)], {type : 'application/json'});
 
     var url = window.URL.createObjectURL(blob);

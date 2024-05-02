@@ -86,8 +86,6 @@ export default defineNuxtConfig({
     public: {
       url: process.env.APP_TYPE == 'development' ? `http://${process.env.APP_DEVELOPMENT_HOST}/` : process.env.APP_TYPE == 'staging' ? `https://${process.env.APP_STAGING_HOST}/` : `https://${process.env.APP_PRODUCTION_HOST}/`,
       externalApi: process.env.MAIN_API_URL,
-      protocol: process.env.APP_TYPE == 'development' ? 'http' : 'https',
-      apiHost: process.env.APP_TYPE == 'development' ? process.env.APP_DEVELOPMENT_HOST : process.env.APP_TYPE == 'staging' ? process.env.APP_STAGING_HOST : process.env.APP_PRODUCTION_HOST,
       apiBase: '/api',
       apiEndPoints: [
         '/api', 
